@@ -14,7 +14,7 @@ export const POST: RequestHandler = async ({ request }) => {
 
     // Perform signup
     const token: Models.Token = await signupWithEmail(email);
-    console.log('Signup token created for email:', email, 'Token ID:', token.$id);
+    console.log(`Signup token created for email — ${email} — at ${token.$createdAt}`);
 
     return json({ data: { signedUp: true }, error: null }, { status: 200 });
   } catch (error: unknown) {
