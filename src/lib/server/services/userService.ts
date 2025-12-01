@@ -22,13 +22,6 @@ export const listUsersFromRedcap = async (fetch: Fetch): Promise<{ id: string; n
   return result;
 };
 
-export const fetchUserId = async (fetch: Fetch, email: string): Promise<string | null> => {
-  const requestData = { type: 'flat', fields: 'id', forms: 'contact', filterLogic: `[mail] = "${email}"` };
-  const contacts = await fetchRedcapJSON<{ id: string }[]>(fetch, requestData);
-  const result = contacts.length === 1 ? contacts[0].id : null;
-  return result;
-};
-
 export const mapAppwriteUserToProfile = (user: Record<string, unknown> | null, fallbackId?: string) => {
   if (!user) return { id: fallbackId ?? null, email: null, name: null };
   const result = {

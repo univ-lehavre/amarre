@@ -4,7 +4,7 @@ import { signupWithEmail } from '$lib/server/services/authService';
 import { validateSignupEmail } from '$lib/validators/server/auth';
 import { mapErrorToResponse } from '$lib/errors/mapper';
 
-export const POST: RequestHandler = async ({ request, fetch, cookies }) => {
+export const POST: RequestHandler = async ({ request }) => {
   try {
     // Parse form data
     const form = await request.formData();
@@ -12,7 +12,7 @@ export const POST: RequestHandler = async ({ request, fetch, cookies }) => {
     const email = await validateSignupEmail(unsecuredEmail);
 
     // Perform signup
-    await signupWithEmail(email, { fetch, cookies });
+    await signupWithEmail(email);
 
     return json({ data: { signedUp: true }, error: null }, { status: 200 });
   } catch (error: unknown) {

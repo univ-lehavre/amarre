@@ -1,20 +1,16 @@
 import { ID, type Models } from 'node-appwrite';
 
-import type { SignupContext } from '$lib/types/auth';
 import { PUBLIC_LOGIN_URL } from '$env/static/public';
 import { createAdminClient, createSessionClient } from '$lib/appwrite/server';
-import { fetchUserId } from '$lib/server/services/userService';
 import { validateMagicUrlLogin, validateSignupEmail, validateUserId } from '$lib/validators/server/auth';
 import type { Cookies } from '@sveltejs/kit';
 import { SESSION_COOKIE } from '$lib/constants';
 
-export const signupWithEmail = async (unsecuredEmail: unknown, ctx: SignupContext): Promise<Models.Token> => {
+export const signupWithEmail = async (unsecuredEmail: unknown): Promise<Models.Token> => {
   // Validate email
   const email: string = await validateSignupEmail(unsecuredEmail);
 
-  // Fetch REDCap user ID
-  const id = await fetchUserId(ctx.fetch, email);
-  const userId: string = id ?? ID.unique();
+  const userId: string = ID.unique();
 
   // Fix redirect URL
   const url: string = `${PUBLIC_LOGIN_URL}/login`;

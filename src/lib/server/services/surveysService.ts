@@ -11,14 +11,14 @@ export const deleteSurveyRecord = async (record: string) => {
   return result;
 };
 
-export const downloadSurvey = async (fetch: Fetch, record: string) => {
+export const downloadSurvey = async (record: string, context: { fetch: Fetch }) => {
   const requestData = {
     type: 'flat',
     'records[0]': record,
     rawOrLabel: 'label',
     rawOrLabelHeaders: 'label',
     exportCheckboxLabel: 'true',
-  } as const;
-  const result = await fetchRedcapText(fetch, requestData);
+  };
+  const result = await fetchRedcapText(context.fetch, requestData);
   return result;
 };
