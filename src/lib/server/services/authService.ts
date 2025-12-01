@@ -1,22 +1,21 @@
+import type { Cookies } from '@sveltejs/kit';
 import { ID, type Models } from 'node-appwrite';
 
+import { SESSION_COOKIE } from '$lib/constants';
 import { PUBLIC_LOGIN_URL } from '$env/static/public';
 import { createAdminClient, createSessionClient } from '$lib/appwrite/server';
 import { validateMagicUrlLogin, validateSignupEmail, validateUserId } from '$lib/validators/server/auth';
-import type { Cookies } from '@sveltejs/kit';
-import { SESSION_COOKIE } from '$lib/constants';
 
 export const signupWithEmail = async (unsecuredEmail: unknown): Promise<Models.Token> => {
   // Validate email
   const email: string = await validateSignupEmail(unsecuredEmail);
-
-  const userId: string = ID.unique();
 
   // Fix redirect URL
   const url: string = `${PUBLIC_LOGIN_URL}/login`;
 
   // Create magic URL token
   const { account } = createAdminClient();
+  const userId: string = ID.unique();
   const token: Models.Token = await account.createMagicURLToken({ userId, email, url });
 
   return token;
