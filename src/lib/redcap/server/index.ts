@@ -19,10 +19,10 @@ export const defaultParameters = {
   filterLogic: '',
 };
 
-const fetchRedcap = async (fetch: Fetch, params: Record<string, string>): Promise<Response> => {
+const fetchRedcap = async (params: Record<string, string>, context: { fetch: Fetch }): Promise<Response> => {
   const requestData = { ...defaultParameters, ...params, token: REDCAP_API_TOKEN };
   const DATA = new URLSearchParams(requestData).toString();
-  const response = await fetch(REDCAP_URL, {
+  const response = await context.fetch(REDCAP_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' },
     body: DATA,
@@ -30,12 +30,12 @@ const fetchRedcap = async (fetch: Fetch, params: Record<string, string>): Promis
   return response;
 };
 
-export const fetchRedcapJSON = async <T>(fetch: Fetch, params: Record<string, string>): Promise<T> => {
-  const response = await fetchRedcap(fetch, params);
+export const fetchRedcapJSON = async <T>(params: Record<string, string>, context: { fetch: Fetch }): Promise<T> => {
+  const response = await fetchRedcap(params, context);
   return response.json() as Promise<T>;
 };
 
-export const fetchRedcapText = async (fetch: Fetch, params: Record<string, string>): Promise<string> => {
-  const response = await fetchRedcap(fetch, params);
+export const fetchRedcapText = async (params: Record<string, string>, context: { fetch: Fetch }): Promise<string> => {
+  const response = await fetchRedcap(params, context);
   return response.text();
 };

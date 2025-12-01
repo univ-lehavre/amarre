@@ -3,8 +3,9 @@ import { json, type RequestHandler } from '@sveltejs/kit';
 import { signupWithEmail } from '$lib/server/services/authService';
 import { validateSignupEmail } from '$lib/validators/server/auth';
 import { mapErrorToResponse } from '$lib/errors/mapper';
+import type { Models } from 'node-appwrite';
 
-export const POST: RequestHandler = async ({ request, fetch, cookies }) => {
+export const POST: RequestHandler = async ({ request }) => {
   try {
     // Parse form data
     const form = await request.formData();
@@ -12,7 +13,10 @@ export const POST: RequestHandler = async ({ request, fetch, cookies }) => {
     const email = await validateSignupEmail(unsecuredEmail);
 
     // Perform signup
-    await signupWithEmail(email, { fetch, cookies });
+    const token: Models.Token = await signupWithEmail(email);
+    console.log(
+      `Signup token for ${process.env.NODE_ENV !== 'production' ? email : '***@***.***'} created at ${token.$createdAt}`,
+    );
 
     return json({ data: { signedUp: true }, error: null }, { status: 200 });
   } catch (error: unknown) {

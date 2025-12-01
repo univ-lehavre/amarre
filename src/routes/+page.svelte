@@ -21,7 +21,7 @@
 
 <ECRIN />
 
-<TopNavbar user={data.user} />
+<TopNavbar />
 
 <div class={containerClass}>
   <div
@@ -33,7 +33,6 @@
     <Collaborate
       {userId}
       {url}
-      {hasPushedAccount}
     />
     <Rule />
     <Administrate

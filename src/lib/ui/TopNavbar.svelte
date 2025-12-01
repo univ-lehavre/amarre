@@ -1,8 +1,6 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  let { user } = $props();
-
   let navEl: HTMLElement | undefined;
 
   onMount(() => {
