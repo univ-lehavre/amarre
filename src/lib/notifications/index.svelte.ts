@@ -1,6 +1,7 @@
+import { v7 } from 'uuid';
 import type { Log } from '$lib/types';
 
-enum Color {
+export enum Color {
   Primary = 'primary',
   Secondary = 'secondary',
   Success = 'success',

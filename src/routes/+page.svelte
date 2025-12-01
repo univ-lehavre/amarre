@@ -33,7 +33,6 @@
     <Collaborate
       {userId}
       {url}
-      {hasPushedAccount}
     />
     <Rule />
     <Administrate
