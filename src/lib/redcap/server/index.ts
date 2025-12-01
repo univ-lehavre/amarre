@@ -1,5 +1,5 @@
-import { REDCAP_API_TOKEN, REDCAP_URL } from '$env/static/private';
 import type { Fetch } from '$lib/types';
+import { REDCAP_API_TOKEN, REDCAP_URL } from '$env/static/private';
 
 export const defaultParameters = {
   content: 'record',
@@ -19,24 +19,23 @@ export const defaultParameters = {
   filterLogic: '',
 };
 
-export const fetchRedcapText = async (fetch: Fetch, params: Record<string, string>): Promise<string> => {
-  const requestData = { ...defaultParameters, ...params, token: REDCAP_API_TOKEN } as Record<string, string>;
+const fetchRedcap = async (fetch: Fetch, params: Record<string, string>): Promise<Response> => {
+  const requestData = { ...defaultParameters, ...params, token: REDCAP_API_TOKEN };
   const DATA = new URLSearchParams(requestData).toString();
   const response = await fetch(REDCAP_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' },
     body: DATA,
   });
-  return response.text();
+  return response;
 };
 
-export const fetchRedcap = async <T>(fetch: Fetch, params: Record<string, string>): Promise<T> => {
-  const requestData = { ...defaultParameters, ...params, token: REDCAP_API_TOKEN } as Record<string, string>;
-  const DATA = new URLSearchParams(requestData).toString();
-  const response = await fetch(REDCAP_URL, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' },
-    body: DATA,
-  });
-  return response.json() as T;
+export const fetchRedcapJSON = async <T>(fetch: Fetch, params: Record<string, string>): Promise<T> => {
+  const response = await fetchRedcap(fetch, params);
+  return response.json() as Promise<T>;
+};
+
+export const fetchRedcapText = async (fetch: Fetch, params: Record<string, string>): Promise<string> => {
+  const response = await fetchRedcap(fetch, params);
+  return response.text();
 };

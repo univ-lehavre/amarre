@@ -10,7 +10,6 @@ const getAllowedEmailsToSubscribe = async (): Promise<string[]> => {
       databaseId: APPWRITE_DB_ID,
       tableId: APPWRITE_TABLE_ID_ALLOWED_EMAIL_DOMAINS_TO_SUBSCRIBE,
     });
-    console.log(result);
     result.rows.forEach(item => {
       emails.push(item.regexp);
     });
