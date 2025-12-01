@@ -71,27 +71,6 @@
                 </div>
               </button>
             </form>
-            <form
-              method="post"
-              action="?/deleteAuth"
-            >
-              <button
-                type="submit"
-                class="list-group-item list-group-item-action list-group-item-danger {userId && !hasPushedAccount
-                  ? ''
-                  : 'disabled'}"
-              >
-                <div class="d-flex flex-row">
-                  <i class="bi bi-trash me-2"></i>
-                  <div
-                    class="list-group list-group-flush fw-light"
-                    style="font-family: Gambetta;"
-                  >
-                    Supprimer
-                  </div>
-                </div>
-              </button>
-            </form>
           </div>
         {/snippet}
       </CardItem>
@@ -130,25 +109,6 @@
                 </div>
               </div>
             </a>
-            <form
-              method="post"
-              action="?/deleteSurvey"
-            >
-              <button
-                type="submit"
-                class="list-group-item list-group-item-action list-group-item-danger {userId && url ? '' : 'disabled'}"
-              >
-                <div class="d-flex flex-row">
-                  <i class="bi bi-trash me-2"></i>
-                  <div
-                    class="list-group list-group-flush fw-light"
-                    style="font-family: Gambetta;"
-                  >
-                    Supprimer
-                  </div>
-                </div>
-              </button>
-            </form>
           </div>
         {/snippet}
       </CardItem>

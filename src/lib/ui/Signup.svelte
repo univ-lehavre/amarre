@@ -41,7 +41,7 @@
           class="modal-title fs-5"
           id="SignUpLabel"
         >
-          Sign up
+          Connexion à votre compte
         </h1>
         <button
           type="button"
@@ -52,8 +52,9 @@
       </div>
       <div class="modal-body">
         <p>
-          To gain access to additional content, please authenticate yourself. This action will set a necessary cookie in
-          your browser. To remove it after authentication, just log out.
+          Pour accéder à du contenu supplémentaire, veuillez vous authentifier. Cette action déposera un cookie
+          nécessaire au bon fonctionnement du site dans votre navigateur. Pour le supprimer après l'authentification, il
+          suffira de vous déconnecter.
         </p>
         <form
           method="post"
@@ -76,7 +77,7 @@
           />
           <button
             type="submit"
-            class="btn btn-primary {disabledSubmit}">Sign up</button
+            class="btn btn-primary {disabledSubmit}">Connexion</button
           >
         </form>
       </div>
