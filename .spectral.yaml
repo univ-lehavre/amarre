@@ -1,0 +1,8 @@
+extends: 'spectral:oas'
+
+# Minimal Spectral ruleset for OpenAPI linting.
+# We extend the official OpenAPI rules and disable a couple of strict rules
+# that may not be relevant for this project's initial spec.
+rules:
+  operation-operationId: off
+  info-contact: off

@@ -1,0 +1,11 @@
+{
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.formatOnType": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[javascript]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[svelte]": { "editor.defaultFormatter": "svelte.svelte-vscode" },
+  "ansible.python.interpreterPath": "/usr/bin/python3",
+  "terminal.integrated.shellIntegration.history": 1000000000,
+  "terminal.integrated.shellIntegration.enabled": false
+}
