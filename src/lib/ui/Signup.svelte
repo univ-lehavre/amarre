@@ -41,7 +41,7 @@
           class="modal-title fs-5"
           id="SignUpLabel"
         >
-          Connexion à votre compte
+          Inscription / Connexion à votre compte
         </h1>
         <button
           type="button"

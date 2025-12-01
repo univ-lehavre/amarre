@@ -21,7 +21,7 @@
 
 <ECRIN />
 
-<TopNavbar user={data.user} />
+<TopNavbar />
 
 <div class={containerClass}>
   <div

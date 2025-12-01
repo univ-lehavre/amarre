@@ -1,9 +1,8 @@
 <script lang="ts">
-  import TakeTheSurvey from '$lib/ui/TakeTheSurvey.svelte';
   import HorizontalScroller from '$lib/ui/HorizontalScroller.svelte';
   import SectionTile from '$lib/ui/SectionTile.svelte';
   import CardItem from '$lib/ui/CardItem.svelte';
-  let { userId, url, hasPushedAccount } = $props();
+  let { userId, url } = $props();
   let showHeading = $state(false);
 </script>
 

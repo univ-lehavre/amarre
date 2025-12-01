@@ -11,7 +11,7 @@ export const GET: RequestHandler = async ({ locals, fetch }) => {
         { status: 401 },
       );
 
-    const result = await getSurveyUrl(id, fetch);
+    const result = await getSurveyUrl(id, { fetch });
 
     if (result.match(/"error":/))
       return json({ data: null, error: { code: 'invalid_url', message: 'Invalid or missing URL' } }, { status: 422 });

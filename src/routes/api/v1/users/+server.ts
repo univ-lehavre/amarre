@@ -11,7 +11,7 @@ export const GET: RequestHandler = async ({ locals, fetch }) => {
       );
     }
 
-    const users = await listUsersFromRedcap(fetch);
+    const users = await listUsersFromRedcap({ fetch });
 
     return json({ data: users, error: null });
   } catch (error: unknown) {

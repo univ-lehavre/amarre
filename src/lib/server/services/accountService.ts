@@ -9,10 +9,9 @@ export interface CheckAccountPushed {
 }
 
 export const checkAccountPushed = async (
-  token: string,
   id: string,
   email: string,
-  fetch: Fetch,
+  context: { fetch: Fetch },
 ): Promise<CheckAccountPushed> => {
   const requestData = {
     'records[0]': id,
@@ -21,7 +20,7 @@ export const checkAccountPushed = async (
     rawOrLabel: 'label',
     rawOrLabelHeaders: 'raw',
   };
-  const user = await fetchRedcapJSON<{ id: string; mail: string; active: string }[]>(fetch, requestData);
+  const user = await fetchRedcapJSON<{ id: string; mail: string; active: string }[]>(requestData, context);
   const hasPushedID = user.length > 0 && user[0].id === id;
   const hasPushedEmail = user.length > 0 && user[0].mail === email;
   const hasPushedAccount = hasPushedID && hasPushedEmail;
@@ -29,7 +28,7 @@ export const checkAccountPushed = async (
   return { hasPushedID, hasPushedEmail, hasPushedAccount, isActive };
 };
 
-export const pushAccountToRedcap = async (token: string, payload: unknown, fetch: Fetch) => {
+export const pushAccountToRedcap = async (payload: unknown, context: { fetch: Fetch }) => {
   const requestData = {
     action: 'import',
     format: 'json',
@@ -39,6 +38,6 @@ export const pushAccountToRedcap = async (token: string, payload: unknown, fetch
     data: JSON.stringify(payload),
     returnContent: 'count',
   };
-  const result = await fetchRedcapJSON<{ count: number }>(fetch, requestData);
+  const result = await fetchRedcapJSON<{ count: number }>(requestData, context);
   return result;
 };
