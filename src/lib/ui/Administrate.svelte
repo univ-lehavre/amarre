@@ -18,92 +18,84 @@
     <SectionTile title={!showHeading ? 'Administrer' : ''} />
 
     <div class="flex-shrink-0">
-      <CardItem title="Mon compte">
-        {#snippet bodyExtra()}
+      <CardItem>
+        {#snippet title()}
+          Mon compte
+        {/snippet}
+        {#snippet description()}
           {#if email}
-            <div
-              class="fw-light"
-              style="font-family: Gambetta;"
-            >
-              <p>
-                Je suis connecté avec le compte <i>{email}</i>.
-              </p>
-            </div>
+            Je suis connecté avec le compte <i>{email}</i>
+          {:else}
+            Je ne suis pas authentifié.
           {/if}
         {/snippet}
-        {#snippet footer()}
-          <div class="list-group list-group-flush">
+        {#snippet actions()}
+          <button
+            type="button"
+            class="list-group-item list-group-item-action list-group-item-primary {userId ? 'disabled' : ''}"
+            data-bs-toggle="modal"
+            data-bs-target="#SignUp"
+          >
+            <div class="d-flex flex-row">
+              <i class="bi bi-box-arrow-in-right me-2"></i>
+              <div
+                class="list-group list-group-flush fw-light"
+                style="font-family: Gambetta;"
+              >
+                S'authentifier
+              </div>
+            </div>
+          </button>
+          <form
+            method="post"
+            action="?/logout"
+          >
             <button
-              type="button"
-              class="list-group-item list-group-item-action list-group-item-primary {userId ? 'disabled' : ''}"
-              data-bs-toggle="modal"
-              data-bs-target="#SignUp"
+              type="submit"
+              class="list-group-item list-group-item-action list-group-item-warning {userId ? '' : 'disabled'}"
             >
               <div class="d-flex flex-row">
-                <i class="bi bi-box-arrow-in-right me-2"></i>
+                <i class="bi bi-box-arrow-right me-2"></i>
                 <div
                   class="list-group list-group-flush fw-light"
                   style="font-family: Gambetta;"
                 >
-                  Se connecter
+                  Se déconnecter
                 </div>
               </div>
             </button>
-            <form
-              method="post"
-              action="?/logout"
-            >
-              <button
-                type="submit"
-                class="list-group-item list-group-item-action list-group-item-warning {userId ? '' : 'disabled'}"
-              >
-                <div class="d-flex flex-row">
-                  <i class="bi bi-box-arrow-right me-2"></i>
-                  <div
-                    class="list-group list-group-flush fw-light"
-                    style="font-family: Gambetta;"
-                  >
-                    Se déconnecter
-                  </div>
-                </div>
-              </button>
-            </form>
-          </div>
+          </form>
         {/snippet}
       </CardItem>
     </div>
 
     <div class="flex-shrink-0">
-      <CardItem title="Mes données d'enquête">
-        {#snippet bodyExtra()}
-          <div
-            class="fw-light"
-            style="font-family: Gambetta;"
-          >
-            {#if !userId}
-              <p>Je dois m'inscrire pour pouvoir remplir mon enquête.</p>
-            {/if}
-          </div>
+      <CardItem>
+        {#snippet title()}
+          Mes données
         {/snippet}
-        {#snippet footer()}
-          <div class="list-group list-group-flush">
-            <a
-              href="/api/v1/surveys/download"
-              class="list-group-item list-group-item-action list-group-item-secondary {userId ? '' : 'disabled'}"
-              target="_parent"
-              role="button"
-            >
-              <div class="d-flex flex-row">
-                <i class="bi bi-arrow-down me-2"></i>
-                <div
-                  class="list-group list-group-flush fw-light"
-                  style="font-family: Gambetta;"
-                >
-                  Télécharger
-                </div>
+        {#snippet description()}
+          {#if !userId}
+            <p>Je dois m'authentifier avant de pouvoir accéder à mes demandes.</p>
+          {/if}
+        {/snippet}
+        {#snippet actions()}
+          <a
+            href="/api/v1/surveys/download"
+            class="list-group-item list-group-item-action list-group-item-success {userId ? '' : 'disabled'}"
+            target="_parent"
+            role="button"
+          >
+            <div class="d-flex flex-row">
+              <i class="bi bi-arrow-down me-2"></i>
+              <div
+                class="list-group list-group-flush fw-light"
+                style="font-family: Gambetta;"
+              >
+                Télécharger
               </div>
-            </a>
-          </div>
+            </div>
+          </a>
         {/snippet}
       </CardItem>
     </div>

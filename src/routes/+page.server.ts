@@ -14,12 +14,12 @@ export const load: PageServerLoad = async ({ fetch, locals }) => {
 };
 
 export const actions = {
-  consent: event => event.fetch(`/api/v1/surveys/consent`).then(res => res.json()),
-  signup: async event => {
-    const form = await event.request.formData();
-    return event.fetch(`/api/v1/auth/signup`, { method: 'POST', body: form }).then(res => res.json());
-  },
+  newSurvey: event => event.fetch(`/api/v1/surveys/new`).then(res => res.json()),
+  signup: event =>
+    event.request
+      .formData()
+      .then(body => event.fetch(`/api/v1/auth/signup`, { method: 'POST', body }))
+      .then(res => res.json()),
+
   logout: event => event.fetch(`/api/v1/auth/logout`, { method: 'POST' }).then(res => res.json()),
-  deleteSurvey: event => event.fetch(`/api/v1/surveys/delete`).then(res => res.json()),
-  deleteAuth: event => event.fetch(`/api/v1/auth/delete`).then(res => res.json()),
 } satisfies Actions;

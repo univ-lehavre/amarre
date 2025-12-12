@@ -6,6 +6,7 @@
   import ECRIN from '$lib/ui/ECRIN.svelte';
   import TopNavbar from '$lib/ui/TopNavbar.svelte';
   import Rule from '$lib/ui/Rule.svelte';
+  import Follow from '$lib/ui/Follow.svelte';
 
   let { data }: PageProps = $props();
 
@@ -35,6 +36,13 @@
       {url}
     />
     <Rule />
+    {#if userId}
+      <Follow
+        {userId}
+        {url}
+      />
+      <Rule />
+    {/if}
     <Administrate
       {userId}
       {email}

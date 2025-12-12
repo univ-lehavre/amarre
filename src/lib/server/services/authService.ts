@@ -51,10 +51,3 @@ export const logout = async (unsecuredUserId: unknown, cookies: Cookies): Promis
   await account.deleteSessions();
   cookies.delete(SESSION_COOKIE, { path: '/' });
 };
-
-export const deleteUser = async (unsecuredUserId: string, cookies: Cookies): Promise<void> => {
-  const userId = validateUserId(unsecuredUserId);
-  await logout(userId, cookies);
-  const { users } = createAdminClient();
-  await users.delete({ userId });
-};

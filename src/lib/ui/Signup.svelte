@@ -1,30 +1,8 @@
 <script lang="ts">
   import { isEmail } from '$lib/validators';
 
-  import { getContext } from 'svelte';
-  import { NotificationCenter, Color } from '$lib/notifications/index.svelte';
-
   let email = $state('');
   let disabledSubmit = $derived(isEmail(email) ? '' : 'disabled');
-  //let { form } = $props();
-
-  //   const center = getContext('notificationCenter') as NotificationCenter;
-
-  //   const signal = form?.done
-  //     ? {
-  //         type: Color.Primary,
-  //         title: 'Registration',
-  //         message: 'We just send you an email. Please check your mailbox to complete your authentication.',
-  //       }
-  //     : form?.error
-  //       ? {
-  //           type: Color.Warning,
-  //           title: 'Registration',
-  //           message: 'Unable to register. Please inform your administrator giving the following details',
-  //           log: form,
-  //         }
-  //       : undefined;
-  //   if (signal) center.add(signal);
 </script>
 
 <div
@@ -41,7 +19,7 @@
           class="modal-title fs-5"
           id="SignUpLabel"
         >
-          Inscription / Connexion à votre compte
+          Authentification à votre compte
         </h1>
         <button
           type="button"
@@ -52,9 +30,9 @@
       </div>
       <div class="modal-body">
         <p>
-          Pour accéder à du contenu supplémentaire, veuillez vous authentifier. Cette action déposera un cookie
-          nécessaire au bon fonctionnement du site dans votre navigateur. Pour le supprimer après l'authentification, il
-          suffira de vous déconnecter.
+          Pour accéder à mes demandes, je vais m'authentifier. Cette action déposera un cookie nécessaire au bon
+          fonctionnement du site dans votre navigateur. Pour le supprimer après l'authentification, il suffira que je me
+          déconnecte.
         </p>
         <form
           method="post"
@@ -77,7 +55,9 @@
           />
           <button
             type="submit"
-            class="btn btn-primary {disabledSubmit}">Connexion</button
+            class="btn btn-primary {disabledSubmit}"
+          >
+            S'authentifier</button
           >
         </form>
       </div>

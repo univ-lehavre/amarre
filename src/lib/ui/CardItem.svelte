@@ -2,14 +2,15 @@
   import type { Snippet } from 'svelte';
 
   interface Props {
-    title?: string;
-    description?: string;
     imageSrc?: string | null;
     imageAlt?: string;
-    width?: string; // e.g. '18rem'
-    bodyExtra?: Snippet; // contenu additionnel dans .card-body après la description
-    footer?: Snippet; // contenu après le body (ex: list-group)
-    actions?: Snippet; // icônes/boutons alignés dans le body, après la description
+    width?: string;
+    title?: Snippet;
+    description?: Snippet;
+    bodyExtra?: Snippet;
+    actions?: Snippet;
+    links?: Snippet;
+    footer?: Snippet;
   }
 
   let {
@@ -19,8 +20,9 @@
     imageAlt = '',
     width = '18rem',
     bodyExtra = undefined,
-    footer = undefined,
     actions = undefined,
+    links = undefined,
+    footer = undefined,
   }: Props = $props();
 </script>
 
@@ -36,30 +38,43 @@
     />
   {/if}
 
-  <div class="card-body">
-    {#if title}
-      <div
-        class="card-title fw-bolder fs-4"
-        style="font-family: Gambetta;"
-      >
-        {title}
-      </div>
-    {/if}
-    {#if description}
-      <p
-        class="card-text fw-light"
-        style="font-family: Gambetta;"
-      >
-        {description}
-      </p>
-    {/if}
-    {#if actions}
-      <div class="d-flex align-items-center gap-2 mt-2">
-        {@render actions?.()}
-      </div>
-    {/if}
-    {@render bodyExtra?.()}
-  </div>
+  {#if title || description || bodyExtra}
+    <div class="card-body">
+      {#if title}
+        <div
+          class="card-title fw-bolder fs-4"
+          style="font-family: Gambetta;"
+        >
+          {@render title?.()}
+        </div>
+      {/if}
+      {#if description}
+        <p
+          class="card-text fw-light"
+          style="font-family: Gambetta;"
+        >
+          {@render description?.()}
+        </p>
+      {/if}
+      {@render bodyExtra?.()}
+    </div>
+  {/if}
 
-  {@render footer?.()}
+  {#if actions}
+    <div class="list-group list-group-flush">
+      {@render actions?.()}
+    </div>
+  {/if}
+
+  {#if links}
+    <div class="card-body">
+      {@render links?.()}
+    </div>
+  {/if}
+
+  {#if footer}
+    <div class="card-footer">
+      {@render footer?.()}
+    </div>
+  {/if}
 </div>
