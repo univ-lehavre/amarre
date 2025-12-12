@@ -5,21 +5,43 @@
     "version": "1.0.0",
     "description": "Spécification initiale des endpoints versionnés /api/v1"
   },
-  "servers": [{ "url": "/api/v1" }],
+  "servers": [
+    {
+      "url": "/api/v1"
+    }
+  ],
   "tags": [
-    { "name": "users", "description": "Gestion des utilisateurs" },
-    { "name": "surveys", "description": "Gestion des questionnaires" },
-    { "name": "graphs", "description": "Génération des graphes" },
-    { "name": "auth", "description": "Authentification & session" }
+    {
+      "name": "users",
+      "description": "Gestion des utilisateurs"
+    },
+    {
+      "name": "surveys",
+      "description": "Gestion des questionnaires"
+    },
+    {
+      "name": "auth",
+      "description": "Authentification & session"
+    }
   ],
   "components": {
-    "securitySchemes": { "bearerAuth": { "type": "http", "scheme": "bearer", "bearerFormat": "JWT" } },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
     "requestBodies": {
       "SignupForm": {
         "description": "Formulaire d'inscription",
         "required": true,
         "content": {
-          "application/x-www-form-urlencoded": { "schema": { "$ref": "#/components/schemas/SignupRequest" } }
+          "application/x-www-form-urlencoded": {
+            "schema": {
+              "$ref": "#/components/schemas/SignupRequest"
+            }
+          }
         }
       }
     },
@@ -28,36 +50,62 @@
         "summary": "Validation error example",
         "value": {
           "data": null,
-          "error": { "code": "validation_error", "message": "Login failed", "cause": "Missing userId or secret" }
+          "error": {
+            "code": "validation_error",
+            "message": "Login failed",
+            "cause": "Missing userId or secret"
+          }
         }
       },
       "InvalidContentType": {
         "summary": "Invalid content type",
         "value": {
           "data": null,
-          "error": { "code": "invalid_content_type", "message": "Content-Type must be application/json" }
+          "error": {
+            "code": "invalid_content_type",
+            "message": "Content-Type must be application/json"
+          }
         }
       },
       "InvalidBody": {
         "summary": "Invalid JSON body",
-        "value": { "data": null, "error": { "code": "invalid_body", "message": "Request body must be valid JSON" } }
+        "value": {
+          "data": null,
+          "error": {
+            "code": "invalid_body",
+            "message": "Request body must be valid JSON"
+          }
+        }
       },
       "Unauthorized": {
         "summary": "Unauthorized example",
         "value": {
           "data": null,
-          "error": { "code": "unauthorized", "message": "Invalid credentials or internal error" }
+          "error": {
+            "code": "unauthorized",
+            "message": "Invalid credentials or internal error"
+          }
         }
       },
       "InternalError": {
         "summary": "Internal server error",
-        "value": { "data": null, "error": { "code": "internal_error", "message": "Unexpected error" } }
+        "value": {
+          "data": null,
+          "error": {
+            "code": "internal_error",
+            "message": "Unexpected error"
+          }
+        }
       },
       "InvalidEmail": {
         "summary": "Invalid email",
         "value": {
           "data": null,
-          "error": { "code": "invalid_email", "message": "Registration not possible", "cause": "Invalid email format" }
+          "error": {
+            "code": "invalid_email",
+            "message": "Registration not possible",
+            "cause": "Invalid email format"
+          }
         }
       },
       "NotInAlliance": {
@@ -77,8 +125,14 @@
         "description": "Validation error for login",
         "content": {
           "application/json": {
-            "schema": { "$ref": "#/components/schemas/LoginResponse" },
-            "examples": { "ValidationError": { "$ref": "#/components/examples/ValidationError" } }
+            "schema": {
+              "$ref": "#/components/schemas/LoginResponse"
+            },
+            "examples": {
+              "ValidationError": {
+                "$ref": "#/components/examples/ValidationError"
+              }
+            }
           }
         }
       },
@@ -86,8 +140,14 @@
         "description": "Invalid content type for login",
         "content": {
           "application/json": {
-            "schema": { "$ref": "#/components/schemas/LoginResponse" },
-            "examples": { "InvalidContentType": { "$ref": "#/components/examples/InvalidContentType" } }
+            "schema": {
+              "$ref": "#/components/schemas/LoginResponse"
+            },
+            "examples": {
+              "InvalidContentType": {
+                "$ref": "#/components/examples/InvalidContentType"
+              }
+            }
           }
         }
       },
@@ -95,8 +155,14 @@
         "description": "Invalid JSON body for login",
         "content": {
           "application/json": {
-            "schema": { "$ref": "#/components/schemas/LoginResponse" },
-            "examples": { "InvalidBody": { "$ref": "#/components/examples/InvalidBody" } }
+            "schema": {
+              "$ref": "#/components/schemas/LoginResponse"
+            },
+            "examples": {
+              "InvalidBody": {
+                "$ref": "#/components/examples/InvalidBody"
+              }
+            }
           }
         }
       },
@@ -104,8 +170,14 @@
         "description": "Unauthorized response for login",
         "content": {
           "application/json": {
-            "schema": { "$ref": "#/components/schemas/LoginResponse" },
-            "examples": { "Unauthorized": { "$ref": "#/components/examples/Unauthorized" } }
+            "schema": {
+              "$ref": "#/components/schemas/LoginResponse"
+            },
+            "examples": {
+              "Unauthorized": {
+                "$ref": "#/components/examples/Unauthorized"
+              }
+            }
           }
         }
       },
@@ -113,10 +185,16 @@
         "description": "Validation errors for signup",
         "content": {
           "application/json": {
-            "schema": { "$ref": "#/components/schemas/SignupResponse" },
+            "schema": {
+              "$ref": "#/components/schemas/SignupResponse"
+            },
             "examples": {
-              "InvalidEmail": { "$ref": "#/components/examples/InvalidEmail" },
-              "NotInAlliance": { "$ref": "#/components/examples/NotInAlliance" }
+              "InvalidEmail": {
+                "$ref": "#/components/examples/InvalidEmail"
+              },
+              "NotInAlliance": {
+                "$ref": "#/components/examples/NotInAlliance"
+              }
             }
           }
         }
@@ -125,17 +203,14 @@
         "description": "Internal server error",
         "content": {
           "application/json": {
-            "schema": { "$ref": "#/components/schemas/LoginResponse" },
-            "examples": { "InternalError": { "$ref": "#/components/examples/InternalError" } }
-          }
-        }
-      },
-      "DeleteValidationResponse": {
-        "description": "Validation / not authenticated for delete",
-        "content": {
-          "application/json": {
-            "schema": { "$ref": "#/components/schemas/DeleteAuthResponse" },
-            "examples": { "ValidationError": { "$ref": "#/components/examples/ValidationError" } }
+            "schema": {
+              "$ref": "#/components/schemas/LoginResponse"
+            },
+            "examples": {
+              "InternalError": {
+                "$ref": "#/components/examples/InternalError"
+              }
+            }
           }
         }
       }
@@ -144,25 +219,74 @@
       "User": {
         "type": "object",
         "properties": {
-          "id": { "type": "string" },
-          "email": { "type": ["string", "null"], "format": "email" },
-          "labels": { "type": "array", "items": { "type": "string" } }
+          "id": {
+            "type": "string"
+          },
+          "email": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "format": "email"
+          },
+          "labels": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
         },
-        "required": ["id", "email", "labels"],
+        "required": [
+          "id",
+          "email",
+          "labels"
+        ],
         "additionalProperties": false
       },
       "ApiError": {
         "type": "object",
-        "properties": { "code": { "type": "string" }, "message": { "type": "string" }, "details": {}, "cause": {} },
-        "required": ["code", "message"],
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "details": {},
+          "cause": {}
+        },
+        "required": [
+          "code",
+          "message"
+        ],
         "additionalProperties": false
       },
       "ListUsersResponse": {
         "type": "object",
         "properties": {
-          "data": { "type": ["array", "null"], "items": { "$ref": "#/components/schemas/User" }, "default": null },
+          "data": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/User"
+            },
+            "default": null
+          },
           "error": {
-            "allOf": [{ "$ref": "#/components/schemas/ApiError" }, { "type": ["object", "null"], "default": null }]
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiError"
+              },
+              {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "default": null
+              }
+            ]
           },
           "meta": {}
         },
@@ -172,10 +296,32 @@
         "type": "object",
         "properties": {
           "data": {
-            "allOf": [{ "$ref": "#/components/schemas/User" }, { "type": ["object", "null"], "default": null }]
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/User"
+              },
+              {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "default": null
+              }
+            ]
           },
           "error": {
-            "allOf": [{ "$ref": "#/components/schemas/ApiError" }, { "type": ["object", "null"], "default": null }]
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiError"
+              },
+              {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "default": null
+              }
+            ]
           },
           "meta": {}
         },
@@ -184,110 +330,187 @@
       "LogoutResponse": {
         "type": "object",
         "properties": {
-          "data": { "type": "object", "properties": { "loggedOut": { "type": "boolean" } }, "required": ["loggedOut"] },
+          "data": {
+            "type": "object",
+            "properties": {
+              "loggedOut": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "loggedOut"
+            ]
+          },
           "error": {
-            "allOf": [{ "$ref": "#/components/schemas/ApiError" }, { "type": ["object", "null"], "default": null }]
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiError"
+              },
+              {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "default": null
+              }
+            ]
           }
         },
-        "required": ["data"],
+        "required": [
+          "data"
+        ],
         "additionalProperties": false
       },
       "SignupResponse": {
         "type": "object",
         "properties": {
-          "data": { "type": "object", "properties": { "signedUp": { "type": "boolean" } }, "required": ["signedUp"] },
+          "data": {
+            "type": "object",
+            "properties": {
+              "signedUp": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "signedUp"
+            ]
+          },
           "error": {
-            "allOf": [{ "$ref": "#/components/schemas/ApiError" }, { "type": ["object", "null"], "default": null }]
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiError"
+              },
+              {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "default": null
+              }
+            ]
           }
         },
-        "required": ["data"],
-        "additionalProperties": false
-      },
-      "DeleteAuthResponse": {
-        "type": "object",
-        "properties": {
-          "data": { "type": "object", "properties": { "deleted": { "type": "boolean" } }, "required": ["deleted"] },
-          "error": {
-            "allOf": [{ "$ref": "#/components/schemas/ApiError" }, { "type": ["object", "null"], "default": null }]
-          }
-        },
-        "required": ["data"],
+        "required": [
+          "data"
+        ],
         "additionalProperties": false
       },
       "SignupRequest": {
         "type": "object",
         "properties": {
-          "email": { "type": "string", "format": "email", "description": "Adresse email de l'utilisateur" }
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "Adresse email de l'utilisateur"
+          }
         },
-        "required": ["email"],
+        "required": [
+          "email"
+        ],
         "additionalProperties": false
       },
       "LoginRequest": {
         "type": "object",
         "properties": {
-          "userId": { "type": "string", "description": "Appwrite user id" },
-          "secret": { "type": "string", "description": "Appwrite session secret" }
+          "userId": {
+            "type": "string",
+            "description": "Appwrite user id"
+          },
+          "secret": {
+            "type": "string",
+            "description": "Appwrite session secret"
+          }
         },
-        "required": ["userId", "secret"],
+        "required": [
+          "userId",
+          "secret"
+        ],
         "additionalProperties": false
       },
       "LoginResponse": {
         "type": "object",
         "properties": {
-          "data": { "type": "object", "properties": { "loggedIn": { "type": "boolean" } }, "required": ["loggedIn"] },
+          "data": {
+            "type": "object",
+            "properties": {
+              "loggedIn": {
+                "type": "boolean"
+              }
+            },
+            "required": [
+              "loggedIn"
+            ]
+          },
           "error": {
-            "allOf": [{ "$ref": "#/components/schemas/ApiError" }, { "type": ["object", "null"], "default": null }]
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiError"
+              },
+              {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "default": null
+              }
+            ]
           }
         },
-        "required": ["data"],
+        "required": [
+          "data"
+        ],
         "additionalProperties": false
-      },
-      "GraphResponse": {
-        "type": "object",
-        "properties": {
-          "data": { "type": "object", "properties": { "graph": {} } },
-          "error": {
-            "allOf": [{ "$ref": "#/components/schemas/ApiError" }, { "type": ["object", "null"], "default": null }]
-          }
-        },
-        "required": ["data"]
-      },
-      "GlobalGraphResponse": {
-        "type": "object",
-        "properties": {
-          "data": { "type": "object", "properties": { "graph": {} } },
-          "error": {
-            "allOf": [{ "$ref": "#/components/schemas/ApiError" }, { "type": ["object", "null"], "default": null }]
-          }
-        },
-        "required": ["data"]
       },
       "SurveyUrlResponse": {
         "type": "object",
         "properties": {
-          "data": { "type": "object", "properties": { "url": { "type": "string" } }, "required": ["url"] },
+          "data": {
+            "type": "object",
+            "properties": {
+              "url": {
+                "type": "string"
+              }
+            },
+            "required": [
+              "url"
+            ]
+          },
           "error": {
-            "allOf": [{ "$ref": "#/components/schemas/ApiError" }, { "type": ["object", "null"], "default": null }]
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiError"
+              },
+              {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "default": null
+              }
+            ]
           }
         },
-        "required": ["data"]
-      },
-      "SurveyDeleteResponse": {
-        "type": "object",
-        "properties": {
-          "data": { "type": "object", "properties": { "result": { "type": "string" } }, "required": ["result"] },
-          "error": {
-            "allOf": [{ "$ref": "#/components/schemas/ApiError" }, { "type": ["object", "null"], "default": null }]
-          }
-        },
-        "required": ["data"]
+        "required": [
+          "data"
+        ]
       },
       "SurveyDownloadResponse": {
         "type": "object",
         "properties": {
           "data": {},
           "error": {
-            "allOf": [{ "$ref": "#/components/schemas/ApiError" }, { "type": ["object", "null"], "default": null }]
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiError"
+              },
+              {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "default": null
+              }
+            ]
           }
         }
       },
@@ -297,28 +520,74 @@
           "data": {
             "type": "object",
             "properties": {
-              "hasPushedID": { "type": "boolean" },
-              "hasPushedEmail": { "type": "boolean" },
-              "hasPushedAccount": { "type": "boolean" },
-              "isActive": { "type": "boolean" }
+              "hasPushedID": {
+                "type": "boolean"
+              },
+              "hasPushedEmail": {
+                "type": "boolean"
+              },
+              "hasPushedAccount": {
+                "type": "boolean"
+              },
+              "isActive": {
+                "type": "boolean"
+              }
             },
-            "required": ["hasPushedID", "hasPushedEmail", "hasPushedAccount", "isActive"]
+            "required": [
+              "hasPushedID",
+              "hasPushedEmail",
+              "hasPushedAccount",
+              "isActive"
+            ]
           },
           "error": {
-            "allOf": [{ "$ref": "#/components/schemas/ApiError" }, { "type": ["object", "null"], "default": null }]
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiError"
+              },
+              {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "default": null
+              }
+            ]
           }
         },
-        "required": ["data"]
+        "required": [
+          "data"
+        ]
       },
       "AccountPushResponse": {
         "type": "object",
         "properties": {
-          "data": { "type": "object", "properties": { "count": { "type": "number" } } },
+          "data": {
+            "type": "object",
+            "properties": {
+              "count": {
+                "type": "number"
+              }
+            }
+          },
           "error": {
-            "allOf": [{ "$ref": "#/components/schemas/ApiError" }, { "type": ["object", "null"], "default": null }]
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiError"
+              },
+              {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "default": null
+              }
+            ]
           }
         },
-        "required": ["data"]
+        "required": [
+          "data"
+        ]
       }
     },
     "parameters": {}
@@ -326,225 +595,298 @@
   "paths": {
     "/users": {
       "get": {
-        "tags": ["users"],
+        "tags": [
+          "users"
+        ],
         "summary": "Liste paginée des utilisateurs",
         "responses": {
           "200": {
             "description": "OK",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ListUsersResponse" } } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListUsersResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/me": {
       "get": {
-        "tags": ["users"],
+        "tags": [
+          "users"
+        ],
         "summary": "Informations de l’utilisateur courant",
         "responses": {
           "200": {
             "description": "OK",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/MeResponse" } } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeResponse"
+                }
+              }
+            }
           },
           "401": {
             "description": "Non authentifié",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/MeResponse" } } }
-          }
-        }
-      }
-    },
-    "/graphs": {
-      "get": {
-        "tags": ["graphs"],
-        "summary": "Égo-graphe public pour un enregistrement",
-        "parameters": [
-          {
-            "schema": { "type": "string", "description": "Identifiant du record REDCap" },
-            "required": true,
-            "description": "Identifiant du record REDCap",
-            "name": "record",
-            "in": "query"
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/GraphResponse" } } }
-          },
-          "400": {
-            "description": "Paramètre manquant",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/GraphResponse" } } }
-          }
-        }
-      }
-    },
-    "/graphs/global": {
-      "get": {
-        "tags": ["graphs"],
-        "summary": "Graphe global (auth requis)",
-        "security": [{ "bearerAuth": [] }],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/GlobalGraphResponse" } } }
-          },
-          "401": {
-            "description": "Non authentifié",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/GlobalGraphResponse" } } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MeResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/surveys/url": {
       "get": {
-        "tags": ["surveys"],
+        "tags": [
+          "surveys"
+        ],
         "summary": "Récupère l’URL du questionnaire (auth requis)",
-        "security": [{ "bearerAuth": [] }],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SurveyUrlResponse" } } }
-          },
-          "401": {
-            "description": "Non authentifié",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SurveyUrlResponse" } } }
+        "security": [
+          {
+            "bearerAuth": []
           }
-        }
-      }
-    },
-    "/surveys/delete": {
-      "get": {
-        "tags": ["surveys"],
-        "summary": "Supprime le questionnaire de l’utilisateur courant (auth requis)",
-        "security": [{ "bearerAuth": [] }],
+        ],
         "responses": {
           "200": {
             "description": "OK",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SurveyDeleteResponse" } } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SurveyUrlResponse"
+                }
+              }
+            }
           },
           "401": {
             "description": "Non authentifié",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SurveyDeleteResponse" } } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SurveyUrlResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/surveys/download": {
       "get": {
-        "tags": ["surveys"],
+        "tags": [
+          "surveys"
+        ],
         "summary": "Télécharge les réponses du questionnaire (auth requis)",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SurveyDownloadResponse" } } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SurveyDownloadResponse"
+                }
+              }
+            }
           },
           "401": {
             "description": "Non authentifié",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SurveyDownloadResponse" } } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SurveyDownloadResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/account/pushed": {
       "get": {
-        "tags": ["users"],
+        "tags": [
+          "users"
+        ],
         "summary": "Vérifie si le compte a été poussé dans REDCap (auth requis)",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AccountPushedResponse" } } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountPushedResponse"
+                }
+              }
+            }
           },
           "401": {
             "description": "Non authentifié",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AccountPushedResponse" } } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountPushedResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/account/push": {
       "get": {
-        "tags": ["users"],
+        "tags": [
+          "users"
+        ],
         "summary": "Pousse le compte courant vers REDCap (auth requis)",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AccountPushResponse" } } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountPushResponse"
+                }
+              }
+            }
           },
           "401": {
             "description": "Non authentifié",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AccountPushResponse" } } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountPushResponse"
+                }
+              }
+            }
           },
           "502": {
             "description": "Erreur REDCap",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AccountPushResponse" } } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountPushResponse"
+                }
+              }
+            }
           }
         }
       }
     },
     "/auth/logout": {
       "post": {
-        "tags": ["auth"],
+        "tags": [
+          "auth"
+        ],
         "summary": "Déconnexion (auth requis)",
-        "security": [{ "bearerAuth": [] }],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "Déconnecté",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LogoutResponse" } } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LogoutResponse"
+                }
+              }
+            }
           },
-          "401": { "$ref": "#/components/responses/LoginValidationResponse" }
+          "401": {
+            "$ref": "#/components/responses/LoginValidationResponse"
+          }
         }
       }
     },
     "/auth/login": {
       "post": {
-        "tags": ["auth"],
+        "tags": [
+          "auth"
+        ],
         "summary": "Login via Appwrite credentials",
         "requestBody": {
           "required": true,
-          "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LoginRequest" } } }
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
         },
         "responses": {
           "200": {
             "description": "Connecté",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/LoginResponse" } } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
           },
-          "400": { "$ref": "#/components/responses/LoginValidationResponse" },
-          "401": { "$ref": "#/components/responses/LoginUnauthorizedResponse" }
+          "400": {
+            "$ref": "#/components/responses/LoginValidationResponse"
+          },
+          "401": {
+            "$ref": "#/components/responses/LoginUnauthorizedResponse"
+          }
         }
       }
     },
     "/auth/signup": {
       "post": {
-        "tags": ["auth"],
+        "tags": [
+          "auth"
+        ],
         "summary": "Inscription (Magic URL token)",
         "requestBody": {
           "required": true,
           "content": {
-            "application/x-www-form-urlencoded": { "schema": { "$ref": "#/components/schemas/SignupRequest" } }
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/SignupRequest"
+              }
+            }
           }
         },
         "responses": {
           "200": {
             "description": "OK",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/SignupResponse" } } }
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SignupResponse"
+                }
+              }
+            }
           },
-          "400": { "$ref": "#/components/responses/SignupValidationResponse" }
-        }
-      }
-    },
-    "/auth/delete": {
-      "post": {
-        "tags": ["auth"],
-        "summary": "Suppression du compte (auth requis)",
-        "security": [{ "bearerAuth": [] }],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/DeleteAuthResponse" } } }
-          },
-          "401": { "$ref": "#/components/responses/DeleteValidationResponse" }
+          "400": {
+            "$ref": "#/components/responses/SignupValidationResponse"
+          }
         }
       }
     }

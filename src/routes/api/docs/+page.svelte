@@ -12,6 +12,18 @@
         dom_id: '#swagger-ui',
         presets: [w.SwaggerUIBundle.presets.apis],
         layout: 'BaseLayout',
+        deepLinking: true,
+        persistAuthorization: true,
+        tryItOutEnabled: true,
+        displayRequestDuration: true,
+        defaultModelsExpandDepth: -1,
+        defaultModelExpandDepth: 2,
+        requestInterceptor: (req: any) => {
+          // Inclure les cookies de session pour les appels same-origin
+          req.credentials = 'include';
+          return req;
+        },
+        syntaxHighlight: { activate: true, theme: 'monokai' },
       });
     };
     document.body.appendChild(script);
