@@ -14,7 +14,7 @@
   >
     <SectionTile title={!showHeading ? 'Déposer' : ''} />
     <div class="flex-shrink-0">
-      <CardItem title="Une demande">
+      <CardItem title="Une nouvelle demande">
         {#snippet footer()}
           <div class="list-group list-group-flush">
             <button
@@ -37,13 +37,13 @@
                   class="fw-light"
                   style="font-family: Gambetta;"
                 >
-                  Afin de déposer une demande, vous devez d'abord vous connectez à un compte.
+                  Afin de déposer une nouvelle demande, je dois d'abord me connecter à mon compte.
                 </p>
               {/if}
             </button>
             <form
               method="post"
-              action="?/subscribe"
+              action="?/consent"
             >
               <button
                 type="submit"
@@ -55,7 +55,7 @@
                     class="list-group list-group-flush fw-{userId && !url ? 'bold mb-1' : 'light'}"
                     style="font-family: Gambetta;"
                   >
-                    Get a survey link
+                    Créer une nouvelle
                   </div>
                 </div>
                 {#if userId && !url}
@@ -63,7 +63,7 @@
                     class="fw-light"
                     style="font-family: Gambetta;"
                   >
-                    Receive a unique link to share the survey with potential collaborators.
+                    Avant de pouvoir remplir ma nouvelle demande, je dois accepter la politique de données.
                   </p>
                 {/if}
               </button>
@@ -78,17 +78,9 @@
                   class="list-group list-group-flush fw-{url ? 'bold mb-1' : 'light'}"
                   style="font-family: Gambetta;"
                 >
-                  Take the survey
+                  Déposer ma nouvelle demande
                 </div>
               </div>
-              {#if url}
-                <p
-                  class="fw-light"
-                  style="font-family: Gambetta;"
-                >
-                  Complete the survey to declare your project.
-                </p>
-              {/if}
             </a>
           </div>
         {/snippet}</CardItem

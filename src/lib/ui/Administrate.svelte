@@ -26,11 +26,8 @@
               style="font-family: Gambetta;"
             >
               <p>
-                <i>{email}</i> est actuellement connecté.
+                Je suis connecté avec le compte <i>{email}</i>.
               </p>
-              {#if hasPushedAccount}
-                <p>La suppression du compte n'est autorisée qu'après avoir supprimé vos données d'enquête.</p>
-              {/if}
             </div>
           {/if}
         {/snippet}
@@ -83,9 +80,6 @@
             class="fw-light"
             style="font-family: Gambetta;"
           >
-            {#if userId && !url}
-              <p>Avant de pouvoir remplir un formulaire, je dois accepter la politique de données d'ECRIN.</p>
-            {/if}
             {#if !userId}
               <p>Je dois m'inscrire pour pouvoir remplir mon enquête.</p>
             {/if}

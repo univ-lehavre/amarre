@@ -15,14 +15,14 @@ export const checkAccountPushed = async (
 ): Promise<CheckAccountPushed> => {
   const requestData = {
     'records[0]': id,
-    fields: 'id,mail,active',
+    fields: 'record_id,email,active',
     type: 'flat',
     rawOrLabel: 'label',
     rawOrLabelHeaders: 'raw',
   };
-  const user = await fetchRedcapJSON<{ id: string; mail: string; active: string }[]>(requestData, context);
-  const hasPushedID = user.length > 0 && user[0].id === id;
-  const hasPushedEmail = user.length > 0 && user[0].mail === email;
+  const user = await fetchRedcapJSON<{ record_id: string; email: string; active: string }[]>(requestData, context);
+  const hasPushedID = user.length > 0 && user[0].record_id === id;
+  const hasPushedEmail = user.length > 0 && user[0].email === email;
   const hasPushedAccount = hasPushedID && hasPushedEmail;
   const isActive = user.length > 0 && (user[0].active === 'Oui' || user[0].active === '1');
   return { hasPushedID, hasPushedEmail, hasPushedAccount, isActive };

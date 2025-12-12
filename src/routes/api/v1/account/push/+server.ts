@@ -7,7 +7,7 @@ import { pushAccountToRedcap } from '$lib/server/services/accountService';
 export const GET: RequestHandler = async ({ cookies, fetch }) => {
   try {
     const { id, email } = await getSession(cookies);
-    const user = [{ id, mail: email, active: '1', contact_complete: 1 }];
+    const user = [{ record_id: id, email, contact_complete: 1 }];
     const result = await pushAccountToRedcap(user, { fetch });
     if (result.count !== 1) {
       return json(

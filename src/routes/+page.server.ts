@@ -14,7 +14,7 @@ export const load: PageServerLoad = async ({ fetch, locals }) => {
 };
 
 export const actions = {
-  subscribe: event => event.fetch(`/api/v1/account/push`).then(res => res.json()),
+  consent: event => event.fetch(`/api/v1/surveys/consent`).then(res => res.json()),
   signup: async event => {
     const form = await event.request.formData();
     return event.fetch(`/api/v1/auth/signup`, { method: 'POST', body: form }).then(res => res.json());
