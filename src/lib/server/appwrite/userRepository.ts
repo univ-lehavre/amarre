@@ -1,4 +1,4 @@
-import { createAdminClient } from '$lib/appwrite/server';
+import { createAdminClient } from '$lib/server/appwrite';
 import type { UserRepository, TUser } from '$lib/types/api/user';
 import type { Models } from 'node-appwrite';
 

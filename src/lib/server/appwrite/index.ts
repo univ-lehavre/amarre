@@ -57,17 +57,4 @@ const createSessionClient = (cookies: Cookies): SessionAccount => {
   };
 };
 
-interface Session {
-  id: string;
-  email: string;
-}
-
-const getSession = async (cookies: Cookies): Promise<Session> => {
-  const client = createSession(cookies);
-  const user = await new Account(client).get();
-  const id = user.$id;
-  const email = user.email;
-  return { id, email };
-};
-
-export { createAdminClient, createSessionClient, getSession };
+export { createAdminClient, createSessionClient };

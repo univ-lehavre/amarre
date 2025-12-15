@@ -1,4 +1,4 @@
-import { AppwriteUserRepository } from '$lib/appwrite/server/userRepository';
+import { AppwriteUserRepository } from '$lib/server/appwrite/userRepository';
 
 // Service métier: s'appuie sur le repository de domaine
 const userRepo = new AppwriteUserRepository();

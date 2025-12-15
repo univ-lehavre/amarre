@@ -1,7 +1,7 @@
 import type { Fetch } from '$lib/types';
 import { REDCAP_API_TOKEN, REDCAP_URL } from '$env/static/private';
 
-export const defaultParameters = {
+const defaultParameters = {
   content: 'record',
   action: 'export',
   format: 'json',

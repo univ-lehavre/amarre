@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { downloadSurvey } from '$lib/server/services/surveysService';
+import { downloadSurvey } from '$lib/server/services/surveys';
 
 export const GET: RequestHandler = async ({ locals, fetch }) => {
   try {

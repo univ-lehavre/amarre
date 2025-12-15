@@ -1,7 +1,7 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
 
-import { signupWithEmail } from '$lib/server/services/authService';
-import { validateSignupEmail } from '$lib/validators/server/auth';
+import { signupWithEmail } from '$lib/server/services/auth';
+import { validateSignupEmail } from '$lib/server/validators/auth';
 import { mapErrorToResponse } from '$lib/errors/mapper';
 import type { Models } from 'node-appwrite';
 

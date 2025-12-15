@@ -1,21 +1,13 @@
 import { isEmail } from '$lib/validators';
 import { MagicUrlLoginValidationError, UserIdValidationError } from '$lib/errors/auth';
-import { isAlliance, isHexadecimal } from '$lib/validators/server';
-import {
-  InvalidContentTypeError,
-  InvalidJsonBodyError,
-  NotAnEmailError,
-  NotPartOfAllianceError,
-  SessionError,
-} from '$lib/errors';
+import { isHexadecimal } from '$lib/server/validators';
+import { InvalidContentTypeError, InvalidJsonBodyError, NotAnEmailError, SessionError } from '$lib/errors';
 
 export const validateSignupEmail = async (email?: unknown): Promise<string> => {
   if (!email) throw new NotAnEmailError('Registration not possible', { cause: 'No email address provided' });
   if (typeof email !== 'string')
     throw new NotAnEmailError('Registration not possible', { cause: 'Email must be a string' });
   if (!isEmail(email)) throw new NotAnEmailError('Registration not possible', { cause: 'Invalid email format' });
-  if (!(await isAlliance(email)))
-    throw new NotPartOfAllianceError('Registration not possible', { cause: 'Email not part of alliance' });
   return email;
 };
 

@@ -1,6 +1,6 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { getSurveyUrl } from '$lib/server/services/surveysService';
+import { getSurveyUrl } from '$lib/server/services/surveys';
 
 export const GET: RequestHandler = async ({ locals, fetch }) => {
   try {
