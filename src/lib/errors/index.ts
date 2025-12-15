@@ -8,8 +8,8 @@ export class ApplicationError extends Error {
     super(message);
     this.code = code;
     this.httpStatus = httpStatus;
-    this.cause = opts?.cause;
-    this.details = opts?.details;
+    if (opts && opts.cause !== undefined) this.cause = opts.cause;
+    if (opts && opts.details !== undefined) this.details = opts.details;
     this.name = this.constructor.name;
   }
 }

@@ -53,6 +53,7 @@
       io = new IntersectionObserver(
         entries => {
           const e = entries[0];
+          if (!e) return;
           const ratio = e.intersectionRatio ?? 0;
           showHeading = ratio < headingRatio;
         },
