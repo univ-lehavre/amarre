@@ -77,7 +77,7 @@
         {/snippet}
         {#snippet description()}
           {#if !userId}
-            <p>Je dois m'authentifier avant de pouvoir accéder à mes demandes.</p>
+            <p>Je dois m'authentifier avant de pouvoir accéder à mes données.</p>
           {/if}
         {/snippet}
         {#snippet actions()}
