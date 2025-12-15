@@ -3,7 +3,7 @@
 
   import Collaborate from '$lib/ui/Collaborate.svelte';
   import Administrate from '$lib/ui/Administrate.svelte';
-  import ECRIN from '$lib/ui/ECRIN.svelte';
+  import ECRIN from '$lib/ui/MainTitle.svelte';
   import TopNavbar from '$lib/ui/TopNavbar.svelte';
   import Rule from '$lib/ui/Rule.svelte';
   import Follow from '$lib/ui/Follow.svelte';
