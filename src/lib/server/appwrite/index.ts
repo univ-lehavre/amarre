@@ -3,8 +3,8 @@ import type { Cookies } from '@sveltejs/kit';
 
 import { SessionError } from '$lib/errors';
 import { SESSION_COOKIE } from '$lib/constants';
-import { APPWRITE_KEY } from '$env/static/private';
-import { PUBLIC_APPWRITE_ENDPOINT, PUBLIC_APPWRITE_PROJECT } from '$env/static/public';
+import { env as private_env } from '$env/dynamic/private';
+import { env } from '$env/dynamic/public';
 
 interface AdminClient {
   readonly account: Account;
@@ -12,14 +12,14 @@ interface AdminClient {
 }
 
 const createAdminClient = (): AdminClient => {
-  if (!PUBLIC_APPWRITE_ENDPOINT || !PUBLIC_APPWRITE_PROJECT || !APPWRITE_KEY) {
+  if (!env.PUBLIC_APPWRITE_ENDPOINT || !env.PUBLIC_APPWRITE_PROJECT || !private_env.APPWRITE_KEY) {
     throw new Error('Appwrite admin client not configured: missing environment variables');
   }
 
   const client = new Client()
-    .setEndpoint(PUBLIC_APPWRITE_ENDPOINT)
-    .setProject(PUBLIC_APPWRITE_PROJECT)
-    .setKey(APPWRITE_KEY);
+    .setEndpoint(env.PUBLIC_APPWRITE_ENDPOINT)
+    .setProject(env.PUBLIC_APPWRITE_PROJECT)
+    .setKey(private_env.APPWRITE_KEY);
 
   return {
     get account() {
@@ -32,7 +32,7 @@ const createAdminClient = (): AdminClient => {
 };
 
 const createSession = (cookies: Cookies): Client => {
-  const client: Client = new Client().setEndpoint(PUBLIC_APPWRITE_ENDPOINT).setProject(PUBLIC_APPWRITE_PROJECT);
+  const client: Client = new Client().setEndpoint(env.PUBLIC_APPWRITE_ENDPOINT).setProject(env.PUBLIC_APPWRITE_PROJECT);
   const session: string | undefined = cookies.get(SESSION_COOKIE);
   if (!session || session === '') throw new SessionError('No active session', { cause: 'No secret set in cookie' });
 
