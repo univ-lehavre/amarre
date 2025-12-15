@@ -12,7 +12,7 @@ export const load: PageServerLoad = async ({ fetch, locals }) => {
 };
 
 export const actions = {
-  newSurvey: event => event.fetch(`/api/v1/surveys/new`).then(res => res.json()),
+  newSurvey: event => event.fetch(`/api/v1/surveys/new`, { method: 'POST' }).then(res => res.json()),
   signup: event =>
     event.request
       .formData()

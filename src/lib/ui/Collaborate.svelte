@@ -40,7 +40,7 @@
           </button>
           <form
             method="post"
-            action="?/new-request"
+            action="?/newSurvey"
           >
             <button
               type="submit"

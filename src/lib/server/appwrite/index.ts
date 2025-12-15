@@ -1,4 +1,4 @@
-import { Client, Account, Users, TablesDB } from 'node-appwrite';
+import { Client, Account, Users } from 'node-appwrite';
 import type { Cookies } from '@sveltejs/kit';
 
 import { SessionError } from '$lib/errors';
@@ -9,7 +9,6 @@ import { PUBLIC_APPWRITE_ENDPOINT, PUBLIC_APPWRITE_PROJECT } from '$env/static/p
 interface AdminClient {
   readonly account: Account;
   readonly users: Users;
-  readonly databases: TablesDB;
 }
 
 const createAdminClient = (): AdminClient => {
@@ -28,9 +27,6 @@ const createAdminClient = (): AdminClient => {
     },
     get users() {
       return new Users(client);
-    },
-    get databases() {
-      return new TablesDB(client);
     },
   };
 };
