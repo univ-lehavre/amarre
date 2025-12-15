@@ -2,7 +2,7 @@
   import HorizontalScroller from '$lib/ui/HorizontalScroller.svelte';
   import SectionTile from '$lib/ui/SectionTile.svelte';
   import CardItem from '$lib/ui/CardItem.svelte';
-  let { userId, url } = $props();
+  let { userId } = $props();
   let showHeading = $state(false);
 </script>
 
@@ -44,12 +44,12 @@
           >
             <button
               type="submit"
-              class="list-group-item list-group-item-action {userId && !url ? 'active' : 'disabled'}"
+              class="list-group-item list-group-item-action {userId ? 'active' : 'disabled'}"
             >
-              <div class="d-flex flex-row {userId && !url ? 'fs-5' : ''}">
+              <div class="d-flex flex-row {userId ? 'fs-5' : ''}">
                 <i class="bi bi-clipboard2-plus me-2"></i>
                 <div
-                  class="list-group list-group-flush fw-{userId && !url ? 'bold mb-1' : 'light'}"
+                  class="list-group list-group-flush fw-{userId ? 'bold mb-1' : 'light'}"
                   style="font-family: Gambetta;"
                 >
                   Créer une nouvelle

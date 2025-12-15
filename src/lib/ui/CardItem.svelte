@@ -49,12 +49,12 @@
         </div>
       {/if}
       {#if description}
-        <p
+        <div
           class="card-text fw-light"
           style="font-family: Gambetta;"
         >
           {@render description?.()}
-        </p>
+        </div>
       {/if}
       {@render bodyExtra?.()}
     </div>

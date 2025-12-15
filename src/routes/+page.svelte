@@ -11,11 +11,7 @@
   let { data }: PageProps = $props();
 
   const userId = $derived(data.user?.id);
-  const hasPushedAccount = $derived(data.pushed?.hasPushedAccount);
-  const url = $derived(data.url);
   const email = $derived(data.user?.email);
-
-  console.log('Page data:', data);
 
   let containerClass = $state<'container' | 'container-fluid' | 'container-fluid w-75'>('container');
 </script>
@@ -31,23 +27,15 @@
     data-bs-root-margin="0px 0px -50%"
     data-bs-smooth-scroll="true"
   >
-    <Collaborate
-      {userId}
-      {url}
-    />
+    <Collaborate {userId} />
     <Rule />
     {#if userId}
-      <Follow
-        {userId}
-        {url}
-      />
+      <Follow />
       <Rule />
     {/if}
     <Administrate
       {userId}
       {email}
-      {url}
-      {hasPushedAccount}
     />
   </div>
 </div>

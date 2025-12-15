@@ -3,7 +3,7 @@
   import HorizontalScroller from '$lib/ui/HorizontalScroller.svelte';
   import SectionTile from '$lib/ui/SectionTile.svelte';
   import CardItem from '$lib/ui/CardItem.svelte';
-  let { userId, url, hasPushedAccount, email } = $props();
+  let { userId, email } = $props();
   let showHeading = $state(false);
 </script>
 

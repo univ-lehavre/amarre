@@ -5,11 +5,9 @@ import type { TUser } from '$lib/types/api/user';
 
 export const load: PageServerLoad = async ({ fetch, locals }) => {
   const userId = locals.userId;
-  if (!userId) return { pushed: null, url: null, user: null };
+  if (!userId) return { user: null };
   const user = (await fetch('/api/v1/me').then(res => res.json())) as { data: TUser } | null;
-  const pushed = (await fetch(`/api/v1/account/pushed`).then(res => res.json())) as { data: unknown } | null;
-  const url = (await fetch(`/api/v1/surveys/url`).then(res => res.json())) as { data: { url: string } } | null;
-  const result = { pushed: pushed?.data, url: url?.data?.url ?? null, user: user?.data };
+  const result = { user: user?.data };
   return result;
 };
 
@@ -20,6 +18,5 @@ export const actions = {
       .formData()
       .then(body => event.fetch(`/api/v1/auth/signup`, { method: 'POST', body }))
       .then(res => res.json()),
-
   logout: event => event.fetch(`/api/v1/auth/logout`, { method: 'POST' }).then(res => res.json()),
 } satisfies Actions;
