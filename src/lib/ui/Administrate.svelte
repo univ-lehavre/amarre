@@ -3,6 +3,7 @@
   import HorizontalScroller from '$lib/ui/HorizontalScroller.svelte';
   import SectionTile from '$lib/ui/SectionTile.svelte';
   import CardItem from '$lib/ui/CardItem.svelte';
+  import { resolve } from '$app/paths';
   let { userId, email } = $props();
   let showHeading = $state(false);
 </script>
@@ -81,7 +82,7 @@
         {/snippet}
         {#snippet actions()}
           <a
-            href="/api/v1/surveys/download"
+            href={resolve('/api/v1/surveys/download')}
             class="list-group-item list-group-item-action list-group-item-success {userId ? '' : 'disabled'}"
             target="_parent"
             role="button"
