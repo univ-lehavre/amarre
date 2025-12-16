@@ -1,5 +1,6 @@
 import type { Fetch } from '$lib/types';
-import { env as private_env } from '$env/dynamic/private';
+import { REDCAP_API_TOKEN } from '$env/static/private';
+import { PUBLIC_REDCAP_URL } from '$env/static/public';
 
 const defaultParameters = {
   content: 'record',
@@ -20,12 +21,9 @@ const defaultParameters = {
 };
 
 const fetchRedcap = async (params: Record<string, string>, context: { fetch: Fetch }): Promise<Response> => {
-  const token = private_env.REDCAP_API_TOKEN;
-  const url = private_env.REDCAP_URL;
-  if (!token || !url) throw new Error('REDCAP env not configured');
-  const requestData: Record<string, string> = { ...defaultParameters, ...params, token };
+  const requestData: Record<string, string> = { ...defaultParameters, ...params, token: REDCAP_API_TOKEN };
   const DATA = new URLSearchParams(requestData).toString();
-  const response = await context.fetch(url, {
+  const response = await context.fetch(PUBLIC_REDCAP_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' },
     body: DATA,

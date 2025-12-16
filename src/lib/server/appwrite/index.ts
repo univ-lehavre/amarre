@@ -3,8 +3,8 @@ import type { Cookies } from '@sveltejs/kit';
 
 import { SessionError } from '$lib/errors';
 import { SESSION_COOKIE } from '$lib/constants';
-import { env as private_env } from '$env/dynamic/private';
-import { env as public_env } from '$env/dynamic/public';
+import { APPWRITE_KEY } from '$env/static/private';
+import { PUBLIC_APPWRITE_ENDPOINT, PUBLIC_APPWRITE_PROJECT } from '$env/static/public';
 
 interface AdminClient {
   readonly account: Account;
@@ -12,10 +12,6 @@ interface AdminClient {
 }
 
 const createAdminClient = (): AdminClient => {
-  const APPWRITE_KEY = private_env.APPWRITE_KEY;
-  const PUBLIC_APPWRITE_ENDPOINT = public_env.PUBLIC_APPWRITE_ENDPOINT;
-  const PUBLIC_APPWRITE_PROJECT = public_env.PUBLIC_APPWRITE_PROJECT;
-
   if (!PUBLIC_APPWRITE_ENDPOINT || !PUBLIC_APPWRITE_PROJECT || !APPWRITE_KEY) {
     throw new Error('Appwrite admin client not configured: missing environment variables');
   }
@@ -36,8 +32,6 @@ const createAdminClient = (): AdminClient => {
 };
 
 const createSession = (cookies: Cookies): Client => {
-  const PUBLIC_APPWRITE_ENDPOINT = public_env.PUBLIC_APPWRITE_ENDPOINT;
-  const PUBLIC_APPWRITE_PROJECT = public_env.PUBLIC_APPWRITE_PROJECT;
   if (!PUBLIC_APPWRITE_ENDPOINT || !PUBLIC_APPWRITE_PROJECT) {
     throw new Error('Appwrite session client not configured: missing PUBLIC_APPWRITE_*');
   }
