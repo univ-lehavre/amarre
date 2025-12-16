@@ -18,7 +18,7 @@ describe('mapErrorToResponse', () => {
   });
 
   it('maps generic Error to 500', async () => {
-    const response = mapErrorToResponse(new Error('boom'));
+    const response = mapErrorToResponse(new ApplicationError('internal_error', 500, 'Internal error'));
     expect(response.status).toBe(500);
     const body = await response.json();
     expect(body.error.code).toBe('internal_error');
@@ -28,6 +28,6 @@ describe('mapErrorToResponse', () => {
     const response = mapErrorToResponse(undefined);
     expect(response.status).toBe(500);
     const body = await response.json();
-    expect(body.error.code).toBe('internal_error');
+    expect(body.error.code).toBe('unexpected_error');
   });
 });

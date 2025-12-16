@@ -12,7 +12,7 @@ import { NotAnEmailError, SessionError } from '$lib/errors';
 
 describe('validateSignupEmail', () => {
   it('accepts a valid email string', async () => {
-    await expect(validateSignupEmail('user@example.org')).resolves.toBe('user@example.org');
+    await expect(validateSignupEmail('user@univ-lehavre.fr')).resolves.toBe('user@univ-lehavre.fr');
   });
 
   it('rejects missing email', async () => {

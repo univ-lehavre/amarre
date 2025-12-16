@@ -14,7 +14,6 @@ export const load: PageServerLoad = async ({ fetch, locals }) => {
 export const actions = {
   newSurvey: event => event.fetch(`/api/v1/surveys/new`, { method: 'POST' }).then(res => res.json()),
   signup: async event => {
-    
     const data: FormData = await event.request.formData();
     const email: string | undefined = data.get('email')?.toString();
     const response = await event
