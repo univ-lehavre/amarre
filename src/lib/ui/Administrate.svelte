@@ -4,11 +4,11 @@
   import SectionTile from '$lib/ui/SectionTile.svelte';
   import CardItem from '$lib/ui/CardItem.svelte';
   import { resolve } from '$app/paths';
-  let { userId, email } = $props();
+  let { userId, email, form } = $props();
   let showHeading = $state(false);
 </script>
 
-<Signup />
+<Signup {form} />
 
 <div id="administrate">
   <HorizontalScroller

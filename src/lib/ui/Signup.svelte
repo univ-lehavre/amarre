@@ -1,8 +1,16 @@
 <script lang="ts">
+  import type { APIResponse } from '$lib/types';
   import { isEmail } from '$lib/validators';
+  import { enhance } from '$app/forms';
+  import { fade } from 'svelte/transition';
+
+  type Props = { form: APIResponse | null };
+
+  let { form }: Props = $props();
 
   let email = $state('');
-  let disabledSubmit = $derived(isEmail(email) ? '' : 'disabled');
+  let signuping = $state(false);
+  let disabledSubmit = $derived(!isEmail(email) || signuping ? 'disabled' : '');
 </script>
 
 <div
@@ -38,17 +46,24 @@
           method="post"
           action="?/signup"
           class="input-group mb-3"
+          use:enhance={() => {
+            signuping = true;
+            return async ({ update }) => {
+              await update();
+              signuping = false;
+            };
+          }}
         >
           <span
             class="input-group-text"
-            id="basic-addon1">Email</span
+            id="basic-addon1">Courriel</span
           >
           <input
             id="email"
             name="email"
             type="email"
             class="form-control"
-            placeholder="Your professional email"
+            placeholder="prenom.nom@univ-lehavre.fr"
             aria-label="Email"
             aria-describedby="basic-addon1"
             bind:value={email}
@@ -60,6 +75,39 @@
             S'authentifier</button
           >
         </form>
+        {#if signuping}
+          <div
+            class="alert alert-info align-items-center d-flex"
+            role="alert"
+            transition:fade
+          >
+            <div
+              class="spinner-border me-2"
+              role="status"
+            >
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            Envoi en cours...
+          </div>
+        {/if}
+        {#if form?.error}
+          <div
+            class="alert alert-danger"
+            role="alert"
+            transition:fade
+          >
+            {form.error.message}. {form.error.cause}
+          </div>
+        {/if}
+        {#if form?.data}
+          <div
+            class="alert alert-success"
+            role="alert"
+            transition:fade
+          >
+            Un courriel d'authentification vous a été envoyé. Veuillez vérifier votre boîte de réception.
+          </div>
+        {/if}
       </div>
 
       <div class="modal-footer"></div>

@@ -8,7 +8,7 @@
   import Rule from '$lib/ui/Rule.svelte';
   import Follow from '$lib/ui/Follow.svelte';
 
-  let { data }: PageProps = $props();
+  let { data, form }: PageProps = $props();
 
   const userId = $derived(data.user?.id);
   const email = $derived(data.user?.email);
@@ -36,6 +36,7 @@
     <Administrate
       {userId}
       {email}
+      {form}
     />
   </div>
 </div>

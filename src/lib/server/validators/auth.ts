@@ -1,13 +1,15 @@
 import { isEmail } from '$lib/validators';
-import { MagicUrlLoginValidationError, UserIdValidationError } from '$lib/errors/auth';
+import { MagicUrlLoginValidationError, RequestBodyValidationError, UserIdValidationError } from '$lib/errors/auth';
 import { isHexadecimal } from '$lib/server/validators';
 import { InvalidContentTypeError, InvalidJsonBodyError, NotAnEmailError, SessionError } from '$lib/errors';
 
 export const validateSignupEmail = async (email?: unknown): Promise<string> => {
-  if (!email) throw new NotAnEmailError('Registration not possible', { cause: 'No email address provided' });
+  if (!email) throw new NotAnEmailError('Authentication not possible', { cause: 'No email address provided' });
   if (typeof email !== 'string')
-    throw new NotAnEmailError('Registration not possible', { cause: 'Email must be a string' });
-  if (!isEmail(email)) throw new NotAnEmailError('Registration not possible', { cause: 'Invalid email format' });
+    throw new NotAnEmailError('Authentication not possible', { cause: 'Email must be a string' });
+  if (!isEmail(email)) throw new NotAnEmailError('Authentication not possible', { cause: 'Invalid email format' });
+  if (!email.match(/@univ-lehavre\.fr$/))
+    throw new NotAnEmailError('Authentication not possible', { cause: 'Your professional email domain is unknown' });
   return email;
 };
 
@@ -48,4 +50,20 @@ export const parseJsonBody = async (request: Request): Promise<Record<string, un
     if (error instanceof InvalidJsonBodyError) throw error;
     throw new InvalidJsonBodyError('Request body must be valid JSON');
   }
+};
+
+export const checkRequestBody = async (request: Request, properties: string[]): Promise<Record<string, unknown>> => {
+  const contentType: string | null = request.headers.get('content-type');
+  if (contentType === null) throw new RequestBodyValidationError('Content-Type header is missing');
+  if (!contentType.includes('application/json')) throw new RequestBodyValidationError('Unsupported Content-Type');
+  const body = await request.json();
+  if (!body || typeof body !== 'object' || Array.isArray(body))
+    throw new RequestBodyValidationError('Request body must be a JSON object');
+  const result: Record<string, unknown> = {};
+  for (const property of properties) {
+    if (!Object.keys(body).includes(property))
+      throw new RequestBodyValidationError('Request body missing correct data');
+    result[property] = body[property];
+  }
+  return result;
 };
