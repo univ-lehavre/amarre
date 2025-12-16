@@ -2,9 +2,12 @@
   import HorizontalScroller from '$lib/ui/HorizontalScroller.svelte';
   import SectionTile from '$lib/ui/SectionTile.svelte';
   import CardItem from '$lib/ui/CardItem.svelte';
+  import CreateRequest from './CreateRequest.svelte';
   let { userId } = $props();
   let showHeading = $state(false);
 </script>
+
+<CreateRequest />
 
 <div id="collaborate">
   <HorizontalScroller
@@ -38,25 +41,22 @@
               </div>
             </div>
           </button>
-          <form
-            method="post"
-            action="?/newSurvey"
+          <button
+            type="button"
+            class="list-group-item list-group-item-action {userId ? 'active' : 'disabled'}"
+            data-bs-toggle="modal"
+            data-bs-target="#CreateRequest"
           >
-            <button
-              type="submit"
-              class="list-group-item list-group-item-action {userId ? 'active' : 'disabled'}"
-            >
-              <div class="d-flex flex-row {userId ? 'fs-5' : ''}">
-                <i class="bi bi-clipboard2-plus me-2"></i>
-                <div
-                  class="list-group list-group-flush fw-{userId ? 'bold mb-1' : 'light'}"
-                  style="font-family: Gambetta;"
-                >
-                  Créer une nouvelle
-                </div>
+            <div class="d-flex flex-row {userId ? 'fs-5' : ''}">
+              <i class="bi bi-clipboard2-plus me-2"></i>
+              <div
+                class="list-group list-group-flush fw-{userId ? 'bold mb-1' : 'light'}"
+                style="font-family: Gambetta;"
+              >
+                Créer une nouvelle
               </div>
-            </button>
-          </form>
+            </div>
+          </button>
         {/snippet}</CardItem
       >
     </div>
