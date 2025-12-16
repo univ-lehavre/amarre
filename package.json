@@ -19,6 +19,8 @@
     "lint": "prettier --check . && eslint .",
     "openapi:generate": "tsx scripts/generate-openapi.ts",
     "test": "vitest run",
+    "test:watch": "vitest",
+    "check:all": "run-s lint check test build find:unused",
     "changeset-status": "changeset status",
     "changeset-add": "changeset add",
     "changeset-version": "changeset version",
