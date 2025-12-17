@@ -1,8 +1,9 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 import { mapErrorToResponse } from '$lib/errors/mapper';
+import { newRequest } from '$lib/server/services/surveys';
 
-export const POST: RequestHandler = async ({ locals }) => {
+export const POST: RequestHandler = async ({ locals, fetch }) => {
   try {
     const userId = locals.userId;
     if (!userId)
@@ -10,9 +11,9 @@ export const POST: RequestHandler = async ({ locals }) => {
         { data: null, error: { code: 'unauthenticated', message: 'No authenticated user' } },
         { status: 401 },
       );
-
-    // À implémenter: création d'une nouvelle demande côté REDCap / Appwrite
-    return json({ data: null, error: { code: 'not_implemented', message: 'Not implemented' } }, { status: 501 });
+    const user = await fetch(`/api/v1/me`).then(res => res.json());
+    const result = await newRequest(user.email, { fetch });
+    return json({ data: { newRequestCreated: result.count }, error: null }, { status: 200 });
   } catch (error) {
     return mapErrorToResponse(error);
   }
