@@ -12,7 +12,7 @@ export const POST: RequestHandler = async ({ locals, fetch }) => {
         { status: 401 },
       );
     const user = await fetch(`/api/v1/me`).then(res => res.json());
-    const result = await newRequest(user.email, { fetch });
+    const result = await newRequest(user.data.email, { fetch });
     return json({ data: { newRequestCreated: result.count }, error: null }, { status: 200 });
   } catch (error) {
     return mapErrorToResponse(error);

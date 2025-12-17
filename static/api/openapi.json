@@ -546,7 +546,23 @@
       "SurveyNewResponse": {
         "type": "object",
         "properties": {
-          "data": {},
+          "data": {
+            "type": [
+              "object",
+              "null"
+            ],
+            "properties": {
+              "newRequestCreated": {
+                "type": "integer",
+                "minimum": 0,
+                "description": "Nombre de demandes créées"
+              }
+            },
+            "default": null,
+            "required": [
+              "newRequestCreated"
+            ]
+          },
           "error": {
             "allOf": [
               {
@@ -673,14 +689,15 @@
           "surveys"
         ],
         "summary": "Crée une nouvelle demande (auth requis)",
+        "operationId": "surveys_new",
         "security": [
           {
             "bearerAuth": []
           }
         ],
         "responses": {
-          "401": {
-            "description": "Non authentifié",
+          "200": {
+            "description": "OK",
             "content": {
               "application/json": {
                 "schema": {
@@ -689,8 +706,8 @@
               }
             }
           },
-          "501": {
-            "description": "Non implémenté",
+          "401": {
+            "description": "Non authentifié",
             "content": {
               "application/json": {
                 "schema": {
@@ -706,6 +723,7 @@
           "surveys"
         ],
         "summary": "Méthode non autorisée - utiliser POST",
+        "operationId": "surveys_new_get_not_allowed",
         "responses": {
           "405": {
             "description": "Méthode non autorisée",

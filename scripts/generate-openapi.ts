@@ -90,9 +90,15 @@ async function main() {
     throw err;
   }
 
-  // Ajout de /surveys/new (POST)
+  // Ajout de /surveys/new
   const SurveyNewResponse = z
-    .object({ data: z.unknown().nullable().default(null), error: ApiError.nullable().default(null) })
+    .object({
+      data: z
+        .object({ newRequestCreated: z.number().int().nonnegative().describe('Nombre de demandes créées') })
+        .nullable()
+        .default(null),
+      error: ApiError.nullable().default(null),
+    })
     .openapi('SurveyNewResponse');
 
   try {
@@ -102,9 +108,10 @@ async function main() {
       path: '/surveys/new',
       tags: ['surveys'],
       summary: 'Crée une nouvelle demande (auth requis)',
+      operationId: 'surveys_new',
       security: [{ bearerAuth: [] }],
       responses: {
-        501: { description: 'Non implémenté', content: { 'application/json': { schema: SurveyNewResponse } } },
+        200: { description: 'OK', content: { 'application/json': { schema: SurveyNewResponse } } },
         401: { description: 'Non authentifié', content: { 'application/json': { schema: SurveyNewResponse } } },
       },
     });
@@ -120,6 +127,7 @@ async function main() {
       path: '/surveys/new',
       tags: ['surveys'],
       summary: 'Méthode non autorisée - utiliser POST',
+      operationId: 'surveys_new_get_not_allowed',
       responses: {
         405: { description: 'Méthode non autorisée', content: { 'application/json': { schema: SurveyNewResponse } } },
       },
