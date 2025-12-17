@@ -101,6 +101,29 @@ async function main() {
     })
     .openapi('SurveyNewResponse');
 
+  // Ajout de /surveys/list
+  const SurveyRequestItem = z
+    .object({
+      record_id: z.string().describe('Identifiant de la demande').openapi({ example: '0123456789abcdef01234567' }),
+      created_at: z.string().describe('Date de création (ISO)').optional().openapi({ example: '2025-12-17T12:34:56Z' }),
+      form_timestamp: z.string().optional(),
+      form_complete: z.union([z.string(), z.number()]).optional(),
+      composante_timestamp: z.string().optional(),
+      composante_complete: z.union([z.string(), z.number()]).optional(),
+      labo_timestamp: z.string().optional(),
+      labo_complete: z.union([z.string(), z.number()]).optional(),
+      encadrant_timestamp: z.string().optional(),
+      encadrant_complete: z.union([z.string(), z.number()]).optional(),
+      validation_finale_timestamp: z.string().optional(),
+      validation_finale_complete: z.union([z.string(), z.number()]).optional(),
+    })
+    .passthrough()
+    .openapi('SurveyRequestItem');
+
+  const SurveyListResponse = z
+    .object({ data: z.array(SurveyRequestItem).nullable().default(null), error: ApiError.nullable().default(null) })
+    .openapi('SurveyListResponse');
+
   try {
     log('registerPath /surveys/new (POST)');
     registry.registerPath({
@@ -137,6 +160,42 @@ async function main() {
     throw err;
   }
 
+  try {
+    log('registerPath /surveys/list (POST)');
+    registry.registerPath({
+      method: 'post',
+      path: '/surveys/list',
+      tags: ['surveys'],
+      summary: 'Liste les demandes de l’utilisateur (auth requis)',
+      operationId: 'surveys_list',
+      security: [{ bearerAuth: [] }],
+      responses: {
+        200: { description: 'OK', content: { 'application/json': { schema: SurveyListResponse } } },
+        401: { description: 'Non authentifié', content: { 'application/json': { schema: SurveyListResponse } } },
+      },
+    });
+  } catch (err) {
+    console.error('[openapi] error registering /surveys/list (POST)', err);
+    throw err;
+  }
+
+  try {
+    log('registerPath /surveys/list (GET)');
+    registry.registerPath({
+      method: 'get',
+      path: '/surveys/list',
+      tags: ['surveys'],
+      summary: 'Méthode non autorisée - utiliser POST',
+      operationId: 'surveys_list_get_not_allowed',
+      responses: {
+        405: { description: 'Méthode non autorisée', content: { 'application/json': { schema: SurveyListResponse } } },
+      },
+    });
+  } catch (err) {
+    console.error('[openapi] error registering /surveys/list (GET)', err);
+    throw err;
+  }
+
   // Auth related responses
   const LogoutResponse = z
     .object({ data: z.object({ loggedOut: z.boolean() }), error: ApiError.nullable().default(null) })
@@ -153,13 +212,13 @@ async function main() {
   registry.register('SignupResponse', SignupResponse);
   // Réponses liées à la suppression de compte supprimées (API réduite)
 
-  // Signup request (form data)
+  // Signup request (JSON)
   const SignupRequest = z
     .object({
       email: z.string().email().describe("Adresse email de l'utilisateur").openapi({ example: 'alice@inserm.fr' }),
     })
     .strict()
-    .openapi({ ref: 'SignupRequest', example: { email: 'alice@inserm.fr' } });
+    .openapi('SignupRequest', { example: { email: 'alice@inserm.fr' } });
 
   // Register the SignupRequest schema into components/schemas so we can reference it.
   registry.register('SignupRequest', SignupRequest);
@@ -171,8 +230,7 @@ async function main() {
       secret: z.string().describe('Appwrite session secret').openapi({ example: 'abcdef0123456789abcdef0123456789' }),
     })
     .strict()
-    .openapi({
-      ref: 'LoginRequest',
+    .openapi('LoginRequest', {
       example: { userId: '0123456789abcdef01234567', secret: 'abcdef0123456789abcdef0123456789' },
     });
 

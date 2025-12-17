@@ -1,5 +1,17 @@
 # @univ-lehavre/amarre
 
+## 1.1.0
+
+### Minor Changes
+
+- 8e4676c: /api/v1/surveys/new Ajoute désormais l'identifiant de l'utilisateur
+- 08608c2: Add /api/v1/surveys/new
+- 43494a0: /api/v1/surveys/list is now implemented
+
+### Patch Changes
+
+- e70b05d: Mise à jour de la description de l'API dans /api/docs
+
 ## 1.0.0
 
 ### Major Changes

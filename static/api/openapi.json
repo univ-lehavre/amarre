@@ -426,7 +426,6 @@
           "email"
         ],
         "additionalProperties": false,
-        "ref": "SignupRequest",
         "example": {
           "email": "alice@inserm.fr"
         }
@@ -450,7 +449,6 @@
           "secret"
         ],
         "additionalProperties": false,
-        "ref": "LoginRequest",
         "example": {
           "userId": "0123456789abcdef01234567",
           "secret": "abcdef0123456789abcdef0123456789"
@@ -562,6 +560,119 @@
             "required": [
               "newRequestCreated"
             ]
+          },
+          "error": {
+            "allOf": [
+              {
+                "$ref": "#/components/schemas/ApiError"
+              },
+              {
+                "type": [
+                  "object",
+                  "null"
+                ],
+                "default": null
+              }
+            ]
+          }
+        }
+      },
+      "SurveyRequestItem": {
+        "type": "object",
+        "properties": {
+          "record_id": {
+            "type": "string",
+            "description": "Identifiant de la demande",
+            "example": "0123456789abcdef01234567"
+          },
+          "created_at": {
+            "type": "string",
+            "description": "Date de création (ISO)",
+            "example": "2025-12-17T12:34:56Z"
+          },
+          "form_timestamp": {
+            "type": "string"
+          },
+          "form_complete": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "composante_timestamp": {
+            "type": "string"
+          },
+          "composante_complete": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "labo_timestamp": {
+            "type": "string"
+          },
+          "labo_complete": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "encadrant_timestamp": {
+            "type": "string"
+          },
+          "encadrant_complete": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          },
+          "validation_finale_timestamp": {
+            "type": "string"
+          },
+          "validation_finale_complete": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "number"
+              }
+            ]
+          }
+        },
+        "required": [
+          "record_id"
+        ],
+        "additionalProperties": {}
+      },
+      "SurveyListResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "items": {
+              "$ref": "#/components/schemas/SurveyRequestItem"
+            },
+            "default": null
           },
           "error": {
             "allOf": [
@@ -738,6 +849,61 @@
         }
       }
     },
+    "/surveys/list": {
+      "post": {
+        "tags": [
+          "surveys"
+        ],
+        "summary": "Liste les demandes de l’utilisateur (auth requis)",
+        "operationId": "surveys_list",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SurveyListResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Non authentifié",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SurveyListResponse"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "surveys"
+        ],
+        "summary": "Méthode non autorisée - utiliser POST",
+        "operationId": "surveys_list_get_not_allowed",
+        "responses": {
+          "405": {
+            "description": "Méthode non autorisée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SurveyListResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/logout": {
       "post": {
         "tags": [
@@ -778,29 +944,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "userId": {
-                    "type": "string",
-                    "description": "Appwrite user id",
-                    "example": "0123456789abcdef01234567"
-                  },
-                  "secret": {
-                    "type": "string",
-                    "description": "Appwrite session secret",
-                    "example": "abcdef0123456789abcdef0123456789"
-                  }
-                },
-                "required": [
-                  "userId",
-                  "secret"
-                ],
-                "additionalProperties": false,
-                "ref": "LoginRequest",
-                "example": {
-                  "userId": "0123456789abcdef01234567",
-                  "secret": "abcdef0123456789abcdef0123456789"
-                }
+                "$ref": "#/components/schemas/LoginRequest"
               },
               "examples": {
                 "ExempleValide": {
@@ -851,23 +995,7 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "email": {
-                    "type": "string",
-                    "format": "email",
-                    "description": "Adresse email de l'utilisateur",
-                    "example": "alice@inserm.fr"
-                  }
-                },
-                "required": [
-                  "email"
-                ],
-                "additionalProperties": false,
-                "ref": "SignupRequest",
-                "example": {
-                  "email": "alice@inserm.fr"
-                }
+                "$ref": "#/components/schemas/SignupRequest"
               },
               "examples": {
                 "ExempleValide": {
