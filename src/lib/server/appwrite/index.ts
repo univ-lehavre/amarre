@@ -12,9 +12,8 @@ interface AdminClient {
 }
 
 const createAdminClient = (): AdminClient => {
-  if (!PUBLIC_APPWRITE_ENDPOINT || !PUBLIC_APPWRITE_PROJECT || !APPWRITE_KEY) {
+  if (!PUBLIC_APPWRITE_ENDPOINT || !PUBLIC_APPWRITE_PROJECT || !APPWRITE_KEY)
     throw new Error('Appwrite admin client not configured: missing environment variables');
-  }
 
   const client = new Client()
     .setEndpoint(PUBLIC_APPWRITE_ENDPOINT)
@@ -32,9 +31,9 @@ const createAdminClient = (): AdminClient => {
 };
 
 const createSession = (cookies: Cookies): Client => {
-  if (!PUBLIC_APPWRITE_ENDPOINT || !PUBLIC_APPWRITE_PROJECT) {
+  if (!PUBLIC_APPWRITE_ENDPOINT || !PUBLIC_APPWRITE_PROJECT)
     throw new Error('Appwrite session client not configured: missing PUBLIC_APPWRITE_*');
-  }
+
   const client: Client = new Client().setEndpoint(PUBLIC_APPWRITE_ENDPOINT).setProject(PUBLIC_APPWRITE_PROJECT);
   const session: string | undefined = cookies.get(SESSION_COOKIE);
   if (!session || session === '') throw new SessionError('No active session', { cause: 'No secret set in cookie' });
