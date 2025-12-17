@@ -1,15 +1,15 @@
 export class ApplicationError extends Error {
   readonly code: string;
   readonly httpStatus: number;
-  readonly cause?: string;
+  readonly cause: string | undefined;
   readonly details?: unknown;
 
   constructor(code: string, httpStatus: number, message: string, opts?: { cause?: string; details?: unknown }) {
     super(message);
     this.code = code;
     this.httpStatus = httpStatus;
-    if (opts && opts.cause !== undefined) this.cause = opts.cause;
-    if (opts && opts.details !== undefined) this.details = opts.details;
+    this.cause = opts?.cause;
+    this.details = opts?.details;
     this.name = this.constructor.name;
   }
 }
