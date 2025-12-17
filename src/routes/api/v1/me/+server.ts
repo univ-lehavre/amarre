@@ -1,6 +1,7 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { getProfile } from '$lib/server/services/profileService';
+import { getProfile } from '$lib/server/services/profile';
+import { mapErrorToResponse } from '$lib/errors/mapper';
 
 export const GET: RequestHandler = async ({ locals }) => {
   try {
@@ -14,7 +15,6 @@ export const GET: RequestHandler = async ({ locals }) => {
     const payload = await getProfile(userId);
     return json({ data: payload, error: null });
   } catch (error: unknown) {
-    console.log(error);
-    return json({ data: null, error: { code: 'internal_error', message: 'Unexpected error' } }, { status: 500 });
+    return mapErrorToResponse(error);
   }
 };

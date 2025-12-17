@@ -1,25 +1,18 @@
 import { ApplicationError } from '$lib/errors';
 
-export class LoginError extends ApplicationError {
-  constructor(message = 'Login error', opts?: { cause?: string; details?: unknown }) {
-    super('unauthorized', 401, message, opts);
-  }
-}
-
 export class MagicUrlLoginValidationError extends ApplicationError {
   constructor(message = 'Invalid magic link parameters', opts?: { cause?: string; details?: unknown }) {
-    super('validation_error', 400, message, opts);
+    super('magicurl_login_validation_error', 400, message, opts);
   }
 }
 
 export class UserIdValidationError extends ApplicationError {
   constructor(message = 'Invalid user id', opts?: { cause?: string; details?: unknown }) {
-    super('validation_error', 400, message, opts);
+    super('userid_validation_error', 400, message, opts);
   }
 }
-
-export class InvalidCredentialsError extends ApplicationError {
-  constructor(message = 'Invalid credentials', opts?: { cause?: string; details?: unknown }) {
-    super('unauthorized', 401, message, opts);
+export class RequestBodyValidationError extends ApplicationError {
+  constructor(message = 'Invalid request body', opts?: { cause?: string; details?: unknown }) {
+    super('request_body_validation_error', 400, message, opts);
   }
 }

@@ -54,57 +54,12 @@ async function main() {
     throw err;
   }
 
-  // Graphs: public ego graph via record param
-  const GraphResponse = z
-    .object({ data: z.object({ graph: z.unknown() }), error: ApiError.nullable().default(null) })
-    .openapi('GraphResponse');
-  try {
-    log('registerPath /graphs');
-    registry.registerPath({
-      method: 'get',
-      path: '/graphs',
-      tags: ['graphs'],
-      summary: 'Égo-graphe public pour un enregistrement',
-      request: {
-        query: z.object({ record: z.string().describe('Identifiant du record REDCap') }).openapi('GraphQuery'),
-      },
-      responses: {
-        200: { description: 'OK', content: { 'application/json': { schema: GraphResponse } } },
-        400: { description: 'Paramètre manquant', content: { 'application/json': { schema: GraphResponse } } },
-      },
-    });
-  } catch (err) {
-    console.error('[openapi] error registering /graphs', err);
-    throw err;
-  }
-
-  // Global graph: requires auth
-  const GlobalGraphResponse = GraphResponse.openapi('GlobalGraphResponse');
-  try {
-    log('registerPath /graphs/global');
-    registry.registerPath({
-      method: 'get',
-      path: '/graphs/global',
-      tags: ['graphs'],
-      summary: 'Graphe global (auth requis)',
-      security: [{ bearerAuth: [] }],
-      responses: {
-        200: { description: 'OK', content: { 'application/json': { schema: GlobalGraphResponse } } },
-        401: { description: 'Non authentifié', content: { 'application/json': { schema: GlobalGraphResponse } } },
-      },
-    });
-  } catch (err) {
-    console.error('[openapi] error registering /graphs/global', err);
-    throw err;
-  }
+  // Graphs endpoints supprimés (API réduite)
 
   // Surveys
   const SurveyUrlResponse = z
     .object({ data: z.object({ url: z.string() }), error: ApiError.nullable().default(null) })
     .openapi('SurveyUrlResponse');
-  const SurveyDeleteResponse = z
-    .object({ data: z.object({ result: z.string() }), error: ApiError.nullable().default(null) })
-    .openapi('SurveyDeleteResponse');
   const SurveyDownloadResponse = z
     .object({ data: z.unknown(), error: ApiError.nullable().default(null) })
     .openapi('SurveyDownloadResponse');
@@ -127,23 +82,7 @@ async function main() {
     throw err;
   }
 
-  try {
-    log('registerPath /surveys/delete');
-    registry.registerPath({
-      method: 'get',
-      path: '/surveys/delete',
-      tags: ['surveys'],
-      summary: 'Supprime le questionnaire de l’utilisateur courant (auth requis)',
-      security: [{ bearerAuth: [] }],
-      responses: {
-        200: { description: 'OK', content: { 'application/json': { schema: SurveyDeleteResponse } } },
-        401: { description: 'Non authentifié', content: { 'application/json': { schema: SurveyDeleteResponse } } },
-      },
-    });
-  } catch (err) {
-    console.error('[openapi] error registering /surveys/delete', err);
-    throw err;
-  }
+  // Route /surveys/delete supprimée (API réduite)
 
   try {
     log('registerPath /surveys/download');
@@ -227,11 +166,7 @@ async function main() {
     .strict()
     .openapi('SignupResponse');
   registry.register('SignupResponse', SignupResponse);
-  const DeleteAuthResponse = z
-    .object({ data: z.object({ deleted: z.boolean() }), error: ApiError.nullable().default(null) })
-    .strict()
-    .openapi('DeleteAuthResponse');
-  registry.register('DeleteAuthResponse', DeleteAuthResponse);
+  // Réponses liées à la suppression de compte supprimées (API réduite)
 
   // Signup request (form data)
   const SignupRequest = z
@@ -368,16 +303,7 @@ async function main() {
     },
   });
 
-  // Delete-specific validation/unauthenticated response
-  registry.registerComponent('responses', 'DeleteValidationResponse', {
-    description: 'Validation / not authenticated for delete',
-    content: {
-      'application/json': {
-        schema: { $ref: '#/components/schemas/DeleteAuthResponse' },
-        examples: { ValidationError: { $ref: '#/components/examples/ValidationError' } },
-      },
-    },
-  });
+  // Composant de réponse Delete supprimé
 
   try {
     log('registerPath /auth/logout');
@@ -439,23 +365,7 @@ async function main() {
     throw err;
   }
 
-  try {
-    log('registerPath /auth/delete');
-    registry.registerPath({
-      method: 'post',
-      path: '/auth/delete',
-      tags: ['auth'],
-      summary: 'Suppression du compte (auth requis)',
-      security: [{ bearerAuth: [] }],
-      responses: {
-        200: { description: 'OK', content: { 'application/json': { schema: DeleteAuthResponse } } },
-        401: { $ref: '#/components/responses/DeleteValidationResponse' },
-      },
-    });
-  } catch (err) {
-    console.error('[openapi] error registering /auth/delete', err);
-    throw err;
-  }
+  // Endpoint /auth/delete supprimé (API réduite)
 
   const generator = new OpenApiGeneratorV31(registry.definitions);
 
@@ -470,7 +380,6 @@ async function main() {
     tags: [
       { name: 'users', description: 'Gestion des utilisateurs' },
       { name: 'surveys', description: 'Gestion des questionnaires' },
-      { name: 'graphs', description: 'Génération des graphes' },
       { name: 'auth', description: 'Authentification & session' },
     ],
   });

@@ -6,12 +6,28 @@
     script.src = 'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js';
     script.defer = true;
     script.onload = () => {
-      const w = window as unknown as { SwaggerUIBundle: any };
+      type SwaggerUIBundleFn = ((config: Record<string, unknown>) => void) & { presets: { apis: unknown } };
+
+      const w = window as unknown as { SwaggerUIBundle: SwaggerUIBundleFn };
       w.SwaggerUIBundle({
         url: '/api/openapi.json',
         dom_id: '#swagger-ui',
         presets: [w.SwaggerUIBundle.presets.apis],
         layout: 'BaseLayout',
+        deepLinking: true,
+        persistAuthorization: true,
+        tryItOutEnabled: true,
+        displayRequestDuration: true,
+        defaultModelsExpandDepth: -1,
+        defaultModelExpandDepth: 2,
+        requestInterceptor: (req: unknown) => {
+          // Inclure les cookies de session pour les appels same-origin
+          type ReqWithCreds = { credentials?: 'include' | 'omit' | 'same-origin' | string };
+          const r = req as ReqWithCreds;
+          r.credentials = 'include';
+          return r;
+        },
+        syntaxHighlight: { activate: true, theme: 'monokai' },
       });
     };
     document.body.appendChild(script);

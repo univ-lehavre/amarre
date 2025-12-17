@@ -3,11 +3,12 @@
   import HorizontalScroller from '$lib/ui/HorizontalScroller.svelte';
   import SectionTile from '$lib/ui/SectionTile.svelte';
   import CardItem from '$lib/ui/CardItem.svelte';
-  let { userId, url, hasPushedAccount, email } = $props();
+  import { resolve } from '$app/paths';
+  let { userId, email, form } = $props();
   let showHeading = $state(false);
 </script>
 
-<Signup />
+<Signup {form} />
 
 <div id="administrate">
   <HorizontalScroller
@@ -18,138 +19,84 @@
     <SectionTile title={!showHeading ? 'Administrer' : ''} />
 
     <div class="flex-shrink-0">
-      <CardItem title="Mon compte">
-        {#snippet bodyExtra()}
+      <CardItem>
+        {#snippet title()}
+          Mon compte
+        {/snippet}
+        {#snippet description()}
           {#if email}
-            <div
-              class="fw-light"
-              style="font-family: Gambetta;"
-            >
-              <p>
-                <i>{email}</i> est actuellement connecté.
-              </p>
-              {#if hasPushedAccount}
-                <p>La suppression du compte n'est autorisée qu'après avoir supprimé vos données d'enquête.</p>
-              {/if}
-            </div>
+            Je suis connecté avec le compte <i>{email}</i>
+          {:else}
+            Je ne suis pas authentifié.
           {/if}
         {/snippet}
-        {#snippet footer()}
-          <div class="list-group list-group-flush">
+        {#snippet actions()}
+          <button
+            type="button"
+            class="list-group-item list-group-item-action list-group-item-primary {userId ? 'disabled' : ''}"
+            data-bs-toggle="modal"
+            data-bs-target="#SignUp"
+          >
+            <div class="d-flex flex-row">
+              <i class="bi bi-box-arrow-in-right me-2"></i>
+              <div
+                class="list-group list-group-flush fw-light"
+                style="font-family: Gambetta;"
+              >
+                S'authentifier
+              </div>
+            </div>
+          </button>
+          <form
+            method="post"
+            action="?/logout"
+          >
             <button
-              type="button"
-              class="list-group-item list-group-item-action list-group-item-primary {userId ? 'disabled' : ''}"
-              data-bs-toggle="modal"
-              data-bs-target="#SignUp"
+              type="submit"
+              class="list-group-item list-group-item-action list-group-item-warning {userId ? '' : 'disabled'}"
             >
               <div class="d-flex flex-row">
-                <i class="bi bi-box-arrow-in-right me-2"></i>
+                <i class="bi bi-box-arrow-right me-2"></i>
                 <div
                   class="list-group list-group-flush fw-light"
                   style="font-family: Gambetta;"
                 >
-                  Se connecter
+                  Se déconnecter
                 </div>
               </div>
             </button>
-            <form
-              method="post"
-              action="?/logout"
-            >
-              <button
-                type="submit"
-                class="list-group-item list-group-item-action list-group-item-warning {userId ? '' : 'disabled'}"
-              >
-                <div class="d-flex flex-row">
-                  <i class="bi bi-box-arrow-right me-2"></i>
-                  <div
-                    class="list-group list-group-flush fw-light"
-                    style="font-family: Gambetta;"
-                  >
-                    Se déconnecter
-                  </div>
-                </div>
-              </button>
-            </form>
-            <form
-              method="post"
-              action="?/deleteAuth"
-            >
-              <button
-                type="submit"
-                class="list-group-item list-group-item-action list-group-item-danger {userId && !hasPushedAccount
-                  ? ''
-                  : 'disabled'}"
-              >
-                <div class="d-flex flex-row">
-                  <i class="bi bi-trash me-2"></i>
-                  <div
-                    class="list-group list-group-flush fw-light"
-                    style="font-family: Gambetta;"
-                  >
-                    Supprimer
-                  </div>
-                </div>
-              </button>
-            </form>
-          </div>
+          </form>
         {/snippet}
       </CardItem>
     </div>
 
     <div class="flex-shrink-0">
-      <CardItem title="Mes données d'enquête">
-        {#snippet bodyExtra()}
-          <div
-            class="fw-light"
-            style="font-family: Gambetta;"
-          >
-            {#if userId && !url}
-              <p>Avant de pouvoir remplir un formulaire, je dois accepter la politique de données d'ECRIN.</p>
-            {/if}
-            {#if !userId}
-              <p>Je dois m'inscrire pour pouvoir remplir mon enquête.</p>
-            {/if}
-          </div>
+      <CardItem>
+        {#snippet title()}
+          Mes données
         {/snippet}
-        {#snippet footer()}
-          <div class="list-group list-group-flush">
-            <a
-              href="/api/v1/surveys/download"
-              class="list-group-item list-group-item-action list-group-item-secondary {userId ? '' : 'disabled'}"
-              target="_parent"
-              role="button"
-            >
-              <div class="d-flex flex-row">
-                <i class="bi bi-arrow-down me-2"></i>
-                <div
-                  class="list-group list-group-flush fw-light"
-                  style="font-family: Gambetta;"
-                >
-                  Télécharger
-                </div>
-              </div>
-            </a>
-            <form
-              method="post"
-              action="?/deleteSurvey"
-            >
-              <button
-                type="submit"
-                class="list-group-item list-group-item-action list-group-item-danger {userId && url ? '' : 'disabled'}"
+        {#snippet description()}
+          {#if !userId}
+            <p>Je dois m'authentifier avant de pouvoir accéder à mes données.</p>
+          {/if}
+        {/snippet}
+        {#snippet actions()}
+          <a
+            href={resolve('/api/v1/surveys/download')}
+            class="list-group-item list-group-item-action list-group-item-success {userId ? '' : 'disabled'}"
+            target="_parent"
+            role="button"
+          >
+            <div class="d-flex flex-row">
+              <i class="bi bi-arrow-down me-2"></i>
+              <div
+                class="list-group list-group-flush fw-light"
+                style="font-family: Gambetta;"
               >
-                <div class="d-flex flex-row">
-                  <i class="bi bi-trash me-2"></i>
-                  <div
-                    class="list-group list-group-flush fw-light"
-                    style="font-family: Gambetta;"
-                  >
-                    Supprimer
-                  </div>
-                </div>
-              </button>
-            </form>
-          </div>
+                Télécharger
+              </div>
+            </div>
+          </a>
         {/snippet}
       </CardItem>
     </div>

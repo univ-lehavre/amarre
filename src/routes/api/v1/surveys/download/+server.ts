@@ -1,9 +1,9 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { REDCAP_API_TOKEN, REDCAP_URL } from '$env/static/private';
-import { downloadSurvey } from '$lib/server/services/surveysService';
+import { downloadSurvey } from '$lib/server/services/surveys';
+import { mapErrorToResponse } from '$lib/errors/mapper';
 
-export const GET: RequestHandler = async ({ locals }) => {
+export const GET: RequestHandler = async ({ locals, fetch }) => {
   try {
     const id = locals.userId;
     if (!id)
@@ -11,9 +11,9 @@ export const GET: RequestHandler = async ({ locals }) => {
         { data: null, error: { code: 'unauthenticated', message: 'No authenticated user' } },
         { status: 401 },
       );
-    const result = await downloadSurvey(REDCAP_API_TOKEN, REDCAP_URL, id);
+    const result = await downloadSurvey(id, { fetch });
     return json({ data: result, error: null });
-  } catch {
-    return json({ data: null, error: { code: 'internal_error', message: 'Unexpected error' } }, { status: 500 });
+  } catch (error) {
+    return mapErrorToResponse(error);
   }
 };

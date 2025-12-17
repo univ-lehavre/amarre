@@ -1,6 +1,6 @@
 import { redirect } from '@sveltejs/kit';
 
-import { validateMagicUrlLogin } from '$lib/validators/server/auth';
+import { validateMagicUrlLogin } from '$lib/server/validators/auth';
 
 export async function load({ url, fetch }) {
   // Extract parameters

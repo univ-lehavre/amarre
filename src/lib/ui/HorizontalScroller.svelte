@@ -53,6 +53,10 @@
       io = new IntersectionObserver(
         entries => {
           const e = entries[0];
+          if (!e) {
+            console.warn('IntersectionObserver callback received no entries. This should not happen.', entries);
+            return;
+          }
           const ratio = e.intersectionRatio ?? 0;
           showHeading = ratio < headingRatio;
         },

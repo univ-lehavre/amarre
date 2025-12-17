@@ -1,7 +1,7 @@
 import type { Handle } from '@sveltejs/kit';
 
 import { SessionError } from '$lib/errors';
-import { createSessionClient } from '$lib/appwrite/server';
+import { createSessionClient } from '$lib/server/appwrite';
 
 export const handle: Handle = async ({ event, resolve }) => {
   try {

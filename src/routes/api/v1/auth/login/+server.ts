@@ -1,7 +1,7 @@
 import { json, type RequestHandler } from '@sveltejs/kit';
 
-import { login } from '$lib/server/services/authService';
-import { ensureJsonContentType, parseJsonBody, validateMagicUrlLogin } from '$lib/validators/server/auth';
+import { login } from '$lib/server/services/auth';
+import { ensureJsonContentType, parseJsonBody, validateMagicUrlLogin } from '$lib/server/validators/auth';
 import { mapErrorToResponse } from '$lib/errors/mapper';
 
 export const POST: RequestHandler = async ({ request, cookies }) => {

@@ -1,11 +1,13 @@
 <script lang="ts">
-  import TakeTheSurvey from '$lib/ui/TakeTheSurvey.svelte';
   import HorizontalScroller from '$lib/ui/HorizontalScroller.svelte';
   import SectionTile from '$lib/ui/SectionTile.svelte';
   import CardItem from '$lib/ui/CardItem.svelte';
-  let { userId, url, hasPushedAccount } = $props();
+  import CreateRequest from './CreateRequest.svelte';
+  let { userId } = $props();
   let showHeading = $state(false);
 </script>
+
+<CreateRequest />
 
 <div id="collaborate">
   <HorizontalScroller
@@ -15,83 +17,46 @@
   >
     <SectionTile title={!showHeading ? 'Déposer' : ''} />
     <div class="flex-shrink-0">
-      <CardItem title="Une demande">
-        {#snippet footer()}
-          <div class="list-group list-group-flush">
-            <button
-              type="button"
-              class="list-group-item list-group-item-action {userId ? 'disabled' : 'active'}"
-              data-bs-toggle="modal"
-              data-bs-target="#SignUp"
-            >
-              <div class="d-flex flex-row {userId ? '' : 'fs-5'}">
-                <i class="bi bi-box-arrow-in-right me-2"></i>
-                <div
-                  class="list-group list-group-flush fw-{userId ? 'light' : 'bold mb-1'}"
-                  style="font-family: Gambetta;"
-                >
-                  Se connecter
-                </div>
-              </div>
-              {#if !userId}
-                <p
-                  class="fw-light"
-                  style="font-family: Gambetta;"
-                >
-                  Afin de déposer une demande, vous devez d'abord vous connectez à un compte.
-                </p>
-              {/if}
-            </button>
-            <form
-              method="post"
-              action="?/subscribe"
-            >
-              <button
-                type="submit"
-                class="list-group-item list-group-item-action {userId && !url ? 'active' : 'disabled'}"
+      <CardItem>
+        {#snippet title()}
+          Une demande
+        {/snippet}
+        {#snippet description()}
+          {userId ? '' : "Je dois m'authentifier avant de déposer ou suivre une demande."}
+        {/snippet}
+        {#snippet actions()}
+          <button
+            type="button"
+            class="list-group-item list-group-item-action {userId ? 'disabled' : 'active'}"
+            data-bs-toggle="modal"
+            data-bs-target="#SignUp"
+          >
+            <div class="d-flex flex-row {userId ? '' : 'fs-5'}">
+              <i class="bi bi-box-arrow-in-right me-2"></i>
+              <div
+                class="list-group list-group-flush fw-{userId ? 'light' : 'bold mb-1'}"
+                style="font-family: Gambetta;"
               >
-                <div class="d-flex flex-row {userId && !url ? 'fs-5' : ''}">
-                  <i class="bi bi-link-45deg me-2"></i>
-                  <div
-                    class="list-group list-group-flush fw-{userId && !url ? 'bold mb-1' : 'light'}"
-                    style="font-family: Gambetta;"
-                  >
-                    Get a survey link
-                  </div>
-                </div>
-                {#if userId && !url}
-                  <p
-                    class="fw-light"
-                    style="font-family: Gambetta;"
-                  >
-                    Receive a unique link to share the survey with potential collaborators.
-                  </p>
-                {/if}
-              </button>
-            </form>
-            <a
-              href={url}
-              class="list-group-item list-group-item-action {url ? 'active' : 'disabled'}"
-            >
-              <div class="d-flex flex-row {url ? 'fs-5' : ''}">
-                <i class="bi bi-clipboard2-data me-2"></i>
-                <div
-                  class="list-group list-group-flush fw-{url ? 'bold mb-1' : 'light'}"
-                  style="font-family: Gambetta;"
-                >
-                  Take the survey
-                </div>
+                S'authentifier
               </div>
-              {#if url}
-                <p
-                  class="fw-light"
-                  style="font-family: Gambetta;"
-                >
-                  Complete the survey to declare your project.
-                </p>
-              {/if}
-            </a>
-          </div>
+            </div>
+          </button>
+          <button
+            type="button"
+            class="list-group-item list-group-item-action {userId ? 'active' : 'disabled'}"
+            data-bs-toggle="modal"
+            data-bs-target="#CreateRequest"
+          >
+            <div class="d-flex flex-row {userId ? 'fs-5' : ''}">
+              <i class="bi bi-clipboard2-plus me-2"></i>
+              <div
+                class="list-group list-group-flush fw-{userId ? 'bold mb-1' : 'light'}"
+                style="font-family: Gambetta;"
+              >
+                Créer une nouvelle
+              </div>
+            </div>
+          </button>
         {/snippet}</CardItem
       >
     </div>
