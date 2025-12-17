@@ -1,6 +1,7 @@
 import type { Fetch } from '$lib/types';
 import { fetchRedcapJSON, fetchRedcapText } from '$lib/server/redcap';
 import { ID } from 'node-appwrite';
+import type { TUser } from '$lib/types/api/user';
 
 export const getSurveyUrl = async (record: string, context: { fetch: Fetch }): Promise<string> => {
   const result = await fetchRedcapText({ content: 'surveyLink', instrument: 'create_my_project', record }, context);
@@ -19,8 +20,16 @@ export const downloadSurvey = async (record: string, context: { fetch: Fetch }) 
   return result;
 };
 
-export const newRequest = async (email: string, { fetch }: { fetch: Fetch }) => {
-  const payload = [{ record_id: ID.unique(), created_at: new Date().toISOString(), email, contact_complete: 1 }];
+export const newRequest = async (user: TUser, { fetch }: { fetch: Fetch }) => {
+  const payload = [
+    {
+      record_id: ID.unique(),
+      created_at: new Date().toISOString(),
+      userid: user.id,
+      email: user.email,
+      contact_complete: 1,
+    },
+  ];
   const requestData = {
     action: 'import',
     type: 'flat',
@@ -32,3 +41,16 @@ export const newRequest = async (email: string, { fetch }: { fetch: Fetch }) => 
   const result = await fetchRedcapJSON<{ count: number }>(requestData, { fetch });
   return result;
 };
+
+// const listRequests = async (email: string, { fetch }: { fetch: Fetch }) => {
+//   const requestData = {
+//     type: 'flat',
+//     filterLogic: `[email] = '${email.replace("'", "''")}'`,
+//     fields: ['record_id', 'created_at', 'contact_complete'],
+//   };
+//   const result = await fetchRedcapJSON<Array<{ record_id: string; created_at: string; contact_complete: number }>>(
+//     requestData,
+//     { fetch },
+//   );
+//   return { requests: result, count: result.length };
+// };
