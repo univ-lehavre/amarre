@@ -37,9 +37,21 @@
         "description": "Formulaire d'inscription",
         "required": true,
         "content": {
-          "application/x-www-form-urlencoded": {
+          "application/json": {
             "schema": {
               "$ref": "#/components/schemas/SignupRequest"
+            },
+            "examples": {
+              "ExempleValide": {
+                "value": {
+                  "email": "alice@inserm.fr"
+                }
+              },
+              "DomaineRefuse": {
+                "value": {
+                  "email": "alice@gmail.com"
+                }
+              }
             }
           }
         }
@@ -369,10 +381,15 @@
             "properties": {
               "signedUp": {
                 "type": "boolean"
+              },
+              "createdAt": {
+                "type": "string",
+                "description": "ISO timestamp"
               }
             },
             "required": [
-              "signedUp"
+              "signedUp",
+              "createdAt"
             ]
           },
           "error": {
@@ -401,31 +418,43 @@
           "email": {
             "type": "string",
             "format": "email",
-            "description": "Adresse email de l'utilisateur"
+            "description": "Adresse email de l'utilisateur",
+            "example": "alice@inserm.fr"
           }
         },
         "required": [
           "email"
         ],
-        "additionalProperties": false
+        "additionalProperties": false,
+        "ref": "SignupRequest",
+        "example": {
+          "email": "alice@inserm.fr"
+        }
       },
       "LoginRequest": {
         "type": "object",
         "properties": {
           "userId": {
             "type": "string",
-            "description": "Appwrite user id"
+            "description": "Appwrite user id",
+            "example": "0123456789abcdef01234567"
           },
           "secret": {
             "type": "string",
-            "description": "Appwrite session secret"
+            "description": "Appwrite session secret",
+            "example": "abcdef0123456789abcdef0123456789"
           }
         },
         "required": [
           "userId",
           "secret"
         ],
-        "additionalProperties": false
+        "additionalProperties": false,
+        "ref": "LoginRequest",
+        "example": {
+          "userId": "0123456789abcdef01234567",
+          "secret": "abcdef0123456789abcdef0123456789"
+        }
       },
       "LoginResponse": {
         "type": "object",
@@ -514,32 +543,10 @@
           }
         }
       },
-      "AccountPushedResponse": {
+      "SurveyNewResponse": {
         "type": "object",
         "properties": {
-          "data": {
-            "type": "object",
-            "properties": {
-              "hasPushedID": {
-                "type": "boolean"
-              },
-              "hasPushedEmail": {
-                "type": "boolean"
-              },
-              "hasPushedAccount": {
-                "type": "boolean"
-              },
-              "isActive": {
-                "type": "boolean"
-              }
-            },
-            "required": [
-              "hasPushedID",
-              "hasPushedEmail",
-              "hasPushedAccount",
-              "isActive"
-            ]
-          },
+          "data": {},
           "error": {
             "allOf": [
               {
@@ -554,65 +561,12 @@
               }
             ]
           }
-        },
-        "required": [
-          "data"
-        ]
-      },
-      "AccountPushResponse": {
-        "type": "object",
-        "properties": {
-          "data": {
-            "type": "object",
-            "properties": {
-              "count": {
-                "type": "number"
-              }
-            }
-          },
-          "error": {
-            "allOf": [
-              {
-                "$ref": "#/components/schemas/ApiError"
-              },
-              {
-                "type": [
-                  "object",
-                  "null"
-                ],
-                "default": null
-              }
-            ]
-          }
-        },
-        "required": [
-          "data"
-        ]
+        }
       }
     },
     "parameters": {}
   },
   "paths": {
-    "/users": {
-      "get": {
-        "tags": [
-          "users"
-        ],
-        "summary": "Liste paginée des utilisateurs",
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ListUsersResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
     "/me": {
       "get": {
         "tags": [
@@ -713,79 +667,34 @@
         }
       }
     },
-    "/account/pushed": {
-      "get": {
+    "/surveys/new": {
+      "post": {
         "tags": [
-          "users"
+          "surveys"
         ],
-        "summary": "Vérifie si le compte a été poussé dans REDCap (auth requis)",
+        "summary": "Crée une nouvelle demande (auth requis)",
         "security": [
           {
             "bearerAuth": []
           }
         ],
         "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AccountPushedResponse"
-                }
-              }
-            }
-          },
           "401": {
             "description": "Non authentifié",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AccountPushedResponse"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/account/push": {
-      "get": {
-        "tags": [
-          "users"
-        ],
-        "summary": "Pousse le compte courant vers REDCap (auth requis)",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AccountPushResponse"
+                  "$ref": "#/components/schemas/SurveyNewResponse"
                 }
               }
             }
           },
-          "401": {
-            "description": "Non authentifié",
+          "501": {
+            "description": "Non implémenté",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AccountPushResponse"
-                }
-              }
-            }
-          },
-          "502": {
-            "description": "Erreur REDCap",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AccountPushResponse"
+                  "$ref": "#/components/schemas/SurveyNewResponse"
                 }
               }
             }
@@ -827,12 +736,49 @@
           "auth"
         ],
         "summary": "Login via Appwrite credentials",
+        "operationId": "auth_login",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/LoginRequest"
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string",
+                    "description": "Appwrite user id",
+                    "example": "0123456789abcdef01234567"
+                  },
+                  "secret": {
+                    "type": "string",
+                    "description": "Appwrite session secret",
+                    "example": "abcdef0123456789abcdef0123456789"
+                  }
+                },
+                "required": [
+                  "userId",
+                  "secret"
+                ],
+                "additionalProperties": false,
+                "ref": "LoginRequest",
+                "example": {
+                  "userId": "0123456789abcdef01234567",
+                  "secret": "abcdef0123456789abcdef0123456789"
+                }
+              },
+              "examples": {
+                "ExempleValide": {
+                  "value": {
+                    "userId": "0123456789abcdef01234567",
+                    "secret": "abcdef0123456789abcdef0123456789"
+                  }
+                },
+                "MauvaisFormat": {
+                  "value": {
+                    "userId": "user-1",
+                    "secret": "not-hex"
+                  }
+                }
               }
             }
           }
@@ -863,12 +809,41 @@
           "auth"
         ],
         "summary": "Inscription (Magic URL token)",
+        "operationId": "auth_signup",
         "requestBody": {
           "required": true,
           "content": {
-            "application/x-www-form-urlencoded": {
+            "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/SignupRequest"
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "format": "email",
+                    "description": "Adresse email de l'utilisateur",
+                    "example": "alice@inserm.fr"
+                  }
+                },
+                "required": [
+                  "email"
+                ],
+                "additionalProperties": false,
+                "ref": "SignupRequest",
+                "example": {
+                  "email": "alice@inserm.fr"
+                }
+              },
+              "examples": {
+                "ExempleValide": {
+                  "value": {
+                    "email": "alice@inserm.fr"
+                  }
+                },
+                "EmailInvalide": {
+                  "value": {
+                    "email": "alice@@inserm"
+                  }
+                }
               }
             }
           }

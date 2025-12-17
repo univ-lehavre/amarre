@@ -23,19 +23,7 @@ async function main() {
   registry.registerComponent('securitySchemes', 'bearerAuth', { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' });
 
   // Paths (initial examples)
-  try {
-    log('registerPath /users');
-    registry.registerPath({
-      method: 'get',
-      path: '/users',
-      tags: ['users'],
-      summary: 'Liste paginée des utilisateurs',
-      responses: { 200: { description: 'OK', content: { 'application/json': { schema: ListUsersResponse } } } },
-    });
-  } catch (err) {
-    console.error('[openapi] error registering /users', err);
-    throw err;
-  }
+  // Route /users supprimée (plus de liste publique d'utilisateurs)
 
   try {
     log('registerPath /me');
@@ -102,56 +90,26 @@ async function main() {
     throw err;
   }
 
-  // Account
-  const AccountPushedResponse = z
-    .object({
-      data: z.object({
-        hasPushedID: z.boolean(),
-        hasPushedEmail: z.boolean(),
-        hasPushedAccount: z.boolean(),
-        isActive: z.boolean(),
-      }),
-      error: ApiError.nullable().default(null),
-    })
-    .openapi('AccountPushedResponse');
-  const AccountPushResponse = z
-    .object({ data: z.object({ count: z.number() }).partial(), error: ApiError.nullable().default(null) })
-    .openapi('AccountPushResponse');
+  // Ajout de /surveys/new (POST)
+  const SurveyNewResponse = z
+    .object({ data: z.unknown().nullable().default(null), error: ApiError.nullable().default(null) })
+    .openapi('SurveyNewResponse');
 
   try {
-    log('registerPath /account/pushed');
+    log('registerPath /surveys/new');
     registry.registerPath({
-      method: 'get',
-      path: '/account/pushed',
-      tags: ['users'],
-      summary: 'Vérifie si le compte a été poussé dans REDCap (auth requis)',
+      method: 'post',
+      path: '/surveys/new',
+      tags: ['surveys'],
+      summary: 'Crée une nouvelle demande (auth requis)',
       security: [{ bearerAuth: [] }],
       responses: {
-        200: { description: 'OK', content: { 'application/json': { schema: AccountPushedResponse } } },
-        401: { description: 'Non authentifié', content: { 'application/json': { schema: AccountPushedResponse } } },
+        501: { description: 'Non implémenté', content: { 'application/json': { schema: SurveyNewResponse } } },
+        401: { description: 'Non authentifié', content: { 'application/json': { schema: SurveyNewResponse } } },
       },
     });
   } catch (err) {
-    console.error('[openapi] error registering /account/pushed', err);
-    throw err;
-  }
-
-  try {
-    log('registerPath /account/push');
-    registry.registerPath({
-      method: 'get',
-      path: '/account/push',
-      tags: ['users'],
-      summary: 'Pousse le compte courant vers REDCap (auth requis)',
-      security: [{ bearerAuth: [] }],
-      responses: {
-        200: { description: 'OK', content: { 'application/json': { schema: AccountPushResponse } } },
-        401: { description: 'Non authentifié', content: { 'application/json': { schema: AccountPushResponse } } },
-        502: { description: 'Erreur REDCap', content: { 'application/json': { schema: AccountPushResponse } } },
-      },
-    });
-  } catch (err) {
-    console.error('[openapi] error registering /account/push', err);
+    console.error('[openapi] error registering /surveys/new', err);
     throw err;
   }
 
@@ -162,7 +120,10 @@ async function main() {
     .openapi('LogoutResponse');
   registry.register('LogoutResponse', LogoutResponse);
   const SignupResponse = z
-    .object({ data: z.object({ signedUp: z.boolean() }), error: ApiError.nullable().default(null) })
+    .object({
+      data: z.object({ signedUp: z.boolean(), createdAt: z.string().describe('ISO timestamp') }),
+      error: ApiError.nullable().default(null),
+    })
     .strict()
     .openapi('SignupResponse');
   registry.register('SignupResponse', SignupResponse);
@@ -170,18 +131,26 @@ async function main() {
 
   // Signup request (form data)
   const SignupRequest = z
-    .object({ email: z.string().email().describe("Adresse email de l'utilisateur") })
+    .object({
+      email: z.string().email().describe("Adresse email de l'utilisateur").openapi({ example: 'alice@inserm.fr' }),
+    })
     .strict()
-    .openapi('SignupRequest');
+    .openapi({ ref: 'SignupRequest', example: { email: 'alice@inserm.fr' } });
 
   // Register the SignupRequest schema into components/schemas so we can reference it.
   registry.register('SignupRequest', SignupRequest);
 
   // Login request: expect JSON body { userId, secret }
   const LoginRequest = z
-    .object({ userId: z.string().describe('Appwrite user id'), secret: z.string().describe('Appwrite session secret') })
+    .object({
+      userId: z.string().describe('Appwrite user id').openapi({ example: '0123456789abcdef01234567' }),
+      secret: z.string().describe('Appwrite session secret').openapi({ example: 'abcdef0123456789abcdef0123456789' }),
+    })
     .strict()
-    .openapi('LoginRequest');
+    .openapi({
+      ref: 'LoginRequest',
+      example: { userId: '0123456789abcdef01234567', secret: 'abcdef0123456789abcdef0123456789' },
+    });
 
   registry.register('LoginRequest', LoginRequest);
 
@@ -189,7 +158,15 @@ async function main() {
   registry.registerComponent('requestBodies', 'SignupForm', {
     description: "Formulaire d'inscription",
     required: true,
-    content: { 'application/x-www-form-urlencoded': { schema: { $ref: '#/components/schemas/SignupRequest' } } },
+    content: {
+      'application/json': {
+        schema: { $ref: '#/components/schemas/SignupRequest' },
+        examples: {
+          ExempleValide: { value: { email: 'alice@inserm.fr' } },
+          DomaineRefuse: { value: { email: 'alice@gmail.com' } },
+        },
+      },
+    },
   });
 
   // Login response: simple loggedIn flag (route handles session cookie)
@@ -333,7 +310,23 @@ async function main() {
       path: '/auth/login',
       tags: ['auth'],
       summary: 'Login via Appwrite credentials',
-      request: { body: { content: { 'application/json': { schema: LoginRequest } }, required: true } },
+      operationId: 'auth_login',
+      request: {
+        body: {
+          content: {
+            'application/json': {
+              schema: LoginRequest,
+              examples: {
+                ExempleValide: {
+                  value: { userId: '0123456789abcdef01234567', secret: 'abcdef0123456789abcdef0123456789' },
+                },
+                MauvaisFormat: { value: { userId: 'user-1', secret: 'not-hex' } },
+              },
+            },
+          },
+          required: true,
+        },
+      },
       responses: {
         200: { description: 'Connecté', content: { 'application/json': { schema: LoginResponse } } },
         400: { $ref: '#/components/responses/LoginValidationResponse' },
@@ -352,8 +345,20 @@ async function main() {
       path: '/auth/signup',
       tags: ['auth'],
       summary: 'Inscription (Magic URL token)',
+      operationId: 'auth_signup',
       request: {
-        body: { content: { 'application/x-www-form-urlencoded': { schema: SignupRequest } }, required: true },
+        body: {
+          content: {
+            'application/json': {
+              schema: SignupRequest,
+              examples: {
+                ExempleValide: { value: { email: 'alice@inserm.fr' } },
+                EmailInvalide: { value: { email: 'alice@@inserm' } },
+              },
+            },
+          },
+          required: true,
+        },
       },
       responses: {
         200: { description: 'OK', content: { 'application/json': { schema: SignupResponse } } },
