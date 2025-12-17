@@ -2,13 +2,14 @@ import { isEmail } from '$lib/validators';
 import { MagicUrlLoginValidationError, RequestBodyValidationError, UserIdValidationError } from '$lib/errors/auth';
 import { isHexadecimal } from '$lib/server/validators';
 import { InvalidContentTypeError, InvalidJsonBodyError, NotAnEmailError, SessionError } from '$lib/errors';
+import { ALLOWED_DOMAINS_REGEXP } from '$env/static/private';
 
 export const validateSignupEmail = async (email?: unknown): Promise<string> => {
   if (!email) throw new NotAnEmailError('Authentication not possible', { cause: 'No email address provided' });
   if (typeof email !== 'string')
     throw new NotAnEmailError('Authentication not possible', { cause: 'Email must be a string' });
   if (!isEmail(email)) throw new NotAnEmailError('Authentication not possible', { cause: 'Invalid email format' });
-  if (!email.match(/@univ-lehavre\.fr$/))
+  if (!email.match(ALLOWED_DOMAINS_REGEXP))
     throw new NotAnEmailError('Authentication not possible', { cause: 'Your professional email domain is unknown' });
   return email;
 };

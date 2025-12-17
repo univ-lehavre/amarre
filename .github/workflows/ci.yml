@@ -26,6 +26,7 @@ jobs:
       # Private env vars (Secrets → Actions → Secrets)
       APPWRITE_KEY: ${{ secrets.APPWRITE_KEY }}
       REDCAP_API_TOKEN: ${{ secrets.REDCAP_API_TOKEN }}
+      ALLOWED_DOMAINS_REGEXP: ${{ vars.ALLOWED_DOMAINS_REGEXP }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
