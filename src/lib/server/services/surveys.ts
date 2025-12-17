@@ -42,15 +42,25 @@ export const newRequest = async (user: TUser, { fetch }: { fetch: Fetch }) => {
   return result;
 };
 
-// const listRequests = async (email: string, { fetch }: { fetch: Fetch }) => {
-//   const requestData = {
-//     type: 'flat',
-//     filterLogic: `[email] = '${email.replace("'", "''")}'`,
-//     fields: ['record_id', 'created_at', 'contact_complete'],
-//   };
-//   const result = await fetchRedcapJSON<Array<{ record_id: string; created_at: string; contact_complete: number }>>(
-//     requestData,
-//     { fetch },
-//   );
-//   return { requests: result, count: result.length };
-// };
+export const listRequests = async (userid: string, { fetch }: { fetch: Fetch }) => {
+  const requestData = {
+    type: 'flat',
+    filterLogic: `[userid] = "${userid}"`,
+    fields: [
+      'record_id',
+      'created_at',
+      'form_timestamp',
+      'form_complete',
+      'composante_timestamp',
+      'composante_complete',
+      'labo_timestamp',
+      'labo_complete',
+      'encadrant_timestamp',
+      'encadrant_complete',
+      'validation_finale_timestamp',
+      'validation_finale_complete',
+    ].join(','),
+  };
+  const result = await fetchRedcapJSON<unknown>(requestData, { fetch });
+  return result;
+};
