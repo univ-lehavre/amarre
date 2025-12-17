@@ -1,8 +1,6 @@
 <script lang="ts">
-  import type { APIResponse } from '$lib/types';
   import { isEmail } from '$lib/validators';
   import { enhance } from '$app/forms';
-  import { fade } from 'svelte/transition';
 
   let { form } = $props();
 
