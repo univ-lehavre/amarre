@@ -2,6 +2,9 @@
   import HorizontalScroller from '$lib/ui/HorizontalScroller.svelte';
   import SectionTile from '$lib/ui/SectionTile.svelte';
   import CardItem from '$lib/ui/CardItem.svelte';
+  import { DateTime } from 'luxon';
+
+  let { requests } = $props();
   let url = undefined;
   let showHeading = $state(false);
 </script>
@@ -13,25 +16,20 @@
     bind:showHeading
   >
     <SectionTile title={!showHeading ? 'Suivre' : ''} />
-    <div class="flex-shrink-0">
-      <CardItem>
-        {#snippet actions()}
-          <a
-            href={url}
-            class="list-group-item list-group-item-action {url ? 'active' : 'disabled'}"
-          >
-            <div class="d-flex flex-row {url ? 'fs-5' : ''}">
-              <i class="bi bi-clipboard2-data me-2"></i>
-              <div
-                class="list-group list-group-flush fw-{url ? 'bold mb-1' : 'light'}"
-                style="font-family: Gambetta;"
-              >
-                Éditer ma demande
-              </div>
-            </div>
-          </a>
-        {/snippet}</CardItem
-      >
-    </div>
+    {#each requests as request}
+      <div class="flex-shrink-0">
+        <CardItem>
+          {#snippet description()}
+            Ma demande {request.record_id} est en cours de traitement.
+          {/snippet}
+          {#snippet actions()}{/snippet}
+          {#snippet footer()}
+            <small class="text-body-secondary">
+              Créée {DateTime.fromISO(request.created_at).toRelative({ locale: 'fr' })}
+            </small>
+          {/snippet}
+        </CardItem>
+      </div>
+    {/each}
   </HorizontalScroller>
 </div>
