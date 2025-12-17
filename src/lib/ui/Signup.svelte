@@ -4,9 +4,7 @@
   import { enhance } from '$app/forms';
   import { fade } from 'svelte/transition';
 
-  type Props = { form: APIResponse | null };
-
-  let { form }: Props = $props();
+  let { form } = $props();
 
   let email = $state('');
   let signuping = $state(false);
@@ -77,9 +75,8 @@
         </form>
         {#if signuping}
           <div
-            class="alert alert-info align-items-center d-flex"
+            class="alert alert-info alert-dismissible fade show align-items-center d-flex"
             role="alert"
-            transition:fade
           >
             <div
               class="spinner-border me-2"
@@ -87,25 +84,43 @@
             >
               <span class="visually-hidden">Loading...</span>
             </div>
-            Envoi en cours...
+            <span> Envoi en cours... </span>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="alert"
+              aria-label="Close"
+            ></button>
           </div>
         {/if}
-        {#if form?.error}
+        {#if form?.wrongSignupEmail}
           <div
-            class="alert alert-danger"
+            class="alert alert-danger alert-dismissible fade show"
             role="alert"
-            transition:fade
           >
-            {form.error.message}. {form.error.cause}
+            <span>
+              {form.message} : {form.cause}.
+            </span>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="alert"
+              aria-label="Close"
+            ></button>
           </div>
         {/if}
         {#if form?.data}
           <div
-            class="alert alert-success"
+            class="alert alert-success alert-dismissible fade show"
             role="alert"
-            transition:fade
           >
-            Un courriel d'authentification vous a été envoyé. Veuillez vérifier votre boîte de réception.
+            <span> Un courriel d'authentification vous a été envoyé. Veuillez vérifier votre boîte de réception. </span>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="alert"
+              aria-label="Close"
+            ></button>
           </div>
         {/if}
       </div>

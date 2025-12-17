@@ -15,7 +15,7 @@ export const actions = {
   newSurvey: event => event.fetch(`/api/v1/surveys/new`, { method: 'POST' }).then(res => res.json()),
   signup: async event => {
     const data: FormData = await event.request.formData();
-    const email: string | undefined = data.get('email')?.toString();
+    const email: string | undefined = data.get('email')?.toString().trim();
     const response = await event
       .fetch(`/api/v1/auth/signup`, {
         method: 'POST',
@@ -23,7 +23,8 @@ export const actions = {
         body: JSON.stringify({ email }),
       })
       .then(res => res.json());
-    if (response.error) fail(response.status, { message: response.error.message });
+    if (response.error) return fail(response.status, { wrongSignupEmail: true, ...response.error });
+
     return response;
   },
   logout: event => event.fetch(`/api/v1/auth/logout`, { method: 'POST' }).then(res => res.json()),
