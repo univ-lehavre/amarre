@@ -96,7 +96,7 @@ async function main() {
     .openapi('SurveyNewResponse');
 
   try {
-    log('registerPath /surveys/new');
+    log('registerPath /surveys/new (POST)');
     registry.registerPath({
       method: 'post',
       path: '/surveys/new',
@@ -109,7 +109,23 @@ async function main() {
       },
     });
   } catch (err) {
-    console.error('[openapi] error registering /surveys/new', err);
+    console.error('[openapi] error registering /surveys/new (POST)', err);
+    throw err;
+  }
+
+  try {
+    log('registerPath /surveys/new (GET)');
+    registry.registerPath({
+      method: 'get',
+      path: '/surveys/new',
+      tags: ['surveys'],
+      summary: 'Méthode non autorisée - utiliser POST',
+      responses: {
+        405: { description: 'Méthode non autorisée', content: { 'application/json': { schema: SurveyNewResponse } } },
+      },
+    });
+  } catch (err) {
+    console.error('[openapi] error registering /surveys/new (GET)', err);
     throw err;
   }
 
