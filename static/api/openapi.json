@@ -700,6 +700,24 @@
             }
           }
         }
+      },
+      "get": {
+        "tags": [
+          "surveys"
+        ],
+        "summary": "Méthode non autorisée - utiliser POST",
+        "responses": {
+          "405": {
+            "description": "Méthode non autorisée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SurveyNewResponse"
+                }
+              }
+            }
+          }
+        }
       }
     },
     "/auth/logout": {
