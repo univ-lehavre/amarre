@@ -49,15 +49,10 @@ export const listRequests = async (userid: string, { fetch }: { fetch: Fetch }) 
     fields: [
       'record_id',
       'created_at',
-      'form_timestamp',
       'form_complete',
-      'composante_timestamp',
       'composante_complete',
-      'labo_timestamp',
       'labo_complete',
-      'encadrant_timestamp',
       'encadrant_complete',
-      'validation_finale_timestamp',
       'validation_finale_complete',
     ].join(','),
   };

@@ -18,6 +18,3 @@ export const POST: RequestHandler = async ({ locals, fetch }) => {
     return mapErrorToResponse(error);
   }
 };
-
-export const GET: RequestHandler = async () =>
-  json({ data: null, error: { code: 'method_not_allowed', message: 'Use POST' } }, { status: 405 });
