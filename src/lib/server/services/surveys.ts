@@ -8,15 +8,15 @@ export const getSurveyUrl = async (record: string, context: { fetch: Fetch }): P
   return result;
 };
 
-export const downloadSurvey = async (record: string, context: { fetch: Fetch }) => {
+export const downloadSurvey = async (userid: string, context: { fetch: Fetch }): Promise<unknown> => {
   const requestData = {
     type: 'flat',
-    'records[0]': record,
+    filterLogic: `[userid] = "${userid}"`,
     rawOrLabel: 'label',
     rawOrLabelHeaders: 'label',
     exportCheckboxLabel: 'true',
   };
-  const result = await fetchRedcapText(requestData, context);
+  const result = await fetchRedcapJSON<unknown>(requestData, context);
   return result;
 };
 

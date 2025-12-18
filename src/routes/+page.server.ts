@@ -7,7 +7,8 @@ export const load: PageServerLoad = async ({ fetch, locals }) => {
   const userId = locals.userId;
   if (!userId) return { user: null };
   const user = (await fetch('/api/v1/me').then(res => res.json())) as { data: TUser } | null;
-  const result = { user: user?.data };
+  const requests = await fetch('/api/v1/surveys/list', { method: 'POST' }).then(res => res.json());
+  const result = { user: user?.data, requests: requests?.data };
   return result;
 };
 

@@ -29,8 +29,8 @@
   >
     <Collaborate {userId} />
     <Rule />
-    {#if userId}
-      <Follow />
+    {#if data.requests && data.requests.length > 0}
+      <Follow requests={data.requests} />
       <Rule />
     {/if}
     <Administrate

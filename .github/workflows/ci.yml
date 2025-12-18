@@ -45,11 +45,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Code format check
+        run: pnpm format:check
+
       - name: Lint
         run: pnpm lint
 
       - name: Type check (svelte-check)
-        run: pnpm check
+        run: pnpm svelte:check
 
       - name: Unit tests
         run: pnpm test
