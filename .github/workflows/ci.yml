@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - master
-      - "**"
+      - '**'
   pull_request:
 
 concurrency:
@@ -39,8 +39,8 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version-file: ".nvmrc"
-          cache: "pnpm"
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
