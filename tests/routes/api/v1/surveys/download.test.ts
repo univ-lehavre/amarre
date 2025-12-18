@@ -9,12 +9,9 @@ describe('GET /api/v1/surveys/download (anti-derive OpenAPI)', () => {
 
     expect(res.status).toBe(401);
     const body = await res.json();
-    
+
     // Validate response structure
-    expect(body).toMatchObject({ 
-      data: null, 
-      error: { code: 'unauthenticated', message: 'No authenticated user' } 
-    });
+    expect(body).toMatchObject({ data: null, error: { code: 'unauthenticated', message: 'No authenticated user' } });
   });
 
   it('200 when downloading survey data successfully', async () => {
@@ -23,7 +20,7 @@ describe('GET /api/v1/surveys/download (anti-derive OpenAPI)', () => {
 
     const mockSurveyData = [
       { record_id: '1', field1: 'value1' },
-      { record_id: '2', field1: 'value2' }
+      { record_id: '2', field1: 'value2' },
     ];
     downloadSurvey.mockResolvedValue(mockSurveyData);
 
@@ -33,7 +30,7 @@ describe('GET /api/v1/surveys/download (anti-derive OpenAPI)', () => {
     expect(res.status).toBe(200);
 
     const body = await res.json();
-    
+
     // Validate response structure
     expect(body.error).toBeNull();
     expect(body.data).toEqual(mockSurveyData);

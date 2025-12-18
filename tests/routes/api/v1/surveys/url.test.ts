@@ -9,12 +9,9 @@ describe('GET /api/v1/surveys/url (anti-derive OpenAPI)', () => {
 
     expect(res.status).toBe(401);
     const body = await res.json();
-    
+
     // Validate response structure
-    expect(body).toMatchObject({ 
-      data: null, 
-      error: { code: 'unauthenticated', message: 'No authenticated user' } 
-    });
+    expect(body).toMatchObject({ data: null, error: { code: 'unauthenticated', message: 'No authenticated user' } });
   });
 
   it('200 when getting survey URL successfully', async () => {
@@ -29,7 +26,7 @@ describe('GET /api/v1/surveys/url (anti-derive OpenAPI)', () => {
     expect(res.status).toBe(200);
 
     const body = await res.json();
-    
+
     // Validate response structure
     expect(body.error).toBeNull();
     expect(body.data).toMatchObject({ url: 'https://example.com/survey' });
@@ -47,11 +44,8 @@ describe('GET /api/v1/surveys/url (anti-derive OpenAPI)', () => {
     expect(res.status).toBe(422);
 
     const body = await res.json();
-    
+
     // Validate response structure
-    expect(body).toMatchObject({ 
-      data: null, 
-      error: { code: 'invalid_url', message: 'Invalid or missing URL' } 
-    });
+    expect(body).toMatchObject({ data: null, error: { code: 'invalid_url', message: 'Invalid or missing URL' } });
   });
 });

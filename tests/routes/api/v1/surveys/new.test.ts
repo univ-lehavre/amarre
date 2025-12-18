@@ -9,12 +9,9 @@ describe('POST /api/v1/surveys/new (anti-derive OpenAPI)', () => {
 
     expect(res.status).toBe(401);
     const body = await res.json();
-    
+
     // Validate response structure
-    expect(body).toMatchObject({ 
-      data: null, 
-      error: { code: 'unauthenticated', message: 'No authenticated user' } 
-    });
+    expect(body).toMatchObject({ data: null, error: { code: 'unauthenticated', message: 'No authenticated user' } });
   });
 
   it('200 when creating new request successfully', async () => {
@@ -22,10 +19,10 @@ describe('POST /api/v1/surveys/new (anti-derive OpenAPI)', () => {
     const newRequest = services.newRequest as unknown as ReturnType<typeof vi.fn>;
 
     newRequest.mockResolvedValue({ count: 1 });
-    
-    const mockFetch = vi.fn().mockResolvedValue({
-      json: vi.fn().mockResolvedValue({ data: { email: 'test@inserm.fr' } })
-    });
+
+    const mockFetch = vi
+      .fn()
+      .mockResolvedValue({ json: vi.fn().mockResolvedValue({ data: { email: 'test@inserm.fr' } }) });
 
     const mod = await import('../../../../../src/routes/api/v1/surveys/new/+server');
     const res = await mod.POST({ locals: { userId: 'user_1' }, fetch: mockFetch } as never);
@@ -33,7 +30,7 @@ describe('POST /api/v1/surveys/new (anti-derive OpenAPI)', () => {
     expect(res.status).toBe(200);
 
     const body = await res.json();
-    
+
     // Validate response structure
     expect(body.error).toBeNull();
     expect(body.data).toMatchObject({ newRequestCreated: 1 });
