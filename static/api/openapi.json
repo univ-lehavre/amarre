@@ -26,10 +26,11 @@
   ],
   "components": {
     "securitySchemes": {
-      "bearerAuth": {
-        "type": "http",
-        "scheme": "bearer",
-        "bearerFormat": "JWT"
+      "cookieAuth": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "session",
+        "description": "Authentification via cookie de session (défini après /auth/login). Aucun Bearer Token requis."
       }
     },
     "requestBodies": {
@@ -700,6 +701,11 @@
           "users"
         ],
         "summary": "Informations de l’utilisateur courant",
+        "security": [
+          {
+            "cookieAuth": []
+          }
+        ],
         "responses": {
           "200": {
             "description": "OK",
@@ -732,7 +738,7 @@
         "summary": "Récupère l’URL du questionnaire (auth requis)",
         "security": [
           {
-            "bearerAuth": []
+            "cookieAuth": []
           }
         ],
         "responses": {
@@ -767,7 +773,7 @@
         "summary": "Télécharge les réponses du questionnaire (auth requis)",
         "security": [
           {
-            "bearerAuth": []
+            "cookieAuth": []
           }
         ],
         "responses": {
@@ -803,7 +809,7 @@
         "operationId": "surveys_new",
         "security": [
           {
-            "bearerAuth": []
+            "cookieAuth": []
           }
         ],
         "responses": {
@@ -858,7 +864,7 @@
         "operationId": "surveys_list",
         "security": [
           {
-            "bearerAuth": []
+            "cookieAuth": []
           }
         ],
         "responses": {
@@ -912,7 +918,7 @@
         "summary": "Déconnexion (auth requis)",
         "security": [
           {
-            "bearerAuth": []
+            "cookieAuth": []
           }
         ],
         "responses": {
