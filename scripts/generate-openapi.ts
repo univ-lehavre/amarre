@@ -259,7 +259,7 @@ async function main() {
 
   registry.register('LoginResponse', LoginResponse);
 
-  // Register common ApiError examples so Swagger can display them in responses
+  // Register common ApiError examples for API documentation
   registry.registerComponent('examples', 'ValidationError', {
     summary: 'Validation error example',
     value: {
