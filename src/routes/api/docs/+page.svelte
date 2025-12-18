@@ -3,45 +3,40 @@
 
   onMount(() => {
     const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui-bundle.js';
-    script.defer = true;
-    script.onload = () => {
-      type SwaggerUIBundleFn = ((config: Record<string, unknown>) => void) & { presets: { apis: unknown } };
-
-      const w = window as unknown as { SwaggerUIBundle: SwaggerUIBundleFn };
-      w.SwaggerUIBundle({
-        url: '/api/openapi.json',
-        dom_id: '#swagger-ui',
-        presets: [w.SwaggerUIBundle.presets.apis],
-        layout: 'BaseLayout',
-        deepLinking: true,
-        persistAuthorization: true,
-        tryItOutEnabled: true,
-        displayRequestDuration: true,
-        defaultModelsExpandDepth: -1,
-        defaultModelExpandDepth: 2,
-        requestInterceptor: (req: unknown) => {
-          // Inclure les cookies de session pour les appels same-origin
-          type ReqWithCreds = { credentials?: 'include' | 'omit' | 'same-origin' | string };
-          const r = req as ReqWithCreds;
-          r.credentials = 'include';
-          return r;
-        },
-        syntaxHighlight: { activate: true, theme: 'monokai' },
-      });
-    };
+    script.src = 'https://cdn.jsdelivr.net/npm/rapidoc@9/dist/rapidoc-min.js';
+    script.type = 'module';
     document.body.appendChild(script);
   });
 </script>
 
-<svelte:head>
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/swagger-ui-dist@5/swagger-ui.css"
-  />
-</svelte:head>
-
-<div
-  id="swagger-ui"
-  style="margin: 0; padding: 0;"
-></div>
+<rapi-doc
+  spec-url="/api/openapi.json"
+  theme="dark"
+  bg-color="#1e1e1e"
+  text-color="#f0f0f0"
+  primary-color="#4a9eff"
+  nav-bg-color="#252525"
+  nav-text-color="#f0f0f0"
+  nav-hover-bg-color="#3a3a3a"
+  nav-hover-text-color="#ffffff"
+  nav-accent-color="#4a9eff"
+  render-style="read"
+  schema-style="table"
+  show-header="true"
+  show-info="true"
+  allow-authentication="true"
+  allow-server-selection="true"
+  allow-api-list-style-selection="false"
+  allow-try="true"
+  persist-auth="true"
+  use-path-in-nav-bar="false"
+  layout="row"
+  sort-tags="false"
+  sort-endpoints-by="path"
+  heading-text="ECRIN API Documentation"
+  goto-path=""
+  fill-request-fields-with-example="true"
+  response-area-height="400px"
+  style="height: 100vh; width: 100%;"
+  fetch-credentials="include"
+></rapi-doc>

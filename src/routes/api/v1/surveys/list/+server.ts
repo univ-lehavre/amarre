@@ -29,7 +29,7 @@ export const _openapi = {
   path: '/api/v1/surveys/list',
   tags: ['surveys'],
   summary: 'Liste les demandes de l’utilisateur (auth requis)',
-  security: [{ bearerAuth: [] }],
+  security: [{ cookieAuth: [] }],
   responses: {
     200: { description: 'OK', content: { 'application/json': { schema: SurveyListResponse } } },
     401: { description: 'Non authentifié', content: { 'application/json': { schema: SurveyListResponse } } },

@@ -19,8 +19,13 @@ async function main() {
   registry.register('ApiError', ApiError);
   registry.register('ListUsersResponse', ListUsersResponse);
   registry.register('MeResponse', MeResponse);
-  log('registering security scheme bearerAuth');
-  registry.registerComponent('securitySchemes', 'bearerAuth', { type: 'http', scheme: 'bearer', bearerFormat: 'JWT' });
+  log('registering security scheme cookieAuth');
+  registry.registerComponent('securitySchemes', 'cookieAuth', {
+    type: 'apiKey',
+    in: 'cookie',
+    name: 'session',
+    description: 'Authentification via cookie de session (défini après /auth/login). Aucun Bearer Token requis.',
+  });
 
   // Paths (initial examples)
   // Route /users supprimée (plus de liste publique d'utilisateurs)
@@ -32,6 +37,7 @@ async function main() {
       path: '/me',
       tags: ['users'],
       summary: 'Informations de l’utilisateur courant',
+      security: [{ cookieAuth: [] }],
       responses: {
         200: { description: 'OK', content: { 'application/json': { schema: MeResponse } } },
         401: { description: 'Non authentifié', content: { 'application/json': { schema: MeResponse } } },
@@ -59,7 +65,7 @@ async function main() {
       path: '/surveys/url',
       tags: ['surveys'],
       summary: 'Récupère l’URL du questionnaire (auth requis)',
-      security: [{ bearerAuth: [] }],
+      security: [{ cookieAuth: [] }],
       responses: {
         200: { description: 'OK', content: { 'application/json': { schema: SurveyUrlResponse } } },
         401: { description: 'Non authentifié', content: { 'application/json': { schema: SurveyUrlResponse } } },
@@ -79,7 +85,7 @@ async function main() {
       path: '/surveys/download',
       tags: ['surveys'],
       summary: 'Télécharge les réponses du questionnaire (auth requis)',
-      security: [{ bearerAuth: [] }],
+      security: [{ cookieAuth: [] }],
       responses: {
         200: { description: 'OK', content: { 'application/json': { schema: SurveyDownloadResponse } } },
         401: { description: 'Non authentifié', content: { 'application/json': { schema: SurveyDownloadResponse } } },
@@ -132,7 +138,7 @@ async function main() {
       tags: ['surveys'],
       summary: 'Crée une nouvelle demande (auth requis)',
       operationId: 'surveys_new',
-      security: [{ bearerAuth: [] }],
+      security: [{ cookieAuth: [] }],
       responses: {
         200: { description: 'OK', content: { 'application/json': { schema: SurveyNewResponse } } },
         401: { description: 'Non authentifié', content: { 'application/json': { schema: SurveyNewResponse } } },
@@ -168,7 +174,7 @@ async function main() {
       tags: ['surveys'],
       summary: 'Liste les demandes de l’utilisateur (auth requis)',
       operationId: 'surveys_list',
-      security: [{ bearerAuth: [] }],
+      security: [{ cookieAuth: [] }],
       responses: {
         200: { description: 'OK', content: { 'application/json': { schema: SurveyListResponse } } },
         401: { description: 'Non authentifié', content: { 'application/json': { schema: SurveyListResponse } } },
@@ -259,7 +265,7 @@ async function main() {
 
   registry.register('LoginResponse', LoginResponse);
 
-  // Register common ApiError examples so Swagger can display them in responses
+  // Register common ApiError examples for API documentation
   registry.registerComponent('examples', 'ValidationError', {
     summary: 'Validation error example',
     value: {
@@ -371,7 +377,7 @@ async function main() {
       path: '/auth/logout',
       tags: ['auth'],
       summary: 'Déconnexion (auth requis)',
-      security: [{ bearerAuth: [] }],
+      security: [{ cookieAuth: [] }],
       responses: {
         200: {
           description: 'Déconnecté',
