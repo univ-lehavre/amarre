@@ -103,7 +103,7 @@ export const _openapi = {
   tags: ['health'],
   summary: 'Check network connectivity to an allowed host (TCP + TLS)',
   description:
-    'Performs TCP connection check and TLS/HTTPS certificate validation. Only allows port 443 and specific whitelisted hosts (www.google.com, redcap.univ-lehavre.fr, and Appwrite host from PUBLIC_APPWRITE_ENDPOINT). Returns 200 if online, 503 if offline, 400 if invalid parameters or host not allowed.',
+    'Performs TCP connection check and TLS/HTTPS certificate validation. Only allows port 443 and specific allowlisted hosts (www.google.com, redcap.univ-lehavre.fr, and Appwrite host from PUBLIC_APPWRITE_ENDPOINT). Returns 200 if online, 503 if offline, 400 if invalid parameters or host not allowed.',
   parameters: [
     {
       name: 'host',

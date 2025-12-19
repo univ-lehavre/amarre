@@ -202,7 +202,11 @@ export async function checkTlsConnection(host: string, port: number, timeoutMs: 
  */
 export async function checkOnline(host: string, port: number, timeoutMs: number): Promise<OnlineCheckResult> {
   const tcp = await checkTcpConnection(host, port, timeoutMs);
-  const tls = await checkTlsConnection(host, port, timeoutMs);
+  
+  // Only perform TLS check if TCP connection succeeded
+  const tls = tcp.ok
+    ? await checkTlsConnection(host, port, timeoutMs)
+    : { ok: false, authorized: false, error: 'TCP connection failed' };
 
   const online = tcp.ok && tls.ok && tls.authorized === true;
 
