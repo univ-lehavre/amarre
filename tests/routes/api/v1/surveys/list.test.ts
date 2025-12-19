@@ -2,10 +2,10 @@ import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('$lib/server/services/surveys', () => ({ listRequests: vi.fn() }));
 
-describe('POST /api/v1/surveys/list (anti-derive OpenAPI)', () => {
+describe('GET /api/v1/surveys/list (anti-derive OpenAPI)', () => {
   it('401 est documenté et conforme au schéma', async () => {
     const mod = await import('../../../../../src/routes/api/v1/surveys/list/+server');
-    const res = await mod.POST({ locals: {}, fetch: vi.fn() } as never);
+    const res = await mod.GET({ locals: {}, fetch: vi.fn() } as never);
 
     expect(res.status).toBe(401);
     expect(mod._openapi.responses[401]).toBeTruthy();
@@ -35,7 +35,7 @@ describe('POST /api/v1/surveys/list (anti-derive OpenAPI)', () => {
     ]);
 
     const mod = await import('../../../../../src/routes/api/v1/surveys/list/+server');
-    const res = await mod.POST({ locals: { userId: 'user_1' }, fetch: vi.fn() } as never);
+    const res = await mod.GET({ locals: { userId: 'user_1' }, fetch: vi.fn() } as never);
 
     expect(res.status).toBe(200);
     expect(mod._openapi.responses[200]).toBeTruthy();
