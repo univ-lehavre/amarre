@@ -489,7 +489,7 @@
         ],
         "additionalProperties": false
       },
-      "SurveyUrlResponse": {
+      "SurveyLinkResponse": {
         "type": "object",
         "properties": {
           "data": {
@@ -730,12 +730,12 @@
         }
       }
     },
-    "/surveys/url": {
+    "/surveys/links": {
       "get": {
         "tags": [
           "surveys"
         ],
-        "summary": "Récupère l’URL du questionnaire (auth requis)",
+        "summary": "Récupère un lien de questionnaire (auth requis)",
         "security": [
           {
             "cookieAuth": []
@@ -747,7 +747,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SurveyUrlResponse"
+                  "$ref": "#/components/schemas/SurveyLinkResponse"
                 }
               }
             }
@@ -757,7 +757,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/SurveyUrlResponse"
+                  "$ref": "#/components/schemas/SurveyLinkResponse"
                 }
               }
             }

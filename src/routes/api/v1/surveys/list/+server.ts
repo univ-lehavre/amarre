@@ -33,7 +33,29 @@ export const GET: RequestHandler = async ({ locals, fetch }) => {
         { status: 401 },
       );
     const requests = await listRequests(userId, { fetch });
-    const result = requests.sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
+    const requestsWithLinks: {
+      form: string | undefined;
+      validation_finale: string | undefined;
+      record_id: string;
+      created_at: string;
+      form_complete: string;
+      composante_complete: string;
+      labo_complete: string;
+      encadrant_complete: string;
+      validation_finale_complete: string;
+    }[] = await Promise.all(
+      requests.map(async request => {
+        const form = (await fetch(`/api/v1/surveys/links?record=${request.record_id}&instrument=form`).then(res =>
+          res.json(),
+        )) as { data: { url: string } | null };
+        const validation_finale = (await fetch(
+          `/api/v1/surveys/links?record=${request.record_id}&instrument=validation_finale`,
+        ).then(res => res.json())) as { data: { url: string } | null };
+        const result = { ...request, form: form.data?.url, validation_finale: validation_finale.data?.url };
+        return result;
+      }),
+    );
+    const result = requestsWithLinks.sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
     return json({ data: result, error: null }, { status: 200 });
   } catch (error) {
     return mapErrorToResponse(error);
