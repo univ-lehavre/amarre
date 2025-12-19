@@ -51,9 +51,21 @@ export const GET: RequestHandler = async ({ locals, fetch, url }) => {
 
     const result = await getSurveyUrl(record, instrument, { fetch });
 
-    if (result.match(/"error":/))
-      return json({ data: null, error: { code: 'invalid_url', message: 'Invalid or missing URL' } }, { status: 422 });
+    let hasError = false;
+    try {
+      const parsed = JSON.parse(result);
+      if (parsed && typeof parsed === 'object' && 'error' in parsed) {
+        hasError = true;
+      }
+    } catch {
+      // result is not JSON; treat it as a plain URL string
+    }
 
+    if (hasError)
+      return json(
+        { data: null, error: { code: 'invalid_url', message: 'Invalid or missing URL' } },
+        { status: 422 },
+      );
     return json({ data: { url: result }, error: null }, { status: 200 });
   } catch (error) {
     return mapErrorToResponse(error);
