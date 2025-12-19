@@ -62,10 +62,7 @@ export const GET: RequestHandler = async ({ locals, fetch, url }) => {
     }
 
     if (hasError)
-      return json(
-        { data: null, error: { code: 'invalid_url', message: 'Invalid or missing URL' } },
-        { status: 422 },
-      );
+      return json({ data: null, error: { code: 'invalid_url', message: 'Invalid or missing URL' } }, { status: 422 });
     return json({ data: { url: result }, error: null }, { status: 200 });
   } catch (error) {
     return mapErrorToResponse(error);
