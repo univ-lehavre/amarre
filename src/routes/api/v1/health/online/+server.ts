@@ -42,11 +42,57 @@ const OnlineCheckResponse = makeResponseSchema(OnlineCheckData);
 /**
  * Query parameters schema
  */
-const QueryParams = z.object({
-  host: z.string().min(1),
-  port: z.coerce.number().int(),
-  timeoutMs: z.coerce.number().int().min(100).max(30000).optional().default(3000),
-});
+const QueryParams = z
+  .object({
+    host: z.string().nullable(),
+    port: z.string().nullable(),
+    timeoutMs: z.string().nullable().optional(),
+  })
+  .superRefine((val, ctx) => {
+    // Validate host
+    if (!val.host || val.host.length === 0) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['host'],
+        message: 'host must be a non-empty string',
+      });
+    }
+    
+    // Validate port
+    if (!val.port) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        path: ['port'],
+        message: 'port is required',
+      });
+    } else {
+      const portNum = parseInt(val.port, 10);
+      if (isNaN(portNum) || !Number.isInteger(portNum)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['port'],
+          message: 'port must be an integer',
+        });
+      }
+    }
+    
+    // Validate timeoutMs
+    if (val.timeoutMs) {
+      const timeoutNum = parseInt(val.timeoutMs, 10);
+      if (isNaN(timeoutNum) || timeoutNum < 100 || timeoutNum > 30000) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          path: ['timeoutMs'],
+          message: 'timeoutMs must be between 100 and 30000',
+        });
+      }
+    }
+  })
+  .transform((val) => ({
+    host: val.host as string, // Safe because superRefine validates it
+    port: parseInt(val.port as string, 10), // Safe because superRefine validates it
+    timeoutMs: val.timeoutMs ? parseInt(val.timeoutMs, 10) : 3000,
+  }));
 
 /**
  * OpenAPI metadata for the /api/v1/health/online endpoint

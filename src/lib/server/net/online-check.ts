@@ -146,8 +146,8 @@ export async function checkTlsConnection(host: string, port: number, timeoutMs: 
       clearTimeout(timer);
       const latencyMs = Date.now() - startTime;
       const authorized = socket.authorized;
-      const protocol = socket.getProtocol();
-      const alpnProtocol = socket.alpnProtocol;
+      const protocolValue = socket.getProtocol();
+      const alpnProtocolValue = socket.alpnProtocol;
 
       let cert: CertInfo | undefined;
       if (authorized) {
@@ -164,14 +164,25 @@ export async function checkTlsConnection(host: string, port: number, timeoutMs: 
       }
 
       cleanup();
-      resolve({
+      const result: TlsCheckResult = {
         ok: true,
         latencyMs,
         authorized,
-        protocol,
-        alpnProtocol: alpnProtocol || undefined,
-        cert,
-      });
+      };
+      
+      if (protocolValue) {
+        result.protocol = protocolValue;
+      }
+      
+      if (alpnProtocolValue && typeof alpnProtocolValue === 'string') {
+        result.alpnProtocol = alpnProtocolValue;
+      }
+      
+      if (cert) {
+        result.cert = cert;
+      }
+      
+      resolve(result);
     });
 
     socket.on('error', (err) => {

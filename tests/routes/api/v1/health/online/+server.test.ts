@@ -7,7 +7,7 @@ vi.mock('$env/static/public', () => ({
 
 // Mock the online-check module to avoid actual network calls in tests
 vi.mock('$lib/server/net/online-check', async (importOriginal) => {
-  const actual = await importOriginal<typeof import('../../../../../src/lib/server/net/online-check')>();
+  const actual = await importOriginal<typeof import('../../../../../../src/lib/server/net/online-check')>();
   return {
     ...actual,
     checkOnline: vi.fn(),
@@ -17,7 +17,7 @@ vi.mock('$lib/server/net/online-check', async (importOriginal) => {
 describe('GET /api/v1/health/online', () => {
   describe('parameter validation', () => {
     it('returns 400 when host parameter is missing', async () => {
-      const mod = await import('../../../../../src/routes/api/v1/health/online/+server');
+      const mod = await import('../../../../../../src/routes/api/v1/health/online/+server');
       const url = new URL('http://localhost/api/v1/health/online?port=443');
       const res = await mod.GET({ url } as never);
 
@@ -28,7 +28,7 @@ describe('GET /api/v1/health/online', () => {
     });
 
     it('returns 400 when port parameter is missing', async () => {
-      const mod = await import('../../../../../src/routes/api/v1/health/online/+server');
+      const mod = await import('../../../../../../src/routes/api/v1/health/online/+server');
       const url = new URL('http://localhost/api/v1/health/online?host=www.google.com');
       const res = await mod.GET({ url } as never);
 
@@ -39,7 +39,7 @@ describe('GET /api/v1/health/online', () => {
     });
 
     it('returns 400 when port is not 443', async () => {
-      const mod = await import('../../../../../src/routes/api/v1/health/online/+server');
+      const mod = await import('../../../../../../src/routes/api/v1/health/online/+server');
       const url = new URL('http://localhost/api/v1/health/online?host=www.google.com&port=80');
       const res = await mod.GET({ url } as never);
 
@@ -63,7 +63,7 @@ describe('GET /api/v1/health/online', () => {
         tls: { ok: true, latencyMs: 20, authorized: true },
       });
 
-      const mod = await import('../../../../../src/routes/api/v1/health/online/+server');
+      const mod = await import('../../../../../../src/routes/api/v1/health/online/+server');
       const url = new URL('http://localhost/api/v1/health/online?host=www.google.com&port=443');
       await mod.GET({ url } as never);
 
@@ -83,7 +83,7 @@ describe('GET /api/v1/health/online', () => {
         tls: { ok: true, latencyMs: 20, authorized: true },
       });
 
-      const mod = await import('../../../../../src/routes/api/v1/health/online/+server');
+      const mod = await import('../../../../../../src/routes/api/v1/health/online/+server');
       const url = new URL('http://localhost/api/v1/health/online?host=www.google.com&port=443&timeoutMs=5000');
       await mod.GET({ url } as never);
 
@@ -93,7 +93,7 @@ describe('GET /api/v1/health/online', () => {
 
   describe('allowlist enforcement (anti-SSRF)', () => {
     it('returns 400 when host is not in allowlist', async () => {
-      const mod = await import('../../../../../src/routes/api/v1/health/online/+server');
+      const mod = await import('../../../../../../src/routes/api/v1/health/online/+server');
       const url = new URL('http://localhost/api/v1/health/online?host=malicious.example.com&port=443');
       const res = await mod.GET({ url } as never);
 
@@ -117,7 +117,7 @@ describe('GET /api/v1/health/online', () => {
         tls: { ok: true, latencyMs: 20, authorized: true },
       });
 
-      const mod = await import('../../../../../src/routes/api/v1/health/online/+server');
+      const mod = await import('../../../../../../src/routes/api/v1/health/online/+server');
       const url = new URL('http://localhost/api/v1/health/online?host=www.google.com&port=443');
       const res = await mod.GET({ url } as never);
 
@@ -137,7 +137,7 @@ describe('GET /api/v1/health/online', () => {
         tls: { ok: true, latencyMs: 20, authorized: true },
       });
 
-      const mod = await import('../../../../../src/routes/api/v1/health/online/+server');
+      const mod = await import('../../../../../../src/routes/api/v1/health/online/+server');
       const url = new URL('http://localhost/api/v1/health/online?host=redcap.univ-lehavre.fr&port=443');
       const res = await mod.GET({ url } as never);
 
@@ -157,7 +157,7 @@ describe('GET /api/v1/health/online', () => {
         tls: { ok: true, latencyMs: 20, authorized: true },
       });
 
-      const mod = await import('../../../../../src/routes/api/v1/health/online/+server');
+      const mod = await import('../../../../../../src/routes/api/v1/health/online/+server');
       const url = new URL('http://localhost/api/v1/health/online?host=cloud.appwrite.io&port=443');
       const res = await mod.GET({ url } as never);
 
@@ -165,7 +165,7 @@ describe('GET /api/v1/health/online', () => {
     });
 
     it('rejects localhost (SSRF protection)', async () => {
-      const mod = await import('../../../../../src/routes/api/v1/health/online/+server');
+      const mod = await import('../../../../../../src/routes/api/v1/health/online/+server');
       const url = new URL('http://localhost/api/v1/health/online?host=localhost&port=443');
       const res = await mod.GET({ url } as never);
 
@@ -175,7 +175,7 @@ describe('GET /api/v1/health/online', () => {
     });
 
     it('rejects internal IP (SSRF protection)', async () => {
-      const mod = await import('../../../../../src/routes/api/v1/health/online/+server');
+      const mod = await import('../../../../../../src/routes/api/v1/health/online/+server');
       const url = new URL('http://localhost/api/v1/health/online?host=192.168.1.1&port=443');
       const res = await mod.GET({ url } as never);
 
@@ -212,7 +212,7 @@ describe('GET /api/v1/health/online', () => {
         },
       });
 
-      const mod = await import('../../../../../src/routes/api/v1/health/online/+server');
+      const mod = await import('../../../../../../src/routes/api/v1/health/online/+server');
       const url = new URL('http://localhost/api/v1/health/online?host=www.google.com&port=443');
       const res = await mod.GET({ url } as never);
 
@@ -241,7 +241,7 @@ describe('GET /api/v1/health/online', () => {
         tls: { ok: false, authorized: false, error: 'Connection refused' },
       });
 
-      const mod = await import('../../../../../src/routes/api/v1/health/online/+server');
+      const mod = await import('../../../../../../src/routes/api/v1/health/online/+server');
       const url = new URL('http://localhost/api/v1/health/online?host=www.google.com&port=443');
       const res = await mod.GET({ url } as never);
 
@@ -266,7 +266,7 @@ describe('GET /api/v1/health/online', () => {
         tls: { ok: true, latencyMs: 34, authorized: false, error: 'Certificate verification failed' },
       });
 
-      const mod = await import('../../../../../src/routes/api/v1/health/online/+server');
+      const mod = await import('../../../../../../src/routes/api/v1/health/online/+server');
       const url = new URL('http://localhost/api/v1/health/online?host=www.google.com&port=443');
       const res = await mod.GET({ url } as never);
 
@@ -282,7 +282,7 @@ describe('GET /api/v1/health/online', () => {
 
   describe('OpenAPI metadata', () => {
     it('has valid OpenAPI metadata export', async () => {
-      const mod = await import('../../../../../src/routes/api/v1/health/online/+server');
+      const mod = await import('../../../../../../src/routes/api/v1/health/online/+server');
       expect(mod._openapi).toBeDefined();
       expect(mod._openapi.method).toBe('get');
       expect(mod._openapi.path).toBe('/api/v1/health/online');
@@ -310,7 +310,7 @@ describe('GET /api/v1/health/online', () => {
         },
       });
 
-      const mod = await import('../../../../../src/routes/api/v1/health/online/+server');
+      const mod = await import('../../../../../../src/routes/api/v1/health/online/+server');
       const url = new URL('http://localhost/api/v1/health/online?host=www.google.com&port=443');
       const res = await mod.GET({ url } as never);
 
@@ -323,7 +323,7 @@ describe('GET /api/v1/health/online', () => {
     });
 
     it('validates 400 response schema', async () => {
-      const mod = await import('../../../../../src/routes/api/v1/health/online/+server');
+      const mod = await import('../../../../../../src/routes/api/v1/health/online/+server');
       const url = new URL('http://localhost/api/v1/health/online?host=malicious.example.com&port=443');
       const res = await mod.GET({ url } as never);
 
@@ -348,7 +348,7 @@ describe('GET /api/v1/health/online', () => {
         tls: { ok: false, authorized: false },
       });
 
-      const mod = await import('../../../../../src/routes/api/v1/health/online/+server');
+      const mod = await import('../../../../../../src/routes/api/v1/health/online/+server');
       const url = new URL('http://localhost/api/v1/health/online?host=www.google.com&port=443');
       const res = await mod.GET({ url } as never);
 
