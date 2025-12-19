@@ -81,14 +81,18 @@
             </div>
           {/snippet}
           {#snippet links()}
-            <a
-              href={resolve(request.form)}
-              class="card-link">Formulaire</a
-            >
-            <a
-              href={resolve(request.validation_finale)}
-              class="card-link">Validation finale</a
-            >
+            {#if request.form}
+              <a
+                href={resolve(request.form)}
+                class="card-link">Formulaire</a
+              >
+            {/if}
+            {#if request.validation_finale}
+              <a
+                href={resolve(request.validation_finale)}
+                class="card-link">Validation finale</a
+              >
+            {/if}
           {/snippet}
           {#snippet footer()}
             <small class="text-body-secondary">
