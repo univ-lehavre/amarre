@@ -36,9 +36,9 @@ export const GET: RequestHandler = async ({ locals, fetch }) => {
     const safeGetInstrumentLink = async (recordId: string, instrument: string): Promise<string | undefined> => {
       try {
         const res = await fetch(`/api/v1/surveys/links?record=${recordId}&instrument=${instrument}`);
-        if (!res || typeof (res as unknown as { json?: unknown }).json !== 'function') return undefined;
+        if (!res.ok) return undefined;
 
-        const body = (await (res as unknown as { json: () => Promise<unknown> }).json()) as {
+        const body = (await res.json()) as {
           data?: { url?: string } | null;
         };
         return body?.data?.url;
