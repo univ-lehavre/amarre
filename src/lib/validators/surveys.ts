@@ -4,4 +4,4 @@ export const allowed_request_creation = (requests: SurveyRequestList | undefined
   requests === undefined ||
   requests === null ||
   requests.length === 0 ||
-  (requests.length >= 0 && requests.filter((r: SurveyRequestItem) => r.form_complete !== '2').length === 0);
+  (requests.length > 0 && requests.filter((r: SurveyRequestItem) => r.form_complete !== '2').length === 0);
