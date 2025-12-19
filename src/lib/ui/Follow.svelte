@@ -4,7 +4,6 @@
   import HorizontalScroller from '$lib/ui/HorizontalScroller.svelte';
   import SectionTile from '$lib/ui/SectionTile.svelte';
   import CardItem from '$lib/ui/CardItem.svelte';
-  import { resolve } from '$app/paths';
 
   let { requests } = $props();
   let showHeading = $state(false);
@@ -82,16 +81,20 @@
           {/snippet}
           {#snippet links()}
             {#if request.form}
+              <!-- eslint-disable svelte/no-navigation-without-resolve -->
               <a
-                href={resolve(request.form)}
+                href={request.form}
                 class="card-link">Formulaire</a
               >
+              <!-- eslint-enable svelte/no-navigation-without-resolve -->
             {/if}
             {#if request.validation_finale}
+              <!-- eslint-disable svelte/no-navigation-without-resolve -->
               <a
-                href={resolve(request.validation_finale)}
+                href={request.validation_finale}
                 class="card-link">Validation finale</a
               >
+              <!-- eslint-enable svelte/no-navigation-without-resolve -->
             {/if}
           {/snippet}
           {#snippet footer()}
