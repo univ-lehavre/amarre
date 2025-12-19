@@ -26,7 +26,7 @@ describe('online-check utility', () => {
       const { getAllowedHosts, getAppwriteHostname } = await import('../../../../src/lib/server/net/online-check');
       const hosts = getAllowedHosts();
       const appwriteHost = getAppwriteHostname();
-      
+
       if (appwriteHost) {
         // If we have an Appwrite hostname, it should be in the list
         expect(hosts).toContain(appwriteHost);
@@ -51,7 +51,7 @@ describe('online-check utility', () => {
     it('returns true for Appwrite hostname if configured', async () => {
       const { isHostAllowed, getAppwriteHostname } = await import('../../../../src/lib/server/net/online-check');
       const appwriteHost = getAppwriteHostname();
-      
+
       if (appwriteHost) {
         expect(isHostAllowed(appwriteHost)).toBe(true);
       }

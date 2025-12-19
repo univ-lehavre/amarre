@@ -84,7 +84,7 @@ export function isHostAllowed(host: string): boolean {
  * Perform a TCP connection check
  */
 export async function checkTcpConnection(host: string, port: number, timeoutMs: number): Promise<TcpCheckResult> {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const startTime = Date.now();
     const socket = new net.Socket();
 
@@ -105,7 +105,7 @@ export async function checkTcpConnection(host: string, port: number, timeoutMs: 
       resolve({ ok: true, latencyMs });
     });
 
-    socket.on('error', (err) => {
+    socket.on('error', err => {
       clearTimeout(timer);
       cleanup();
       resolve({ ok: false, error: err.message });
@@ -119,7 +119,7 @@ export async function checkTcpConnection(host: string, port: number, timeoutMs: 
  * Perform a TLS/HTTPS check with strict certificate validation
  */
 export async function checkTlsConnection(host: string, port: number, timeoutMs: number): Promise<TlsCheckResult> {
-  return new Promise((resolve) => {
+  return new Promise(resolve => {
     const startTime = Date.now();
 
     const options: tls.ConnectionOptions = {
@@ -164,35 +164,27 @@ export async function checkTlsConnection(host: string, port: number, timeoutMs: 
       }
 
       cleanup();
-      const result: TlsCheckResult = {
-        ok: true,
-        latencyMs,
-        authorized,
-      };
-      
+      const result: TlsCheckResult = { ok: true, latencyMs, authorized };
+
       if (protocolValue) {
         result.protocol = protocolValue;
       }
-      
+
       if (alpnProtocolValue && typeof alpnProtocolValue === 'string') {
         result.alpnProtocol = alpnProtocolValue;
       }
-      
+
       if (cert) {
         result.cert = cert;
       }
-      
+
       resolve(result);
     });
 
-    socket.on('error', (err) => {
+    socket.on('error', err => {
       clearTimeout(timer);
       cleanup();
-      resolve({
-        ok: false,
-        authorized: false,
-        error: err.message,
-      });
+      resolve({ ok: false, authorized: false, error: err.message });
     });
   });
 }
@@ -202,7 +194,7 @@ export async function checkTlsConnection(host: string, port: number, timeoutMs: 
  */
 export async function checkOnline(host: string, port: number, timeoutMs: number): Promise<OnlineCheckResult> {
   const tcp = await checkTcpConnection(host, port, timeoutMs);
-  
+
   // Only perform TLS check if TCP connection succeeded
   const tls = tcp.ok
     ? await checkTlsConnection(host, port, timeoutMs)
@@ -210,12 +202,5 @@ export async function checkOnline(host: string, port: number, timeoutMs: number)
 
   const online = tcp.ok && tls.ok && tls.authorized === true;
 
-  return {
-    online,
-    host,
-    port,
-    timeoutMs,
-    tcp,
-    tls,
-  };
+  return { online, host, port, timeoutMs, tcp, tls };
 }

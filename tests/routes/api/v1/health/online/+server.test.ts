@@ -1,17 +1,12 @@
 import { describe, expect, it, vi } from 'vitest';
 
 // Mock environment variables before importing the module
-vi.mock('$env/static/public', () => ({
-  PUBLIC_APPWRITE_ENDPOINT: 'https://cloud.appwrite.io/v1',
-}));
+vi.mock('$env/static/public', () => ({ PUBLIC_APPWRITE_ENDPOINT: 'https://cloud.appwrite.io/v1' }));
 
 // Mock the online-check module to avoid actual network calls in tests
-vi.mock('$lib/server/net/online-check', async (importOriginal) => {
+vi.mock('$lib/server/net/online-check', async importOriginal => {
   const actual = await importOriginal<typeof import('../../../../../../src/lib/server/net/online-check')>();
-  return {
-    ...actual,
-    checkOnline: vi.fn(),
-  };
+  return { ...actual, checkOnline: vi.fn() };
 });
 
 describe('GET /api/v1/health/online', () => {
@@ -302,12 +297,7 @@ describe('GET /api/v1/health/online', () => {
         port: 443,
         timeoutMs: 3000,
         tcp: { ok: true, latencyMs: 12 },
-        tls: {
-          ok: true,
-          latencyMs: 34,
-          authorized: true,
-          protocol: 'TLSv1.3',
-        },
+        tls: { ok: true, latencyMs: 34, authorized: true, protocol: 'TLSv1.3' },
       });
 
       const mod = await import('../../../../../../src/routes/api/v1/health/online/+server');

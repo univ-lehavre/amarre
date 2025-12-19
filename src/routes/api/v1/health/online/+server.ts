@@ -12,11 +12,7 @@ const OnlineCheckData = z
     host: z.string(),
     port: z.number().int(),
     timeoutMs: z.number().int(),
-    tcp: z.object({
-      ok: z.boolean(),
-      latencyMs: z.number().int().optional(),
-      error: z.string().optional(),
-    }),
+    tcp: z.object({ ok: z.boolean(), latencyMs: z.number().int().optional(), error: z.string().optional() }),
     tls: z.object({
       ok: z.boolean(),
       latencyMs: z.number().int().optional(),
@@ -43,39 +39,23 @@ const OnlineCheckResponse = makeResponseSchema(OnlineCheckData);
  * Query parameters schema
  */
 const QueryParams = z
-  .object({
-    host: z.string().nullable(),
-    port: z.string().nullable(),
-    timeoutMs: z.string().nullable().optional(),
-  })
+  .object({ host: z.string().nullable(), port: z.string().nullable(), timeoutMs: z.string().nullable().optional() })
   .superRefine((val, ctx) => {
     // Validate host
     if (!val.host || val.host.length === 0) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['host'],
-        message: 'host must be a non-empty string',
-      });
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['host'], message: 'host must be a non-empty string' });
     }
-    
+
     // Validate port
     if (!val.port) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        path: ['port'],
-        message: 'port is required',
-      });
+      ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['port'], message: 'port is required' });
     } else {
       const portNum = parseInt(val.port, 10);
       if (isNaN(portNum) || !Number.isInteger(portNum)) {
-        ctx.addIssue({
-          code: z.ZodIssueCode.custom,
-          path: ['port'],
-          message: 'port must be an integer',
-        });
+        ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['port'], message: 'port must be an integer' });
       }
     }
-    
+
     // Validate timeoutMs
     if (val.timeoutMs) {
       const timeoutNum = parseInt(val.timeoutMs, 10);
@@ -88,7 +68,7 @@ const QueryParams = z
       }
     }
   })
-  .transform((val) => ({
+  .transform(val => ({
     host: val.host as string, // Safe because superRefine validates it
     port: parseInt(val.port as string, 10), // Safe because superRefine validates it
     timeoutMs: val.timeoutMs ? parseInt(val.timeoutMs, 10) : 3000,
@@ -161,11 +141,7 @@ export const GET: RequestHandler = async ({ url }) => {
     return json(
       {
         data: null,
-        error: {
-          code: 'invalid_parameters',
-          message: 'Invalid query parameters',
-          details: parseResult.error.format(),
-        },
+        error: { code: 'invalid_parameters', message: 'Invalid query parameters', details: parseResult.error.format() },
       },
       { status: 400 },
     );
@@ -175,28 +151,13 @@ export const GET: RequestHandler = async ({ url }) => {
 
   // Enforce port 443 only (anti-SSRF)
   if (port !== 443) {
-    return json(
-      {
-        data: null,
-        error: {
-          code: 'invalid_port',
-          message: 'Only port 443 is allowed',
-        },
-      },
-      { status: 400 },
-    );
+    return json({ data: null, error: { code: 'invalid_port', message: 'Only port 443 is allowed' } }, { status: 400 });
   }
 
   // Enforce host allowlist (anti-SSRF)
   if (!isHostAllowed(host)) {
     return json(
-      {
-        data: null,
-        error: {
-          code: 'host_not_allowed',
-          message: `Host '${host}' is not in the allowlist`,
-        },
-      },
+      { data: null, error: { code: 'host_not_allowed', message: `Host '${host}' is not in the allowlist` } },
       { status: 400 },
     );
   }
@@ -209,13 +170,7 @@ export const GET: RequestHandler = async ({ url }) => {
     return json({ data: result, error: null }, { status: 200 });
   } else {
     return json(
-      {
-        data: result,
-        error: {
-          code: 'offline',
-          message: `Host '${host}' is offline or unreachable`,
-        },
-      },
+      { data: result, error: { code: 'offline', message: `Host '${host}' is offline or unreachable` } },
       { status: 503 },
     );
   }
