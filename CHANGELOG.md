@@ -5,7 +5,7 @@
 ### Minor Changes
 
 - 42f45ff: Ajout d'une méthode API liée à la santé de l'application
-- 4cbfa3e: Ajout des lins d'enquête pour chaque demande et chaque instrument dans chaque demande
+- 4cbfa3e: Ajout des liens d'enquête pour chaque demande et chaque instrument dans chaque demande
 
 ## 1.2.0
 
