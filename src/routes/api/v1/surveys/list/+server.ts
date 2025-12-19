@@ -11,7 +11,7 @@ import { surveyListResponse } from '$lib/types/api/surveys';
  * Note SvelteKit: les exports arbitraires sont interdits, d'où le préfixe `_`.
  */
 export const _openapi = {
-  method: 'post',
+  method: 'get',
   path: '/api/v1/surveys/list',
   tags: ['surveys'],
   summary: 'Liste les demandes de l’utilisateur (auth requis)',
@@ -24,7 +24,7 @@ export const _openapi = {
   components: { schemas: { ApiError } },
 } as const;
 
-export const POST: RequestHandler = async ({ locals, fetch }) => {
+export const GET: RequestHandler = async ({ locals, fetch }) => {
   try {
     const userId = locals.userId;
     if (!userId)
