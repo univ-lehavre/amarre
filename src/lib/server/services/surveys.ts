@@ -2,6 +2,7 @@ import type { Fetch } from '$lib/types';
 import { fetchRedcapJSON, fetchRedcapText } from '$lib/server/redcap';
 import { ID } from 'node-appwrite';
 import type { TUser } from '$lib/types/api/user';
+import type { SurveyRequestItem } from '$lib/types/api/surveys';
 
 export const getSurveyUrl = async (record: string, context: { fetch: Fetch }): Promise<string> => {
   const result = await fetchRedcapText({ content: 'surveyLink', instrument: 'create_my_project', record }, context);
@@ -42,7 +43,7 @@ export const newRequest = async (user: TUser, { fetch }: { fetch: Fetch }) => {
   return result;
 };
 
-export const listRequests = async (userid: string, { fetch }: { fetch: Fetch }) => {
+export const listRequests = async (userid: string, { fetch }: { fetch: Fetch }): Promise<SurveyRequestItem[]> => {
   const requestData = {
     type: 'flat',
     filterLogic: `[userid] = "${userid}"`,
@@ -56,6 +57,6 @@ export const listRequests = async (userid: string, { fetch }: { fetch: Fetch }) 
       'validation_finale_complete',
     ].join(','),
   };
-  const result = await fetchRedcapJSON<unknown>(requestData, { fetch });
+  const result = await fetchRedcapJSON<SurveyRequestItem[]>(requestData, { fetch });
   return result;
 };

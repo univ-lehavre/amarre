@@ -34,7 +34,7 @@
         </p>
         <form
           method="post"
-          action="?/signup"
+          action="?/newSurvey"
           class="input-group mb-3"
         >
           <div class="input-group-text">
@@ -50,16 +50,14 @@
             class="input-group-text"
             id="basic-addon1">Je donne mon consentement</span
           >
+          <button
+            type="submit"
+            class="btn btn-primary {consent ? '' : 'disabled'}"
+          >
+            Créer une demande</button
+          >
         </form>
-        <button
-          type="submit"
-          class="btn btn-primary {consent ? '' : 'disabled'}"
-        >
-          Créer une demande</button
-        >
       </div>
-
-      <div class="modal-footer"></div>
     </div>
   </div>
 </div>

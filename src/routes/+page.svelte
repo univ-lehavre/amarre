@@ -27,7 +27,10 @@
     data-bs-root-margin="0px 0px -50%"
     data-bs-smooth-scroll="true"
   >
-    <Collaborate {userId} />
+    <Collaborate
+      {userId}
+      requests={data.requests}
+    />
     <Rule />
     {#if data.requests && data.requests.length > 0}
       <Follow requests={data.requests} />
