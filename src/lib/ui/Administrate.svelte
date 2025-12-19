@@ -53,7 +53,9 @@
           >
             <button
               type="submit"
-              class="list-group-item list-group-item-action list-group-item-warning {userId ? '' : 'disabled'}"
+              class="list-group-item list-group-item-action {userId ? 'list-group-item-secondary' : ''} {userId
+                ? ''
+                : 'disabled'}"
             >
               <div class="d-flex flex-row">
                 <i class="bi bi-box-arrow-right me-2"></i>
@@ -83,7 +85,9 @@
         {#snippet actions()}
           <a
             href={resolve('/api/v1/surveys/download')}
-            class="list-group-item list-group-item-action list-group-item-success {userId ? '' : 'disabled'}"
+            class="list-group-item list-group-item-action {userId ? 'list-group-item-secondary' : ''} {userId
+              ? ''
+              : 'disabled'}"
             target="_parent"
             role="button"
           >
