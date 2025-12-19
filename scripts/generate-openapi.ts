@@ -51,28 +51,28 @@ async function main() {
   // Graphs endpoints supprimés (API réduite)
 
   // Surveys
-  const SurveyUrlResponse = z
+  const SurveyLinkResponse = z
     .object({ data: z.object({ url: z.string() }), error: ApiError.nullable().default(null) })
-    .openapi('SurveyUrlResponse');
+    .openapi('SurveyLinkResponse');
   const SurveyDownloadResponse = z
     .object({ data: z.unknown(), error: ApiError.nullable().default(null) })
     .openapi('SurveyDownloadResponse');
 
   try {
-    log('registerPath /surveys/url');
+    log('registerPath /surveys/links');
     registry.registerPath({
       method: 'get',
-      path: '/surveys/url',
+      path: '/surveys/links',
       tags: ['surveys'],
-      summary: 'Récupère l’URL du questionnaire (auth requis)',
+      summary: 'Récupère un lien de questionnaire (auth requis)',
       security: [{ cookieAuth: [] }],
       responses: {
-        200: { description: 'OK', content: { 'application/json': { schema: SurveyUrlResponse } } },
-        401: { description: 'Non authentifié', content: { 'application/json': { schema: SurveyUrlResponse } } },
+        200: { description: 'OK', content: { 'application/json': { schema: SurveyLinkResponse } } },
+        401: { description: 'Non authentifié', content: { 'application/json': { schema: SurveyLinkResponse } } },
       },
     });
   } catch (err) {
-    console.error('[openapi] error registering /surveys/url', err);
+    console.error('[openapi] error registering /surveys/links', err);
     throw err;
   }
 

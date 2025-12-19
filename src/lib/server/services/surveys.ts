@@ -4,8 +4,8 @@ import { ID } from 'node-appwrite';
 import type { TUser } from '$lib/types/api/user';
 import type { SurveyRequestItem } from '$lib/types/api/surveys';
 
-export const getSurveyUrl = async (record: string, context: { fetch: Fetch }): Promise<string> => {
-  const result = await fetchRedcapText({ content: 'surveyLink', instrument: 'create_my_project', record }, context);
+export const getSurveyUrl = async (record: string, instrument: string, context: { fetch: Fetch }): Promise<string> => {
+  const result = await fetchRedcapText({ content: 'surveyLink', instrument, record }, context);
   return result;
 };
 

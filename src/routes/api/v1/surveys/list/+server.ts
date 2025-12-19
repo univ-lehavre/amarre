@@ -32,8 +32,41 @@ export const GET: RequestHandler = async ({ locals, fetch }) => {
         { data: null, error: { code: 'unauthenticated', message: 'No authenticated user' } },
         { status: 401 },
       );
+
+    const safeGetInstrumentLink = async (recordId: string, instrument: string): Promise<string | undefined> => {
+      try {
+        const res = await fetch(`/api/v1/surveys/links?record=${recordId}&instrument=${instrument}`);
+        if (!res.ok) return undefined;
+
+        const body = (await res.json()) as { data?: { url?: string } | null };
+        return body?.data?.url;
+      } catch {
+        return undefined;
+      }
+    };
+
     const requests = await listRequests(userId, { fetch });
-    const result = requests.sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
+    const requestsWithLinks: {
+      form: string | undefined;
+      validation_finale: string | undefined;
+      record_id: string;
+      created_at: string;
+      form_complete: string;
+      composante_complete: string;
+      labo_complete: string;
+      encadrant_complete: string;
+      validation_finale_complete: string;
+    }[] = await Promise.all(
+      requests.map(async request => {
+        const [form, validation_finale] = await Promise.all([
+          safeGetInstrumentLink(request.record_id, 'form'),
+          safeGetInstrumentLink(request.record_id, 'validation_finale'),
+        ]);
+        const result = { ...request, form, validation_finale };
+        return result;
+      }),
+    );
+    const result = requestsWithLinks.sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
     return json({ data: result, error: null }, { status: 200 });
   } catch (error) {
     return mapErrorToResponse(error);

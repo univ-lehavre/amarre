@@ -4,6 +4,7 @@
   import HorizontalScroller from '$lib/ui/HorizontalScroller.svelte';
   import SectionTile from '$lib/ui/SectionTile.svelte';
   import CardItem from '$lib/ui/CardItem.svelte';
+  import { resolve } from '$app/paths';
 
   let { requests } = $props();
   let showHeading = $state(false);
@@ -78,6 +79,20 @@
                   ? 'Ma validation finale est complète'
                   : 'Je dois compléter ma validation finale'}.
             </div>
+          {/snippet}
+          {#snippet links()}
+            {#if request.form}
+              <a
+                href={resolve(request.form)}
+                class="card-link">Formulaire</a
+              >
+            {/if}
+            {#if request.validation_finale}
+              <a
+                href={resolve(request.validation_finale)}
+                class="card-link">Validation finale</a
+              >
+            {/if}
           {/snippet}
           {#snippet footer()}
             <small class="text-body-secondary">
