@@ -1,5 +1,17 @@
 # @univ-lehavre/amarre
 
+## 1.2.0
+
+### Minor Changes
+
+- 3f712af: La création d'une nouvelle requête n'est pas possible uniquement que si les dernières ont un formulaire complété
+- cc93f5f: Replace Swagger UI with RapiDoc for API documentation. RapiDoc offers a modern, customizable interface with better user experience. Added anti-derive tests for survey endpoints to ensure OpenAPI schemas match actual API responses.
+- c34f53b: add UI cards for each request
+
+### Patch Changes
+
+- 13fd770: /api/v1/surveys/download retrieves now all requests.
+
 ## 1.1.0
 
 ### Minor Changes
