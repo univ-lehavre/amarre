@@ -20,9 +20,21 @@ describe('POST /api/v1/surveys/new (anti-derive OpenAPI)', () => {
 
     newRequest.mockResolvedValue({ count: 1 });
 
-    const mockFetch = vi
-      .fn()
-      .mockResolvedValue({ json: vi.fn().mockResolvedValue({ data: { email: 'test@inserm.fr' } }) });
+    const mockFetch = vi.fn(async (input: RequestInfo | URL) => {
+      const url = input.toString();
+
+      if (url === '/api/v1/me') {
+        return {
+          json: vi.fn().mockResolvedValue({ data: { id: 'user_1', email: 'test@inserm.fr', labels: [] }, error: null }),
+        };
+      }
+
+      if (url === '/api/v1/surveys/list') {
+        return { json: vi.fn().mockResolvedValue({ data: [], error: null }) };
+      }
+
+      throw new Error(`Unexpected fetch: ${url}`);
+    });
 
     const mod = await import('../../../../../src/routes/api/v1/surveys/new/+server');
     const res = await mod.POST({ locals: { userId: 'user_1' }, fetch: mockFetch } as never);
