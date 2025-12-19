@@ -32,6 +32,21 @@ export const GET: RequestHandler = async ({ locals, fetch }) => {
         { data: null, error: { code: 'unauthenticated', message: 'No authenticated user' } },
         { status: 401 },
       );
+
+    const safeGetInstrumentLink = async (recordId: string, instrument: string): Promise<string | undefined> => {
+      try {
+        const res = await fetch(`/api/v1/surveys/links?record=${recordId}&instrument=${instrument}`);
+        if (!res || typeof (res as unknown as { json?: unknown }).json !== 'function') return undefined;
+
+        const body = (await (res as unknown as { json: () => Promise<unknown> }).json()) as {
+          data?: { url?: string } | null;
+        };
+        return body?.data?.url;
+      } catch {
+        return undefined;
+      }
+    };
+
     const requests = await listRequests(userId, { fetch });
     const requestsWithLinks: {
       form: string | undefined;
@@ -45,13 +60,11 @@ export const GET: RequestHandler = async ({ locals, fetch }) => {
       validation_finale_complete: string;
     }[] = await Promise.all(
       requests.map(async request => {
-        const form = (await fetch(`/api/v1/surveys/links?record=${request.record_id}&instrument=form`).then(res =>
-          res.json(),
-        )) as { data: { url: string } | null };
-        const validation_finale = (await fetch(
-          `/api/v1/surveys/links?record=${request.record_id}&instrument=validation_finale`,
-        ).then(res => res.json())) as { data: { url: string } | null };
-        const result = { ...request, form: form.data?.url, validation_finale: validation_finale.data?.url };
+        const [form, validation_finale] = await Promise.all([
+          safeGetInstrumentLink(request.record_id, 'form'),
+          safeGetInstrumentLink(request.record_id, 'validation_finale'),
+        ]);
+        const result = { ...request, form, validation_finale };
         return result;
       }),
     );
