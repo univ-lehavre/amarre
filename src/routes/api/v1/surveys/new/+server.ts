@@ -14,9 +14,7 @@ export const POST: RequestHandler = async ({ locals, fetch }) => {
         { status: 401 },
       );
     const user = await fetch(`/api/v1/me`).then(res => res.json());
-    const requests = (await fetch(`/api/v1/surveys/list`, { method: 'POST' }).then(res =>
-      res.json(),
-    )) as SurveyListResponse;
+    const requests = (await fetch(`/api/v1/surveys/list`).then(res => res.json())) as SurveyListResponse;
 
     if (requests && requests.data && allowed_request_creation(requests.data) === false)
       return json(
