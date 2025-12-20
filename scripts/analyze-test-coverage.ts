@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Test Coverage Analyzer
- * 
+ *
  * This script analyzes test coverage and provides actionable insights
  * for improving test quality and coverage.
  */
@@ -17,12 +17,7 @@ interface CoverageThresholds {
   lines: number;
 }
 
-const DEFAULT_THRESHOLDS: CoverageThresholds = {
-  statements: 80,
-  branches: 70,
-  functions: 80,
-  lines: 80,
-};
+const DEFAULT_THRESHOLDS: CoverageThresholds = { statements: 80, branches: 70, functions: 80, lines: 80 };
 
 class TestCoverageAnalyzer {
   private thresholds: CoverageThresholds;
@@ -48,11 +43,9 @@ class TestCoverageAnalyzer {
     console.log('🔍 Running tests with coverage...\n');
     const packageManager = this.detectPackageManager();
     try {
-      execSync(`${packageManager} test -- --coverage --reporter=json --reporter=default`, {
-        stdio: 'inherit',
-      });
+      execSync(`${packageManager} test -- --coverage --reporter=json --reporter=default`, { stdio: 'inherit' });
     } catch (error) {
-      console.error('❌ Tests failed');
+      console.error('❌ Tests failed', error);
       process.exit(1);
     }
   }
@@ -62,7 +55,7 @@ class TestCoverageAnalyzer {
    */
   analyzeCoverage(): void {
     const coveragePath = 'coverage/coverage-summary.json';
-    
+
     if (!existsSync(coveragePath)) {
       console.error('❌ Coverage file not found. Run tests with --coverage first.');
       process.exit(1);
@@ -79,7 +72,7 @@ class TestCoverageAnalyzer {
 
     // Check thresholds
     const failures: string[] = [];
-    
+
     if (total.statements.pct < this.thresholds.statements) {
       failures.push(`Statements coverage (${total.statements.pct}%) below threshold (${this.thresholds.statements}%)`);
     }
@@ -113,13 +106,10 @@ class TestCoverageAnalyzer {
 
     for (const [file, fileCoverage] of Object.entries(coverage)) {
       if (file === 'total') continue;
-      
+
       const fc = fileCoverage as { lines: { pct: number } };
       if (fc.lines && fc.lines.pct < 70) {
-        lowCoverageFiles.push({
-          file: file.replace(process.cwd(), ''),
-          coverage: fc.lines.pct,
-        });
+        lowCoverageFiles.push({ file: file.replace(process.cwd(), ''), coverage: fc.lines.pct });
       }
     }
 
@@ -155,13 +145,13 @@ const isMainModule = import.meta.url === pathToFileURL(process.argv[1]).href;
 if (isMainModule) {
   const args = process.argv.slice(2);
   const skipRun = args.includes('--skip-run');
-  
+
   const analyzer = new TestCoverageAnalyzer();
-  
+
   if (!skipRun) {
     analyzer.runTestsWithCoverage();
   }
-  
+
   analyzer.analyzeCoverage();
   analyzer.generateRecommendations();
 }

@@ -7,25 +7,30 @@ This directory contains the AI-powered automated testing agent for the AMARRE pr
 ## Features
 
 ### 1. **Drift Detection** 🎯
+
 Automatically detect unintended changes in:
+
 - API response structures and schemas
 - Performance characteristics
 - Data formats and types
 - Error handling behavior
 
 ### 2. **Non-Regression Testing** ✅
+
 - Run comprehensive test suites on every change
 - Compare against established baselines
 - Identify breaking changes early
 - Track test success rates over time
 
 ### 3. **Test Coverage Analysis** 📊
+
 - Monitor code coverage metrics
 - Identify untested code paths
 - Generate actionable recommendations
 - Track coverage trends
 
 ### 4. **CI/CD Integration** 🔄
+
 - Automated testing in GitHub Actions
 - Coverage reports as artifacts
 - Baseline validation on PRs
@@ -149,10 +154,10 @@ describe('API Tests', () => {
   it('should maintain response structure', async () => {
     const response = await fetch('/api/endpoint');
     const data = await response.json();
-    
+
     const detector = new DriftDetector();
     const result = detector.checkApiDrift('endpoint-response', data);
-    
+
     expect(result.hasDrift).toBe(false);
   });
 });
@@ -163,6 +168,7 @@ describe('API Tests', () => {
 ### Coverage Thresholds
 
 Default thresholds are defined in `scripts/analyze-test-coverage.ts`:
+
 - Statements: 80%
 - Branches: 70%
 - Functions: 80%
@@ -171,6 +177,7 @@ Default thresholds are defined in `scripts/analyze-test-coverage.ts`:
 ### Drift Detection Settings
 
 Configure drift detection sensitivity:
+
 ```typescript
 // Strict mode - detects value changes
 detector.checkApiDrift('endpoint', data, { strictMode: true });
@@ -183,11 +190,10 @@ detector.checkPerformanceDrift('operation', duration, 30);
 
 The agent runs automatically in CI:
 
-1. **On Push/PR**: 
+1. **On Push/PR**:
    - Runs all tests
    - Generates coverage reports
    - Validates against baselines
-   
 2. **Artifacts**:
    - Test coverage reports
    - Baseline snapshots
@@ -250,16 +256,19 @@ git commit -m "Update baselines for API v2"
 ### Troubleshooting
 
 **Tests failing with "baseline not found":**
+
 ```bash
 npm run test:baseline-init
 ```
 
 **Coverage too low:**
+
 ```bash
 npm run test:coverage-report  # Shows which files need tests
 ```
 
 **Performance test flaky:**
+
 - Increase threshold
 - Run multiple times and average
 - Consider using mocks
@@ -267,6 +276,7 @@ npm run test:coverage-report  # Shows which files need tests
 ## Future Enhancements
 
 Planned features:
+
 - [ ] Visual regression testing with Playwright
 - [ ] Mutation testing for test quality
 - [ ] AI-powered test generation
@@ -284,6 +294,7 @@ Planned features:
 ## Support
 
 For issues or questions:
+
 1. Check the [automated-testing.agent.md](.github/agents/automated-testing.agent.md)
 2. Review existing tests for examples
 3. Create an issue with the `testing` label

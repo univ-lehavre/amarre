@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
  * Test Baseline Manager
- * 
+ *
  * This script manages test baselines for drift detection.
  * It can capture, update, and validate baselines.
  */
@@ -42,13 +42,7 @@ class BaselineManager {
    * Capture a new baseline
    */
   captureBaseline(name: string, type: Baseline['type'], data: unknown): void {
-    const baseline: Baseline = {
-      name,
-      type,
-      data,
-      timestamp: new Date().toISOString(),
-      version: this.getVersion(),
-    };
+    const baseline: Baseline = { name, type, data, timestamp: new Date().toISOString(), version: this.getVersion() };
 
     const filename = `${name}.baseline.json`;
     const filepath = join(this.baselinesDir, filename);

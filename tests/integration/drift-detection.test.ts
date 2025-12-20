@@ -1,9 +1,9 @@
-import { describe, expect, it, beforeAll } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { DriftDetector } from '../utils/drift-detector';
 
 /**
  * Drift Detection Integration Tests
- * 
+ *
  * These tests demonstrate how to use the drift detection system
  * to monitor API responses and performance over time.
  */
@@ -35,13 +35,7 @@ describe('Drift Detection - Integration Examples', () => {
 
     it('should detect when API structure changes', async () => {
       // Original response structure
-      const originalResponse = {
-        data: {
-          surveys: [{ id: 1, name: 'Survey 1' }],
-          total: 1,
-        },
-        error: null,
-      };
+      const originalResponse = { data: { surveys: [{ id: 1, name: 'Survey 1' }], total: 1 }, error: null };
 
       // Modified response structure (added new field)
       const modifiedResponse = {
@@ -60,7 +54,10 @@ describe('Drift Detection - Integration Examples', () => {
 
       // Should detect drift due to structure change
       expect(result.hasDrift).toBe(true);
-      expect(result.driftDetails[0].category).toBe('schema');
+      const [firstDrift] = result.driftDetails;
+      expect(firstDrift).toBeDefined();
+      if (!firstDrift) throw new Error('Expected at least one drift detail');
+      expect(firstDrift.category).toBe('schema');
     });
   });
 
@@ -86,21 +83,16 @@ describe('Drift Detection - Integration Examples', () => {
 
       // Should detect significant performance drift
       expect(result.hasDrift).toBe(true);
-      expect(result.driftDetails[0].category).toBe('performance');
+      const [firstDrift] = result.driftDetails;
+      expect(firstDrift).toBeDefined();
+      if (!firstDrift) throw new Error('Expected at least one drift detail');
+      expect(firstDrift.category).toBe('performance');
     });
   });
 
   describe('Schema Validation', () => {
     it('should validate API response matches expected schema', async () => {
-      const expectedSchema = {
-        data: { id: 'number', name: 'string' },
-        error: null,
-      };
-
-      const actualResponse = {
-        data: { id: 1, name: 'Test' },
-        error: null,
-      };
+      const actualResponse = { data: { id: 1, name: 'Test' }, error: null };
 
       // This is a simple structure check
       const result = detector.checkApiDrift('schema-validation', actualResponse);
@@ -112,10 +104,7 @@ describe('Drift Detection - Integration Examples', () => {
 
   describe('Real-world Scenarios', () => {
     it('should ignore timestamp changes in responses', async () => {
-      const response1 = {
-        data: { message: 'Success' },
-        timestamp: '2024-01-01T00:00:00Z',
-      };
+      const response1 = { data: { message: 'Success' }, timestamp: '2024-01-01T00:00:00Z' };
 
       const response2 = {
         data: { message: 'Success' },
@@ -123,19 +112,14 @@ describe('Drift Detection - Integration Examples', () => {
       };
 
       detector.saveBaseline('timestamped-response', response1);
-      const result = detector.checkApiDrift('timestamped-response', response2, {
-        strictMode: true,
-      });
+      const result = detector.checkApiDrift('timestamped-response', response2, { strictMode: true });
 
       // Should not detect drift in timestamps
       expect(result.hasDrift).toBe(false);
     });
 
     it('should detect breaking changes in error responses', async () => {
-      const originalError = {
-        data: null,
-        error: { code: 'invalid_parameters', message: 'Missing required field' },
-      };
+      const originalError = { data: null, error: { code: 'invalid_parameters', message: 'Missing required field' } };
 
       const modifiedError = {
         data: null,
@@ -146,7 +130,10 @@ describe('Drift Detection - Integration Examples', () => {
       const result = detector.checkApiDrift('error-response-structure', modifiedError);
 
       expect(result.hasDrift).toBe(true);
-      expect(result.driftDetails[0].severity).toBe('high');
+      const [firstDrift] = result.driftDetails;
+      expect(firstDrift).toBeDefined();
+      if (!firstDrift) throw new Error('Expected at least one drift detail');
+      expect(firstDrift.severity).toBe('high');
     });
   });
 });

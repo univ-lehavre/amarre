@@ -1,6 +1,6 @@
 /**
  * Drift Detector Utility
- * 
+ *
  * This utility helps detect unintended changes (drift) in application behavior
  * by comparing current behavior against established baselines.
  */
@@ -41,7 +41,7 @@ export class DriftDetector {
   checkApiDrift(
     endpointName: string,
     currentResponse: Record<string, unknown>,
-    options: { strictMode?: boolean } = {}
+    options: { strictMode?: boolean } = {},
   ): DriftCheckResult {
     const baselinePath = join(this.baselinesDir, `${endpointName}.json`);
     const driftDetails: DriftDetail[] = [];
@@ -49,15 +49,11 @@ export class DriftDetector {
     if (!existsSync(baselinePath)) {
       // No baseline exists, create one
       this.saveBaseline(endpointName, currentResponse);
-      return {
-        hasDrift: false,
-        driftDetails: [],
-        timestamp: new Date().toISOString(),
-      };
+      return { hasDrift: false, driftDetails: [], timestamp: new Date().toISOString() };
     }
 
     const baseline = JSON.parse(readFileSync(baselinePath, 'utf-8'));
-    
+
     // Compare structure
     const structureDrift = this.compareStructure(baseline, currentResponse);
     if (structureDrift) {
@@ -79,31 +75,19 @@ export class DriftDetector {
       }
     }
 
-    return {
-      hasDrift: driftDetails.length > 0,
-      driftDetails,
-      timestamp: new Date().toISOString(),
-    };
+    return { hasDrift: driftDetails.length > 0, driftDetails, timestamp: new Date().toISOString() };
   }
 
   /**
    * Check for performance drift
    */
-  checkPerformanceDrift(
-    operationName: string,
-    currentDuration: number,
-    thresholdPercent = 20
-  ): DriftCheckResult {
+  checkPerformanceDrift(operationName: string, currentDuration: number, thresholdPercent = 20): DriftCheckResult {
     const baselinePath = join(this.baselinesDir, `perf-${operationName}.json`);
     const driftDetails: DriftDetail[] = [];
 
     if (!existsSync(baselinePath)) {
       this.saveBaseline(`perf-${operationName}`, { duration: currentDuration });
-      return {
-        hasDrift: false,
-        driftDetails: [],
-        timestamp: new Date().toISOString(),
-      };
+      return { hasDrift: false, driftDetails: [], timestamp: new Date().toISOString() };
     }
 
     const baseline = JSON.parse(readFileSync(baselinePath, 'utf-8'));
@@ -121,11 +105,7 @@ export class DriftDetector {
       });
     }
 
-    return {
-      hasDrift: driftDetails.length > 0,
-      driftDetails,
-      timestamp: new Date().toISOString(),
-    };
+    return { hasDrift: driftDetails.length > 0, driftDetails, timestamp: new Date().toISOString() };
   }
 
   /**
@@ -148,7 +128,7 @@ export class DriftDetector {
    */
   private compareStructure(expected: unknown, actual: unknown, path = ''): boolean {
     if (typeof expected !== typeof actual) return true;
-    
+
     if (expected === null || actual === null) {
       return expected !== actual;
     }
@@ -156,17 +136,19 @@ export class DriftDetector {
     if (typeof expected === 'object' && typeof actual === 'object') {
       const expectedKeys = Object.keys(expected as object).sort();
       const actualKeys = Object.keys(actual as object).sort();
-      
+
       if (expectedKeys.length !== actualKeys.length) return true;
       if (expectedKeys.some((key, i) => key !== actualKeys[i])) return true;
 
       for (const key of expectedKeys) {
         const newPath = path ? `${path}.${key}` : key;
-        if (this.compareStructure(
-          (expected as Record<string, unknown>)[key],
-          (actual as Record<string, unknown>)[key],
-          newPath
-        )) {
+        if (
+          this.compareStructure(
+            (expected as Record<string, unknown>)[key],
+            (actual as Record<string, unknown>)[key],
+            newPath,
+          )
+        ) {
           return true;
         }
       }
@@ -178,11 +160,7 @@ export class DriftDetector {
   /**
    * Compare values recursively
    */
-  private compareValues(
-    expected: unknown,
-    actual: unknown,
-    path = ''
-  ): DriftDetail[] {
+  private compareValues(expected: unknown, actual: unknown, path = ''): DriftDetail[] {
     const drifts: DriftDetail[] = [];
 
     if (typeof expected !== typeof actual) {

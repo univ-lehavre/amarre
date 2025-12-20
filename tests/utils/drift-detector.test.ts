@@ -1,8 +1,15 @@
 import { describe, expect, it, beforeEach, afterEach } from 'vitest';
-import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
+import { existsSync, mkdirSync, rmSync } from 'fs';
 import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
-import { DriftDetector } from './drift-detector';
+import { DriftDetector, type DriftDetail } from './drift-detector';
+
+function getFirstDriftDetail(driftDetails: DriftDetail[]): DriftDetail {
+  const [first] = driftDetails;
+  expect(first).toBeDefined();
+  if (!first) throw new Error('Expected at least one drift detail');
+  return first;
+}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -58,8 +65,9 @@ describe('DriftDetector', () => {
 
       expect(result.hasDrift).toBe(true);
       expect(result.driftDetails).toHaveLength(1);
-      expect(result.driftDetails[0].category).toBe('schema');
-      expect(result.driftDetails[0].severity).toBe('high');
+      const detail = getFirstDriftDetail(result.driftDetails);
+      expect(detail.category).toBe('schema');
+      expect(detail.severity).toBe('high');
     });
 
     it('detects drift when field is added', () => {
@@ -71,7 +79,8 @@ describe('DriftDetector', () => {
       const result = detector.checkApiDrift('test-endpoint-4', current);
 
       expect(result.hasDrift).toBe(true);
-      expect(result.driftDetails[0].category).toBe('schema');
+      const detail = getFirstDriftDetail(result.driftDetails);
+      expect(detail.category).toBe('schema');
     });
 
     it('detects drift when field is removed', () => {
@@ -133,8 +142,9 @@ describe('DriftDetector', () => {
 
       expect(result.hasDrift).toBe(true);
       expect(result.driftDetails).toHaveLength(1);
-      expect(result.driftDetails[0].category).toBe('performance');
-      expect(result.driftDetails[0].severity).toBe('medium');
+      const detail = getFirstDriftDetail(result.driftDetails);
+      expect(detail.category).toBe('performance');
+      expect(detail.severity).toBe('medium');
     });
 
     it('sets critical severity for large performance degradation', () => {
@@ -143,7 +153,8 @@ describe('DriftDetector', () => {
       const result = detector.checkPerformanceDrift('operation-4', 200, 20);
 
       expect(result.hasDrift).toBe(true);
-      expect(result.driftDetails[0].severity).toBe('critical');
+      const detail = getFirstDriftDetail(result.driftDetails);
+      expect(detail.severity).toBe('critical');
     });
 
     it('detects improvement as drift with custom threshold', () => {
@@ -152,7 +163,8 @@ describe('DriftDetector', () => {
       const result = detector.checkPerformanceDrift('operation-5', 100, 20);
 
       expect(result.hasDrift).toBe(true);
-      expect(result.driftDetails[0].category).toBe('performance');
+      const detail = getFirstDriftDetail(result.driftDetails);
+      expect(detail.category).toBe('performance');
     });
   });
 
@@ -178,14 +190,7 @@ describe('DriftDetector', () => {
 
   describe('nested object drift detection', () => {
     it('detects drift in nested objects', () => {
-      const baseline = {
-        user: {
-          profile: {
-            name: 'John',
-            age: 30,
-          },
-        },
-      };
+      const baseline = { user: { profile: { name: 'John', age: 30 } } };
       const current = {
         user: {
           profile: {
@@ -204,11 +209,7 @@ describe('DriftDetector', () => {
     });
 
     it('detects type changes in nested objects', () => {
-      const baseline = {
-        data: {
-          count: 5,
-        },
-      };
+      const baseline = { data: { count: 5 } };
       const current = {
         data: {
           count: '5', // Number changed to string

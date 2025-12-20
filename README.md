@@ -44,5 +44,6 @@ pnpm check:all
 ```
 
 Pour plus d'informations sur les tests automatisés, consultez :
+
 - [Guide de l'Agent de Test IA](docs/AI_TESTING_GUIDE.md)
 - [Documentation des Tests](tests/README.md)

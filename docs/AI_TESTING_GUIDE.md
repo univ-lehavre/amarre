@@ -3,6 +3,7 @@
 ## What is the AI Testing Agent?
 
 The AI Testing Agent is an automated testing system designed to:
+
 - 🔍 **Detect drift** in application behavior automatically
 - ✅ **Prevent regressions** by running comprehensive tests
 - 📊 **Track coverage** and suggest improvements
@@ -108,6 +109,7 @@ npm run test:coverage-report
 ### What is Drift?
 
 Drift occurs when application behavior changes unintentionally, such as:
+
 - API response structure changes
 - Performance degradation
 - Changed error messages
@@ -130,10 +132,10 @@ describe('My API', () => {
   it('should maintain response structure', async () => {
     const response = await fetch('/api/my-endpoint');
     const data = await response.json();
-    
+
     const detector = new DriftDetector();
     const result = detector.checkApiDrift('my-endpoint', data);
-    
+
     // Fails if structure changed unexpectedly
     expect(result.hasDrift).toBe(false);
   });
@@ -147,6 +149,7 @@ The testing agent runs automatically in GitHub Actions:
 ### What Runs Automatically
 
 On every push/PR:
+
 - ✅ All unit tests
 - ✅ Coverage analysis
 - ✅ Baseline validation
@@ -162,6 +165,7 @@ On every push/PR:
 ### What Blocks Merges
 
 PRs are blocked if:
+
 - ❌ Any test fails
 - ❌ Build fails
 - ❌ Critical drift detected
@@ -175,14 +179,14 @@ const detector = new DriftDetector();
 
 // API drift with strict value checking
 const result = detector.checkApiDrift('endpoint', data, {
-  strictMode: true  // Also checks values, not just structure
+  strictMode: true, // Also checks values, not just structure
 });
 
 // Performance drift with custom threshold
 const perfResult = detector.checkPerformanceDrift(
   'operation',
   duration,
-  30  // Alert if >30% slower
+  30, // Alert if >30% slower
 );
 ```
 
@@ -225,6 +229,7 @@ npm run test:baseline-init
 ### Tests Pass Locally But Fail in CI
 
 Common causes:
+
 1. **Missing dependencies**: Ensure `package-lock.json` is committed
 2. **Environment variables**: Check `.env` configuration
 3. **Timing issues**: Increase timeouts for slow tests
@@ -250,9 +255,7 @@ npm run test:coverage-report
 detector.checkPerformanceDrift('operation', duration, 50); // More lenient
 
 // Or average multiple runs
-const durations = await Promise.all([
-  runTest(), runTest(), runTest()
-]);
+const durations = await Promise.all([runTest(), runTest(), runTest()]);
 const avgDuration = durations.reduce((a, b) => a + b) / 3;
 detector.checkPerformanceDrift('operation', avgDuration);
 ```
@@ -289,6 +292,7 @@ Need assistance?
 ## What's Next?
 
 Planned enhancements:
+
 - Visual regression testing
 - AI-powered test generation
 - Smart test selection

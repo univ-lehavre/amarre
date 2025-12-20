@@ -3,6 +3,7 @@
 ## Purpose
 
 This AI agent is dedicated to automated testing of the application, with a focus on:
+
 - **Non-regression testing**: Ensuring updates don't break existing functionality
 - **Drift detection**: Identifying unintended changes in application behavior
 - **Test coverage**: Maximizing test coverage across the codebase
@@ -11,24 +12,28 @@ This AI agent is dedicated to automated testing of the application, with a focus
 ## Agent Capabilities
 
 ### 1. Non-Regression Testing
+
 - Automatically run all existing tests after major updates
 - Compare test results against baseline
 - Flag any breaking changes or failures
 - Provide detailed reports on regression issues
 
 ### 2. Drift Detection
+
 - Monitor application behavior consistency over time
 - Detect changes in API responses, endpoints, and data structures
 - Identify performance degradation
 - Track changes in dependencies and their impacts
 
 ### 3. Test Generation Recommendations
+
 - Analyze code changes to suggest new test cases
 - Identify untested code paths
 - Recommend edge cases and boundary conditions
 - Suggest integration test scenarios
 
 ### 4. Reporting and Actions
+
 - Generate comprehensive test reports
 - Suggest fixes for detected issues
 - Prioritize issues by severity
@@ -37,6 +42,7 @@ This AI agent is dedicated to automated testing of the application, with a focus
 ## Integration with CI/CD
 
 This agent is integrated into the GitHub Actions CI pipeline:
+
 - Runs on every push and pull request
 - Executes all test suites (unit, integration)
 - Performs drift detection checks
@@ -84,6 +90,7 @@ npm test -- --coverage --reporter=html
 ## Test Structure
 
 Tests are organized by type:
+
 - `tests/lib/`: Library and utility tests
 - `tests/routes/`: API route tests
 - `tests/server/`: Server-side logic tests
@@ -111,6 +118,7 @@ Tests are organized by type:
 ### Updating Baselines
 
 When intentional changes are made:
+
 ```bash
 # Update test baselines
 npm run test:update-baselines
@@ -139,6 +147,7 @@ git diff tests/baselines/
 ### Custom Test Utilities
 
 Add shared test utilities to `tests/utils/`:
+
 - Test fixtures
 - Mock factories
 - Custom matchers
@@ -147,6 +156,7 @@ Add shared test utilities to `tests/utils/`:
 ### Test Data Management
 
 Store test data in `tests/fixtures/`:
+
 - Mock API responses
 - Sample database records
 - Configuration files
@@ -155,6 +165,7 @@ Store test data in `tests/fixtures/`:
 ## Metrics and KPIs
 
 The agent tracks:
+
 - **Test Coverage**: Percentage of code covered by tests
 - **Test Success Rate**: Passing vs. failing tests
 - **Test Execution Time**: Performance monitoring
@@ -165,6 +176,7 @@ The agent tracks:
 ## Security Testing
 
 The agent also performs security checks:
+
 - Dependency vulnerability scanning
 - Authentication/authorization testing
 - Input validation testing
@@ -173,6 +185,7 @@ The agent also performs security checks:
 ## Future Enhancements
 
 Planned improvements:
+
 - [ ] Visual regression testing with Playwright screenshots
 - [ ] Load testing and performance benchmarks
 - [ ] Mutation testing for test quality
@@ -185,6 +198,7 @@ Planned improvements:
 ## Support and Issues
 
 For questions or issues with the testing agent:
+
 1. Check existing test documentation
 2. Review test examples in `tests/` directory
 3. Consult CI workflow logs
