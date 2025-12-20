@@ -29,6 +29,11 @@
       ? { icon: 'bi-check-circle-fill', color: 'text-success', bgColor: 'bg-success-subtle' }
       : { icon: 'bi-clock-fill', color: 'text-warning', bgColor: 'bg-warning-subtle' };
   }
+
+  function getStepStatusText(formComplete: boolean, stepComplete: boolean): string {
+    if (!formComplete) return 'Attend mon formulaire';
+    return stepComplete ? 'Décision informée' : 'En concertation';
+  }
 </script>
 
 <div id="follow">
@@ -40,17 +45,14 @@
     <SectionTile title={!showHeading ? 'Suivre' : ''} />
     {#each requests as request (request.record_id)}
       {@const progress = calculateProgress(request)}
-      {@const formBlocked = false}
-      {@const composanteBlocked = request.form_complete !== '2'}
-      {@const laboBlocked = request.form_complete !== '2'}
-      {@const encadrantBlocked = request.form_complete !== '2'}
-      {@const validationBlocked = request.form_complete !== '2'}
+      {@const formComplete = request.form_complete === '2'}
+      {@const isBlocked = !formComplete}
       
-      {@const formStatus = getStatusInfo(request.form_complete === '2', formBlocked)}
-      {@const composanteStatus = getStatusInfo(request.composante_complete === '2', composanteBlocked)}
-      {@const laboStatus = getStatusInfo(request.labo_complete === '2', laboBlocked)}
-      {@const encadrantStatus = getStatusInfo(request.encadrant_complete === '2', encadrantBlocked)}
-      {@const validationStatus = getStatusInfo(request.validation_finale_complete === '2', validationBlocked)}
+      {@const formStatus = getStatusInfo(formComplete, false)}
+      {@const composanteStatus = getStatusInfo(request.composante_complete === '2', isBlocked)}
+      {@const laboStatus = getStatusInfo(request.labo_complete === '2', isBlocked)}
+      {@const encadrantStatus = getStatusInfo(request.encadrant_complete === '2', isBlocked)}
+      {@const validationStatus = getStatusInfo(request.validation_finale_complete === '2', isBlocked)}
       
       <div class="flex-shrink-0">
         <CardItem>
@@ -83,7 +85,7 @@
               <div class="flex-grow-1">
                 <strong>Mon formulaire</strong>
                 <div class="small text-muted">
-                  {request.form_complete === '2' ? 'Formulaire complet' : 'À compléter'}
+                  {formComplete ? 'Formulaire complet' : 'À compléter'}
                 </div>
               </div>
             </div>
@@ -93,11 +95,7 @@
               <div class="flex-grow-1">
                 <strong>Ma composante</strong>
                 <div class="small text-muted">
-                  {request.form_complete !== '2'
-                    ? 'Attend mon formulaire'
-                    : request.composante_complete === '2'
-                      ? 'Décision informée'
-                      : 'En concertation'}
+                  {getStepStatusText(formComplete, request.composante_complete === '2')}
                 </div>
               </div>
             </div>
@@ -107,11 +105,7 @@
               <div class="flex-grow-1">
                 <strong>Mon laboratoire</strong>
                 <div class="small text-muted">
-                  {request.form_complete !== '2'
-                    ? 'Attend mon formulaire'
-                    : request.labo_complete === '2'
-                      ? 'Décision informée'
-                      : 'En concertation'}
+                  {getStepStatusText(formComplete, request.labo_complete === '2')}
                 </div>
               </div>
             </div>
@@ -121,11 +115,7 @@
               <div class="flex-grow-1">
                 <strong>Mon encadrant</strong>
                 <div class="small text-muted">
-                  {request.form_complete !== '2'
-                    ? 'Attend mon formulaire'
-                    : request.encadrant_complete === '2'
-                      ? 'Décision informée'
-                      : 'En concertation'}
+                  {getStepStatusText(formComplete, request.encadrant_complete === '2')}
                 </div>
               </div>
             </div>
@@ -135,7 +125,7 @@
               <div class="flex-grow-1">
                 <strong>Validation finale</strong>
                 <div class="small text-muted">
-                  {request.form_complete !== '2'
+                  {!formComplete
                     ? 'Pas disponible'
                     : request.validation_finale_complete === '2'
                       ? 'Complète'
