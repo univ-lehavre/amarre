@@ -300,6 +300,24 @@ Pour chaque domaine, nous évaluons :
 
 **SINON** : Garder dans le monolithe (Appwrite gère déjà l'infrastructure auth)
 
+#### Note sur la Gestion des Sessions
+
+**Approche actuelle (Cookies)** :
+- ✅ **Sécurité** : HTTP-only cookies protègent contre XSS
+- ✅ **Simplicité** : Pas de gestion de state serveur
+- ✅ **Scalabilité** : Stateless, compatible load balancers
+- ✅ **Standard** : Approche native web éprouvée
+- ⚠️ **Couplage** : Nécessite partage de configuration cookies
+
+**Alternative (Sessions en mémoire)** :
+- ✅ **Contrôle total** : Gestion fine des sessions
+- ✅ **Révocation immédiate** : Invalidation en temps réel
+- ❌ **Complexité** : Nécessite Redis/Memcached partagé
+- ❌ **Point de défaillance** : Dépendance store distribué
+- ❌ **Scalabilité** : Synchronisation entre instances
+
+**Recommandation** : Conserver l'approche cookies actuelle (Appwrite) qui est bien adaptée à l'architecture stateless. Les sessions en mémoire ajouteraient une complexité significative sans bénéfice majeur pour ce cas d'usage.
+
 ### 3. Service de Santé/Monitoring
 
 #### Justification
