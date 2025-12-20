@@ -11,6 +11,7 @@ This directory contains custom agents for GitHub Copilot that provide specialize
 **Purpose**: Analyzes the codebase for security vulnerabilities, best practices, and compliance with secure coding standards.
 
 **Focus Areas**:
+
 - Authentication and session security
 - Secrets management
 - API security (Appwrite, REDCap)
@@ -19,11 +20,13 @@ This directory contains custom agents for GitHub Copilot that provide specialize
 - Dependency security
 
 **How to Use**:
+
 1. In GitHub Copilot Chat, mention `@security-audit` to invoke the agent
 2. Ask it to review code changes, analyze security concerns, or provide recommendations
 3. The agent will provide categorized findings (Critical → Low priority)
 
 **Examples**:
+
 - `@security-audit Review my authentication changes`
 - `@security-audit Check this API endpoint for security issues`
 - `@security-audit Are there any hardcoded secrets in the codebase?`
@@ -52,6 +55,7 @@ To add a new custom agent:
 ## Project-Specific Context
 
 ### Technology Stack
+
 - **Framework**: SvelteKit
 - **Language**: TypeScript
 - **Backend**: Appwrite (BaaS)
@@ -59,6 +63,7 @@ To add a new custom agent:
 - **Package Manager**: pnpm
 
 ### Security Considerations
+
 - Magic URL authentication (passwordless)
 - Session management with secure cookies
 - Server-side API key management
