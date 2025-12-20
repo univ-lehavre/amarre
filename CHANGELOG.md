@@ -1,5 +1,15 @@
 # @univ-lehavre/amarre
 
+## 1.4.0
+
+### Minor Changes
+
+- 2942f58: Ajout d'un agent IA dédié à la sécurité
+
+### Patch Changes
+
+- 725bd67: Fix test on /api/v1/surveys/new
+
 ## 1.3.0
 
 ### Minor Changes

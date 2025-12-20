@@ -30,7 +30,7 @@ describe('POST /api/v1/surveys/new (anti-derive OpenAPI)', () => {
       }
 
       if (url === '/api/v1/surveys/list') {
-        expect(init?.method).toBe('POST');
+        expect(init?.method).toBeUndefined();
         return {
           json: vi
             .fn()
