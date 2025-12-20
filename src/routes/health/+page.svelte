@@ -2,6 +2,9 @@
   import type { PageProps } from './$types';
   import { onMount } from 'svelte';
 
+  // Configuration
+  const AUTO_REFRESH_INTERVAL_MS = 10000; // 10 seconds
+
   let { data }: PageProps = $props();
 
   let autoRefresh = $state(false);
@@ -25,7 +28,7 @@
   const toggleAutoRefresh = () => {
     autoRefresh = !autoRefresh;
     if (autoRefresh) {
-      refreshInterval = window.setInterval(refreshData, 10000); // Refresh every 10 seconds
+      refreshInterval = window.setInterval(refreshData, AUTO_REFRESH_INTERVAL_MS);
     } else if (refreshInterval) {
       clearInterval(refreshInterval);
       refreshInterval = null;

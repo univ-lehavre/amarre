@@ -497,7 +497,7 @@ async function main() {
       tags: ['health'],
       summary: 'Get comprehensive system health status',
       description:
-        'Returns overall system health status including server information and external service connectivity checks.',
+        'Returns overall system health status including server uptime, timestamp, and connectivity checks for critical services (Appwrite, REDCap, Internet). Returns 200 if healthy, 503 if any service is unhealthy.',
       responses: {
         200: {
           description: 'Health status retrieved successfully',

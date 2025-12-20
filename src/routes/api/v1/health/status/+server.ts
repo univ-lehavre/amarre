@@ -38,7 +38,7 @@ export const _openapi = {
   tags: ['health'],
   summary: 'Get comprehensive system health status',
   description:
-    'Returns overall system health status including server information and external service connectivity checks. This endpoint performs health checks on critical services and returns their status.',
+    'Returns overall system health status including server uptime, timestamp, and connectivity checks for critical services (Appwrite, REDCap, Internet). This endpoint performs TCP and TLS health checks on external services and returns their status. Returns 200 if all services are healthy, 503 if any service is unhealthy.',
   responses: {
     200: {
       description: 'Health status retrieved successfully',
@@ -53,12 +53,12 @@ export const _openapi = {
  * Check health of a specific host
  */
 async function checkServiceHealth(name: string, host: string): Promise<z.infer<typeof ServiceHealth>> {
-  const startTime = Date.now();
   try {
     const result = await checkOnline(host, 443, 3000);
-    const latencyMs = Date.now() - startTime;
 
     if (result.online) {
+      // Use TLS latency as it includes TCP handshake + TLS negotiation
+      const latencyMs = result.tls.latencyMs || result.tcp.latencyMs;
       return {
         name,
         status: 'healthy',
