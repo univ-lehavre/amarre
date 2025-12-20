@@ -8,6 +8,11 @@
 import { writeFileSync, readFileSync, existsSync } from 'fs';
 import { join } from 'path';
 
+// Timestamp detection constants
+const ISO_8601_DATE_PATTERN = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/;
+const MIN_TIMESTAMP_MS = 1_000_000_000_000; // Sept 9, 2001 01:46:40 GMT
+const MAX_TIMESTAMP_MS = 9_999_999_999_999; // Nov 20, 2286 17:46:39 GMT
+
 export interface DriftCheckResult {
   hasDrift: boolean;
   driftDetails: DriftDetail[];
@@ -225,12 +230,10 @@ export class DriftDetector {
   private isTimestampLike(value: unknown): boolean {
     if (typeof value === 'string') {
       // ISO 8601 date format
-      return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(value);
+      return ISO_8601_DATE_PATTERN.test(value);
     }
     if (typeof value === 'number') {
-      // Unix timestamp (milliseconds): from 2001-09-09 to 2286-11-20
-      const MIN_TIMESTAMP_MS = 1_000_000_000_000;
-      const MAX_TIMESTAMP_MS = 9_999_999_999_999;
+      // Unix timestamp in milliseconds
       return value > MIN_TIMESTAMP_MS && value < MAX_TIMESTAMP_MS;
     }
     return false;

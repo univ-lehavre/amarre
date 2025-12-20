@@ -35,7 +35,6 @@ class TestCoverageAnalyzer {
    * Detect the package manager being used
    */
   private detectPackageManager(): string {
-    const { existsSync } = require('fs');
     if (existsSync('pnpm-lock.yaml')) return 'pnpm';
     if (existsSync('yarn.lock')) return 'yarn';
     if (existsSync('package-lock.json')) return 'npm';
