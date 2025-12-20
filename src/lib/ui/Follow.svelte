@@ -21,7 +21,7 @@
     return Math.round((completed / steps.length) * 100);
   }
 
-  function getStatusInfo(condition: boolean, isBlocked: boolean = false) {
+  function getStatusInfo(condition: boolean, isBlocked: boolean = false): { icon: string; color: string; bgColor: string } {
     if (isBlocked) {
       return { icon: 'bi-dash-circle-fill', color: 'text-secondary', bgColor: 'bg-light' };
     }
@@ -57,7 +57,7 @@
       {@const formComplete = request.form_complete === '2'}
       {@const isBlocked = !formComplete}
       
-      {@const formStatus = getStatusInfo(formComplete, false)}
+      {@const formStatus = getStatusInfo(formComplete)}
       {@const composanteStatus = getStatusInfo(request.composante_complete === '2', isBlocked)}
       {@const laboStatus = getStatusInfo(request.labo_complete === '2', isBlocked)}
       {@const encadrantStatus = getStatusInfo(request.encadrant_complete === '2', isBlocked)}
