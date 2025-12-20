@@ -137,8 +137,10 @@ class TestCoverageAnalyzer {
   }
 }
 
-// CLI execution
-if (require.main === module) {
+// CLI execution - ES module compatible
+const isMainModule = import.meta.url === `file://${process.argv[1]}`;
+
+if (isMainModule) {
   const args = process.argv.slice(2);
   const skipRun = args.includes('--skip-run');
   
