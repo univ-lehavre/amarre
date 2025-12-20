@@ -8,7 +8,7 @@
 
 ### Patch Changes
 
-- 725bd67: Fix test on /api/v1/surweys/new
+- 725bd67: Fix test on /api/v1/surveys/new
 
 ## 1.3.0
 
