@@ -24,3 +24,9 @@ vite.config.ts.timestamp-*
 
 # Paraglide
 src/lib/paraglide
+
+# Test artifacts
+coverage
+tests/baselines/*.json
+!tests/baselines/.gitkeep
+tests/utils/test-baselines
