@@ -34,6 +34,15 @@
     if (!formComplete) return 'Attend mon formulaire';
     return stepComplete ? 'Décision informée' : 'En concertation';
   }
+
+  function getValidationStatusText(formComplete: boolean, validationComplete: boolean): string {
+    if (!formComplete) return 'Pas disponible';
+    return validationComplete ? 'Complète' : 'À compléter';
+  }
+
+  function getProgressBarClass(progress: number): string {
+    return progress === 100 ? 'bg-success' : 'bg-primary';
+  }
 </script>
 
 <div id="follow">
@@ -68,7 +77,7 @@
               </div>
               <div class="progress" style="height: 8px;">
                 <div
-                  class="progress-bar bg-{progress === 100 ? 'success' : 'primary'}"
+                  class="progress-bar {getProgressBarClass(progress)}"
                   role="progressbar"
                   style="width: {progress}%"
                   aria-valuenow={progress}
@@ -125,11 +134,7 @@
               <div class="flex-grow-1">
                 <strong>Validation finale</strong>
                 <div class="small text-muted">
-                  {!formComplete
-                    ? 'Pas disponible'
-                    : request.validation_finale_complete === '2'
-                      ? 'Complète'
-                      : 'À compléter'}
+                  {getValidationStatusText(formComplete, request.validation_finale_complete === '2')}
                 </div>
               </div>
             </div>
