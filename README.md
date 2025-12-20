@@ -24,3 +24,25 @@ Puis renseigner les variables dans `.env` (ne pas committer de secrets).
 pnpm install
 pnpm dev
 ```
+
+### Tests et Qualité
+
+Le projet utilise un agent de test automatisé IA pour garantir la qualité du code :
+
+```bash
+# Exécuter tous les tests
+pnpm test
+
+# Mode watch pour le développement
+pnpm test:watch
+
+# Générer un rapport de couverture
+pnpm test:coverage
+
+# Vérifier tout (format, lint, tests, build)
+pnpm check:all
+```
+
+Pour plus d'informations sur les tests automatisés, consultez :
+- [Guide de l'Agent de Test IA](docs/AI_TESTING_GUIDE.md)
+- [Documentation des Tests](tests/README.md)
