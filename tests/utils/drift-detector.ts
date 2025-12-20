@@ -228,8 +228,10 @@ export class DriftDetector {
       return /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/.test(value);
     }
     if (typeof value === 'number') {
-      // Unix timestamp (milliseconds)
-      return value > 1000000000000 && value < 9999999999999;
+      // Unix timestamp (milliseconds): from 2001-09-09 to 2286-11-20
+      const MIN_TIMESTAMP_MS = 1_000_000_000_000;
+      const MAX_TIMESTAMP_MS = 9_999_999_999_999;
+      return value > MIN_TIMESTAMP_MS && value < MAX_TIMESTAMP_MS;
     }
     return false;
   }

@@ -8,6 +8,7 @@
 
 import { writeFileSync, readFileSync, existsSync, mkdirSync, readdirSync } from 'fs';
 import { join } from 'path';
+import { pathToFileURL } from 'url';
 
 const BASELINES_DIR = join(process.cwd(), 'tests/baselines');
 
@@ -180,7 +181,7 @@ class BaselineManager {
 }
 
 // CLI execution - ES module compatible
-const isMainModule = import.meta.url === `file://${process.argv[1]}`;
+const isMainModule = import.meta.url === pathToFileURL(process.argv[1]).href;
 
 if (isMainModule) {
   const args = process.argv.slice(2);

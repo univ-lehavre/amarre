@@ -8,6 +8,7 @@
 
 import { execSync } from 'child_process';
 import { existsSync, readFileSync } from 'fs';
+import { pathToFileURL } from 'url';
 
 interface CoverageThresholds {
   statements: number;
@@ -31,12 +32,24 @@ class TestCoverageAnalyzer {
   }
 
   /**
+   * Detect the package manager being used
+   */
+  private detectPackageManager(): string {
+    const { existsSync } = require('fs');
+    if (existsSync('pnpm-lock.yaml')) return 'pnpm';
+    if (existsSync('yarn.lock')) return 'yarn';
+    if (existsSync('package-lock.json')) return 'npm';
+    return 'npm'; // Default to npm
+  }
+
+  /**
    * Run tests with coverage
    */
   runTestsWithCoverage(): void {
     console.log('🔍 Running tests with coverage...\n');
+    const packageManager = this.detectPackageManager();
     try {
-      execSync('npm test -- --coverage --reporter=json --reporter=default', {
+      execSync(`${packageManager} test -- --coverage --reporter=json --reporter=default`, {
         stdio: 'inherit',
       });
     } catch (error) {
@@ -138,7 +151,7 @@ class TestCoverageAnalyzer {
 }
 
 // CLI execution - ES module compatible
-const isMainModule = import.meta.url === `file://${process.argv[1]}`;
+const isMainModule = import.meta.url === pathToFileURL(process.argv[1]).href;
 
 if (isMainModule) {
   const args = process.argv.slice(2);

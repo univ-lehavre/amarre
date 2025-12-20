@@ -1,8 +1,11 @@
 import { describe, expect, it, beforeEach, afterEach } from 'vitest';
 import { existsSync, mkdirSync, rmSync, writeFileSync } from 'fs';
-import { join } from 'path';
+import { join, dirname } from 'path';
+import { fileURLToPath } from 'url';
 import { DriftDetector } from './drift-detector';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 const TEST_BASELINES_DIR = join(__dirname, 'test-baselines');
 
 describe('DriftDetector', () => {
