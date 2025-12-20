@@ -1,5 +1,5 @@
 ---
-'@univ-lehavre/amarre': patch
+'@univ-lehavre/amarre': minor
 ---
 
-Correctif sur l'agent IA dédié à la sécurité
+Ajout d'un agent IA dédié à la sécurité
