@@ -4,8 +4,8 @@
 
   // Configuration
   const AUTO_REFRESH_INTERVAL_MS = 10000; // 10 seconds
-  const LATENCY_GOOD_THRESHOLD_MS = 1000; // Under 1s is good
-  const LATENCY_DEGRADED_THRESHOLD_MS = 3000; // 1-3s is degraded, over 3s is bad
+  const LATENCY_GOOD_THRESHOLD_MS = 1000; // Under 1s is good (green)
+  const LATENCY_DEGRADED_THRESHOLD_MS = 2000; // 1-2s is degraded (yellow), over 2s is bad (red)
 
   let { data }: PageProps = $props();
 

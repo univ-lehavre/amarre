@@ -10,8 +10,25 @@ const DEFAULT_HEALTH_CHECK_TIMEOUT_MS = 3000;
 const LATENCY_DEGRADED_THRESHOLD_MS = 2000; // Over 2s is considered degraded
 const CACHE_DURATION_MS = 10000; // Cache health check results for 10 seconds
 
+// Response type for caching
+interface CachedHealthResponse {
+  data: {
+    status: 'healthy' | 'degraded' | 'unhealthy';
+    timestamp: string;
+    uptime: number;
+    services: Array<{
+      name: string;
+      status: 'healthy' | 'degraded' | 'unhealthy';
+      message?: string;
+      latencyMs?: number;
+      lastChecked: string;
+    }>;
+  };
+  error: null;
+}
+
 // Simple in-memory cache
-let cachedResponse: { data: unknown; timestamp: number } | null = null;
+let cachedResponse: { data: CachedHealthResponse; timestamp: number; statusCode: number } | null = null;
 
 /**
  * Schema for a service health check
@@ -103,7 +120,7 @@ async function checkServiceHealth(name: string, host: string): Promise<z.infer<t
 export const GET: RequestHandler = async () => {
   // Check cache
   if (cachedResponse && Date.now() - cachedResponse.timestamp < CACHE_DURATION_MS) {
-    return json(cachedResponse.data, { status: cachedResponse.data.error ? 503 : 200 });
+    return json(cachedResponse.data, { status: cachedResponse.statusCode });
   }
 
   const timestamp = new Date().toISOString();
@@ -156,10 +173,10 @@ export const GET: RequestHandler = async () => {
   // Return 503 for unhealthy or degraded status
   const statusCode = overallStatus === 'healthy' ? 200 : 503;
 
-  const response = { data, error: null };
+  const response: CachedHealthResponse = { data, error: null };
 
   // Cache the response
-  cachedResponse = { data: response, timestamp: Date.now() };
+  cachedResponse = { data: response, timestamp: Date.now(), statusCode };
 
   return json(response, { status: statusCode });
 };
