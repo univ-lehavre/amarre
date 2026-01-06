@@ -120,12 +120,16 @@
       </div>
     {/snippet}
     {#snippet links()}
-      <!-- eslint-disable svelte/no-navigation-without-resolve -->
-      <a
-        href={request.form}
-        class="card-link">Formulaire</a
-      >
-      <!-- eslint-enable svelte/no-navigation-without-resolve -->
+      {#if request.form}
+        <!-- eslint-disable svelte/no-navigation-without-resolve -->
+        <a
+          href={request.form}
+          class="card-link">Formulaire</a
+        >
+        <!-- eslint-enable svelte/no-navigation-without-resolve -->
+      {:else}
+        <span class="card-link text-body-secondary">Formulaire</span>
+      {/if}
       {#if finalValidationShouldSign}
         <!-- eslint-disable svelte/no-navigation-without-resolve -->
         <a
