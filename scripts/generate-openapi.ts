@@ -460,6 +460,57 @@ async function main() {
 
   // Endpoint /auth/delete supprimé (API réduite)
 
+  // Health Status
+  const ServiceHealth = z
+    .object({
+      name: z.string(),
+      status: z.enum(['healthy', 'degraded', 'unhealthy']),
+      message: z.string().optional(),
+      latencyMs: z.number().int().optional(),
+      lastChecked: z.string(),
+    })
+    .openapi('ServiceHealth');
+
+  const HealthStatusData = z
+    .object({
+      status: z.enum(['healthy', 'degraded', 'unhealthy']),
+      timestamp: z.string(),
+      uptime: z.number(),
+      services: z.array(ServiceHealth),
+    })
+    .openapi('HealthStatusData');
+
+  const HealthStatusResponse = z
+    .object({ data: HealthStatusData.nullable().default(null), error: ApiError.nullable().default(null) })
+    .strict()
+    .openapi('HealthStatusResponse');
+
+  registry.register('ServiceHealth', ServiceHealth);
+  registry.register('HealthStatusData', HealthStatusData);
+  registry.register('HealthStatusResponse', HealthStatusResponse);
+
+  try {
+    log('registerPath /health/status');
+    registry.registerPath({
+      method: 'get',
+      path: '/health/status',
+      tags: ['health'],
+      summary: 'Get comprehensive system health status',
+      description:
+        'Returns overall system health status including server uptime, timestamp, and connectivity checks for critical services (Appwrite, REDCap, Internet). Returns 200 if healthy, 503 if any service is unhealthy.',
+      responses: {
+        200: {
+          description: 'Health status retrieved successfully',
+          content: { 'application/json': { schema: HealthStatusResponse } },
+        },
+        503: { description: 'Service unhealthy', content: { 'application/json': { schema: HealthStatusResponse } } },
+      },
+    });
+  } catch (err) {
+    console.error('[openapi] error registering /health/status', err);
+    throw err;
+  }
+
   const generator = new OpenApiGeneratorV31(registry.definitions);
 
   const doc = generator.generateDocument({
@@ -474,6 +525,7 @@ async function main() {
       { name: 'users', description: 'Gestion des utilisateurs' },
       { name: 'surveys', description: 'Gestion des questionnaires' },
       { name: 'auth', description: 'Authentification & session' },
+      { name: 'health', description: 'Health monitoring' },
     ],
   });
 
