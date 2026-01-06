@@ -12,11 +12,23 @@ export const surveyRequestItem = z
     gu8: z.string().describe('Université GU8'),
     uni: z.string().describe('Université Le Havre Normandie'),
     form_complete: z.string().describe('Complétude de la demande (ex: 0/1/2)'),
-    avis: z.string().describe('Avis de la composante'),
+    avis: z
+      .string()
+      .describe(
+        "Avis de la composante (code d'avis sous forme de chaîne ; par exemple '3' pour un avis défavorable / rejet, d'autres valeurs pouvant représenter d'autres états comme accord ou en attente)"
+      ),
     composante_complete: z.string().describe('Complétude de la composante (ex: 0/1/2)'),
-    avis_v2: z.string().describe('Avis du laboratoire'),
+    avis_v2: z
+      .string()
+      .describe(
+        "Avis du laboratoire (code d'avis sous forme de chaîne ; par exemple '3' pour un avis défavorable / rejet, d'autres valeurs pouvant représenter d'autres états comme accord ou en attente)"
+      ),
     labo_complete: z.string().describe('Complétude du laboratoire (ex: 0/1/2)'),
-    avis_v2_v2: z.string().describe("Avis de l'encadrant"),
+    avis_v2_v2: z
+      .string()
+      .describe(
+        "Avis de l'encadrant (code d'avis sous forme de chaîne ; par exemple '3' pour un avis défavorable / rejet, d'autres valeurs pouvant représenter d'autres états comme accord ou en attente)"
+      ),
     encadrant_complete: z.string().describe("Complétude de l'encadrant (ex: 0/1/2)"),
     confirmation: z.string().describe("Confirmation finale par l'utilisateur"),
     validation_finale_complete: z.string().describe('Complétude de la validation finale (ex: 0/1/2)'),
