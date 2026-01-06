@@ -1,4 +1,4 @@
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 // Mock environment variables before importing the module
 vi.mock('$env/static/public', () => ({ PUBLIC_APPWRITE_ENDPOINT: 'https://cloud.appwrite.io/v1' }));
@@ -14,6 +14,11 @@ vi.mock('$lib/server/net/online-check', async importOriginal => {
 });
 
 describe('GET /api/v1/health/status', () => {
+  beforeEach(async () => {
+    // Clear module cache to reset the cache variable between tests
+    vi.resetModules();
+  });
+
   describe('successful health check', () => {
     it('returns 200 with healthy status when all services are healthy', async () => {
       const onlineCheck = await import('$lib/server/net/online-check');
@@ -229,7 +234,7 @@ describe('GET /api/v1/health/status', () => {
       const mod = await import('../../../../../../src/routes/api/v1/health/status/+server');
       expect(mod._openapi).toBeDefined();
       expect(mod._openapi.method).toBe('get');
-      expect(mod._openapi.path).toBe('/api/v1/health/status');
+      expect(mod._openapi.path).toBe('/health/status');
       expect(mod._openapi.tags).toContain('health');
       expect(mod._openapi.responses[200]).toBeDefined();
       expect(mod._openapi.responses[503]).toBeDefined();

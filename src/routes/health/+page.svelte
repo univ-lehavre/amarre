@@ -4,6 +4,8 @@
 
   // Configuration
   const AUTO_REFRESH_INTERVAL_MS = 10000; // 10 seconds
+  const LATENCY_GOOD_THRESHOLD_MS = 1000; // Under 1s is good
+  const LATENCY_DEGRADED_THRESHOLD_MS = 3000; // 1-3s is degraded, over 3s is bad
 
   let { data }: PageProps = $props();
 
@@ -20,6 +22,12 @@
       data.statusCode = response.status;
     } catch (error) {
       console.error('Failed to refresh health data:', error);
+      // Show error in UI
+      data.healthData = {
+        data: null,
+        error: { code: 'refresh_failed', message: 'Failed to refresh health data. Information may be outdated.' },
+      };
+      data.statusCode = 500;
     } finally {
       isRefreshing = false;
     }
@@ -80,13 +88,13 @@
   const getStatusIcon = (status: string) => {
     switch (status) {
       case 'healthy':
-        return '✓';
+        return 'Healthy ✓';
       case 'degraded':
-        return '⚠';
+        return 'Degraded ⚠';
       case 'unhealthy':
-        return '✗';
+        return 'Unhealthy ✗';
       default:
-        return '?';
+        return 'Unknown ?';
     }
   };
 </script>
@@ -105,12 +113,15 @@
             class="btn btn-outline-primary me-2"
             onclick={refreshData}
             disabled={isRefreshing}
+            aria-label="Refresh health status"
           >
             {isRefreshing ? 'Refreshing...' : 'Refresh'}
           </button>
           <button
             class="btn {autoRefresh ? 'btn-success' : 'btn-outline-secondary'}"
             onclick={toggleAutoRefresh}
+            aria-pressed={autoRefresh}
+            aria-label="Toggle automatic refresh every 10 seconds"
           >
             {autoRefresh ? 'Auto-refresh ON' : 'Auto-refresh OFF'}
           </button>
@@ -177,9 +188,9 @@
                       <p class="card-text">
                         <strong>Latency:</strong>
                         <span
-                          class="text-{service.latencyMs < 1000
+                          class="text-{service.latencyMs < LATENCY_GOOD_THRESHOLD_MS
                             ? 'success'
-                            : service.latencyMs < 3000
+                            : service.latencyMs < LATENCY_DEGRADED_THRESHOLD_MS
                               ? 'warning'
                               : 'danger'}"
                         >

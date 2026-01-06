@@ -4,6 +4,15 @@ import { ApiError, makeResponseSchema } from '$lib/types/api/common';
 import { checkOnline, getAllowedHosts } from '$lib/server/net/online-check';
 import { PUBLIC_APPWRITE_ENDPOINT } from '$env/static/public';
 
+// Configuration constants
+const DEFAULT_HTTPS_PORT = 443;
+const DEFAULT_HEALTH_CHECK_TIMEOUT_MS = 3000;
+const LATENCY_DEGRADED_THRESHOLD_MS = 2000; // Over 2s is considered degraded
+const CACHE_DURATION_MS = 10000; // Cache health check results for 10 seconds
+
+// Simple in-memory cache
+let cachedResponse: { data: unknown; timestamp: number } | null = null;
+
 /**
  * Schema for a service health check
  */
@@ -30,15 +39,15 @@ const HealthStatusData = z
 const HealthStatusResponse = makeResponseSchema(HealthStatusData);
 
 /**
- * OpenAPI metadata for the /api/v1/health/status endpoint
+ * OpenAPI metadata for the /health/status endpoint
  */
 export const _openapi = {
   method: 'get',
-  path: '/api/v1/health/status',
+  path: '/health/status',
   tags: ['health'],
   summary: 'Get comprehensive system health status',
   description:
-    'Returns overall system health status including server uptime, timestamp, and connectivity checks for critical services (Appwrite, REDCap, Internet). This endpoint performs TCP and TLS health checks on external services and returns their status. Returns 200 if all services are healthy, 503 if any service is unhealthy.',
+    'Returns overall system health status including server uptime, timestamp, and connectivity checks for critical services (Appwrite, REDCap, Internet). Returns 200 if all services are healthy, 503 if any service is unhealthy or degraded.',
   responses: {
     200: {
       description: 'Health status retrieved successfully',
@@ -54,15 +63,19 @@ export const _openapi = {
  */
 async function checkServiceHealth(name: string, host: string): Promise<z.infer<typeof ServiceHealth>> {
   try {
-    const result = await checkOnline(host, 443, 3000);
+    const result = await checkOnline(host, DEFAULT_HTTPS_PORT, DEFAULT_HEALTH_CHECK_TIMEOUT_MS);
 
     if (result.online) {
       // Use TLS latency as it includes TCP handshake + TLS negotiation
       const latencyMs = result.tls.latencyMs || result.tcp.latencyMs;
+
+      // Determine status based on latency
+      const status = latencyMs && latencyMs > LATENCY_DEGRADED_THRESHOLD_MS ? 'degraded' : 'healthy';
+
       return {
         name,
-        status: 'healthy',
-        message: 'Service is online and responding',
+        status,
+        message: status === 'degraded' ? 'Service is reachable but experiencing high latency' : 'Service is reachable',
         latencyMs,
         lastChecked: new Date().toISOString(),
       };
@@ -70,7 +83,7 @@ async function checkServiceHealth(name: string, host: string): Promise<z.infer<t
       return {
         name,
         status: 'unhealthy',
-        message: result.tcp.error || result.tls.error || 'Service is not responding',
+        message: result.tcp.error || result.tls.error || 'Service check failed with no error details',
         lastChecked: new Date().toISOString(),
       };
     }
@@ -88,6 +101,11 @@ async function checkServiceHealth(name: string, host: string): Promise<z.infer<t
  * GET handler for /api/v1/health/status
  */
 export const GET: RequestHandler = async () => {
+  // Check cache
+  if (cachedResponse && Date.now() - cachedResponse.timestamp < CACHE_DURATION_MS) {
+    return json(cachedResponse.data, { status: cachedResponse.data.error ? 503 : 200 });
+  }
+
   const timestamp = new Date().toISOString();
   const uptime = process.uptime();
 
@@ -135,7 +153,13 @@ export const GET: RequestHandler = async () => {
 
   const data = { status: overallStatus, timestamp, uptime, services };
 
-  const statusCode = overallStatus === 'unhealthy' ? 503 : 200;
+  // Return 503 for unhealthy or degraded status
+  const statusCode = overallStatus === 'healthy' ? 200 : 503;
 
-  return json({ data, error: null }, { status: statusCode });
+  const response = { data, error: null };
+
+  // Cache the response
+  cachedResponse = { data: response, timestamp: Date.now() };
+
+  return json(response, { status: statusCode });
 };
