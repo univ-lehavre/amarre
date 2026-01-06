@@ -1,5 +1,11 @@
 # @univ-lehavre/amarre
 
+## 1.5.0
+
+### Minor Changes
+
+- 90a0309: Add health API, and adjust the UI behavior
+
 ## 1.4.0
 
 ### Minor Changes
