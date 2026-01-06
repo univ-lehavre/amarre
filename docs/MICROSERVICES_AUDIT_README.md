@@ -12,11 +12,11 @@ Cet audit analyse l'application AMARRE (application SvelteKit monolithique de ~2
 
 **3 opportunités de microservices identifiées**, avec une recommandation claire :
 
-| Service | Priorité | Score | Recommandation |
-|---------|----------|-------|----------------|
-| **Survey Service** | 🔴 **HAUTE** | 9/10 | ⭐ **À IMPLÉMENTER** |
-| Auth Service | 🟡 MOYENNE | 7/10 | À considérer si SSO/multi-apps |
-| Health Service | 🟢 BASSE | 8/10 | Optionnel |
+| Service            | Priorité     | Score | Recommandation                 |
+| ------------------ | ------------ | ----- | ------------------------------ |
+| **Survey Service** | 🔴 **HAUTE** | 9/10  | ⭐ **À IMPLÉMENTER**           |
+| Auth Service       | 🟡 MOYENNE   | 7/10  | À considérer si SSO/multi-apps |
+| Health Service     | 🟢 BASSE     | 8/10  | Optionnel                      |
 
 ### 📋 Recommandation Globale
 
@@ -36,6 +36,7 @@ Cette analyse est documentée dans 3 fichiers complémentaires :
 ### 1. [MICROSERVICES_AUDIT.md](./MICROSERVICES_AUDIT.md) - L'audit complet
 
 **Contenu :**
+
 - 📊 Analyse détaillée de l'architecture actuelle
 - 🔍 Analyse des domaines fonctionnels (Auth, Surveys, Health)
 - ⚖️ Matrice d'évaluation des opportunités
@@ -49,6 +50,7 @@ Cette analyse est documentée dans 3 fichiers complémentaires :
 ### 2. [ARCHITECTURE_DIAGRAMS.md](./ARCHITECTURE_DIAGRAMS.md) - Les diagrammes
 
 **Contenu :**
+
 - 🏗️ Architecture actuelle (monolithe)
 - 🔄 Architecture proposée Phase 1 (hybride)
 - 🌐 Architecture proposée Phase 2 (full microservices)
@@ -61,6 +63,7 @@ Cette analyse est documentée dans 3 fichiers complémentaires :
 ### 3. [IMPLEMENTATION_GUIDE.md](./IMPLEMENTATION_GUIDE.md) - Le guide pratique
 
 **Contenu :**
+
 - 💻 Structure de projet complète
 - 🔐 Configuration et secrets
 - 🔑 Authentification inter-services (API Key, JWT)
@@ -103,7 +106,7 @@ Cette analyse est documentée dans 3 fichiers complémentaires :
 ✅ **Scalabilité importante** : Volume de requêtes potentiellement élevé  
 ✅ **Logique métier complexe** : Règles de validation spécifiques  
 ✅ **Évolution fréquente** : Changements réguliers des règles métier  
-✅ **Réutilisabilité** : Peut servir d'autres applications  
+✅ **Réutilisabilité** : Peut servir d'autres applications
 
 ### Architecture proposée Phase 1
 
@@ -143,28 +146,31 @@ Cette analyse est documentée dans 3 fichiers complémentaires :
 ## 📊 Métriques de Succès
 
 ### Performance
+
 - ✅ Latence P95 < 500ms pour surveys API
 - ✅ Throughput ≥ actuel
 - ✅ Taux d'erreur < 1%
 
 ### Fiabilité
+
 - ✅ Uptime ≥ 99.5%
 - ✅ MTTR < 15 minutes
 - ✅ Zero perte de données
 
 ### Développement
+
 - ✅ Temps de déploiement < 10 minutes
 - ✅ Fréquence de déploiement ↑ 50%
 - ✅ Time-to-market features surveys ↓ 30%
 
 ## ⚠️ Risques Principaux
 
-| Risque | Niveau | Mitigation |
-|--------|--------|------------|
-| Complexité opérationnelle | 🔴 ÉLEVÉ | Monitoring + Runbooks |
-| Latence réseau | 🟡 MOYEN | Cache + Optimisation |
-| Point de défaillance | 🟡 MOYEN | Health checks + Auto-restart |
-| Sécurité inter-services | 🟡 MOYEN | API Key/JWT + mTLS |
+| Risque                    | Niveau   | Mitigation                   |
+| ------------------------- | -------- | ---------------------------- |
+| Complexité opérationnelle | 🔴 ÉLEVÉ | Monitoring + Runbooks        |
+| Latence réseau            | 🟡 MOYEN | Cache + Optimisation         |
+| Point de défaillance      | 🟡 MOYEN | Health checks + Auto-restart |
+| Sécurité inter-services   | 🟡 MOYEN | API Key/JWT + mTLS           |
 
 ## 🚀 Prochaines Étapes
 
@@ -192,11 +198,13 @@ Cette analyse est documentée dans 3 fichiers complémentaires :
 ### Option 1 : Rester en Monolithe Modulaire
 
 **Choisir si :**
+
 - Équipe < 5 développeurs
 - Trafic faible à moyen
 - Pas de contraintes de scalabilité
 
 **Actions :**
+
 - Améliorer modularité du code
 - Renforcer les tests
 - Séparer en modules npm si réutilisation nécessaire
@@ -204,11 +212,13 @@ Cette analyse est documentée dans 3 fichiers complémentaires :
 ### Option 2 : Serverless (Functions)
 
 **Choisir si :**
+
 - Trafic très variable
 - Budget limité
 - Pas d'état à maintenir
 
 **Candidats :**
+
 - Health checks → Cloudflare Workers, AWS Lambda
 - Survey operations → AWS Lambda avec REDCap
 
@@ -228,9 +238,9 @@ Ce document fait partie du projet AMARRE et suit la même licence.
 
 ## 📝 Historique des versions
 
-| Version | Date | Auteur | Changements |
-|---------|------|--------|-------------|
-| 1.0 | 2025-12-20 | GitHub Copilot | Audit initial complet |
+| Version | Date       | Auteur         | Changements           |
+| ------- | ---------- | -------------- | --------------------- |
+| 1.0     | 2025-12-20 | GitHub Copilot | Audit initial complet |
 
 ---
 
@@ -240,4 +250,4 @@ Ce document fait partie du projet AMARRE et suit la même licence.
 
 ---
 
-*Généré le 20 décembre 2025 par GitHub Copilot Workspace*
+_Généré le 20 décembre 2025 par GitHub Copilot Workspace_

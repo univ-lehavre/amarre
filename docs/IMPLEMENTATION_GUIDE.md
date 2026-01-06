@@ -27,6 +27,7 @@ Extraire la logique de gestion des enquêtes (Surveys) de l'application AMARRE m
 ### Périmètre fonctionnel
 
 Le service Survey gère :
+
 - Création de nouvelles demandes d'enquête
 - Liste des demandes par utilisateur
 - Génération de liens d'enquête REDCap
@@ -135,34 +136,24 @@ const configSchema = z.object({
   node_env: z.enum(['development', 'test', 'production']).default('development'),
   port: z.coerce.number().default(3001),
   host: z.string().default('0.0.0.0'),
-  
-  cors: z.object({
-    origins: z.string().transform(s => s.split(',')),
-  }),
-  
+
+  cors: z.object({ origins: z.string().transform(s => s.split(',')) }),
+
   auth: z.object({
     apiKey: z.string().optional(),
-    jwt: z.object({
-      secret: z.string().optional(),
-      issuer: z.string().optional(),
-      audience: z.string().optional(),
-    }).optional(),
+    jwt: z
+      .object({ secret: z.string().optional(), issuer: z.string().optional(), audience: z.string().optional() })
+      .optional(),
   }),
-  
-  redcap: z.object({
-    apiUrl: z.string().url(),
-    apiToken: z.string().min(32),
-  }),
-  
+
+  redcap: z.object({ apiUrl: z.string().url(), apiToken: z.string().min(32) }),
+
   logging: z.object({
     level: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace']).default('info'),
     pretty: z.coerce.boolean().default(false),
   }),
-  
-  metrics: z.object({
-    enabled: z.coerce.boolean().default(true),
-    port: z.coerce.number().default(9090),
-  }),
+
+  metrics: z.object({ enabled: z.coerce.boolean().default(true), port: z.coerce.number().default(9090) }),
 });
 
 export type Config = z.infer<typeof configSchema>;
@@ -172,29 +163,14 @@ export function loadConfig(): Config {
     node_env: process.env.NODE_ENV,
     port: process.env.PORT,
     host: process.env.HOST,
-    cors: {
-      origins: process.env.ALLOWED_ORIGINS || 'http://localhost:3000',
-    },
+    cors: { origins: process.env.ALLOWED_ORIGINS || 'http://localhost:3000' },
     auth: {
       apiKey: process.env.API_KEY,
-      jwt: {
-        secret: process.env.JWT_SECRET,
-        issuer: process.env.JWT_ISSUER,
-        audience: process.env.JWT_AUDIENCE,
-      },
+      jwt: { secret: process.env.JWT_SECRET, issuer: process.env.JWT_ISSUER, audience: process.env.JWT_AUDIENCE },
     },
-    redcap: {
-      apiUrl: process.env.REDCAP_API_URL,
-      apiToken: process.env.REDCAP_API_TOKEN,
-    },
-    logging: {
-      level: process.env.LOG_LEVEL,
-      pretty: process.env.LOG_PRETTY,
-    },
-    metrics: {
-      enabled: process.env.ENABLE_METRICS,
-      port: process.env.METRICS_PORT,
-    },
+    redcap: { apiUrl: process.env.REDCAP_API_URL, apiToken: process.env.REDCAP_API_TOKEN },
+    logging: { level: process.env.LOG_LEVEL, pretty: process.env.LOG_PRETTY },
+    metrics: { enabled: process.env.ENABLE_METRICS, port: process.env.METRICS_PORT },
   };
 
   return configSchema.parse(raw);
@@ -212,26 +188,17 @@ export function loadConfig(): Config {
 import { FastifyRequest, FastifyReply } from 'fastify';
 import { config } from '../config';
 
-export async function apiKeyAuth(
-  request: FastifyRequest,
-  reply: FastifyReply
-): Promise<void> {
+export async function apiKeyAuth(request: FastifyRequest, reply: FastifyReply): Promise<void> {
   const apiKey = request.headers['x-api-key'];
-  
+
   if (!apiKey) {
-    return reply.status(401).send({
-      error: 'Unauthorized',
-      message: 'Missing API key',
-    });
+    return reply.status(401).send({ error: 'Unauthorized', message: 'Missing API key' });
   }
-  
+
   if (apiKey !== config.auth.apiKey) {
-    return reply.status(403).send({
-      error: 'Forbidden',
-      message: 'Invalid API key',
-    });
+    return reply.status(403).send({ error: 'Forbidden', message: 'Invalid API key' });
   }
-  
+
   // API key is valid, continue
 }
 ```
@@ -258,33 +225,24 @@ declare module 'fastify' {
   }
 }
 
-export async function jwtAuth(
-  request: FastifyRequest,
-  reply: FastifyReply
-): Promise<void> {
+export async function jwtAuth(request: FastifyRequest, reply: FastifyReply): Promise<void> {
   const authHeader = request.headers.authorization;
-  
+
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    return reply.status(401).send({
-      error: 'Unauthorized',
-      message: 'Missing or invalid authorization header',
-    });
+    return reply.status(401).send({ error: 'Unauthorized', message: 'Missing or invalid authorization header' });
   }
-  
+
   const token = authHeader.substring(7);
-  
+
   try {
     const decoded = jwt.verify(token, config.auth.jwt!.secret!, {
       issuer: config.auth.jwt!.issuer,
       audience: config.auth.jwt!.audience,
     }) as JWTPayload;
-    
+
     request.user = decoded;
   } catch (error) {
-    return reply.status(403).send({
-      error: 'Forbidden',
-      message: 'Invalid or expired token',
-    });
+    return reply.status(403).send({ error: 'Forbidden', message: 'Invalid or expired token' });
   }
 }
 ```
@@ -341,22 +299,15 @@ export class RedcapClient {
   }
 
   private async request(params: RedcapRequestOptions): Promise<Response> {
-    const requestData = {
-      ...DEFAULT_OPTIONS,
-      ...params,
-      token: this.apiToken,
-    };
+    const requestData = { ...DEFAULT_OPTIONS, ...params, token: this.apiToken };
 
     const body = new URLSearchParams(
-      Object.entries(requestData).filter(([, v]) => v !== undefined) as [string, string][]
+      Object.entries(requestData).filter(([, v]) => v !== undefined) as [string, string][],
     ).toString();
 
     const response = await fetch(this.apiUrl, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/x-www-form-urlencoded',
-        Accept: 'application/json',
-      },
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded', Accept: 'application/json' },
       body,
     });
 
@@ -378,19 +329,11 @@ export class RedcapClient {
   }
 
   async getSurveyLink(record: string, instrument: string): Promise<string> {
-    return this.requestText({
-      content: 'surveyLink',
-      instrument,
-      record,
-    });
+    return this.requestText({ content: 'surveyLink', instrument, record });
   }
 
   async exportRecords<T>(filterLogic: string, fields?: string[]): Promise<T> {
-    return this.requestJSON<T>({
-      type: 'flat',
-      filterLogic,
-      fields: fields?.join(','),
-    });
+    return this.requestJSON<T>({ type: 'flat', filterLogic, fields: fields?.join(',') });
   }
 
   async importRecords<T>(data: unknown): Promise<T> {
@@ -464,10 +407,7 @@ export class SurveyService {
       'validation_finale_complete',
     ];
 
-    const requests = await this.redcapClient.exportRecords<SurveyRequest[]>(
-      filterLogic,
-      fields
-    );
+    const requests = await this.redcapClient.exportRecords<SurveyRequest[]>(filterLogic, fields);
 
     return requests;
   }
@@ -483,15 +423,15 @@ export class SurveyService {
 
   async canCreateNewRequest(userId: string): Promise<boolean> {
     const requests = await this.listRequests(userId);
-    
+
     // Business rule: pas de demandes incomplètes
     const hasIncomplete = requests.some(
-      (r) =>
+      r =>
         r.form_complete !== '2' ||
         r.composante_complete !== '2' ||
         r.labo_complete !== '2' ||
         r.encadrant_complete !== '2' ||
-        r.validation_finale_complete !== '2'
+        r.validation_finale_complete !== '2',
     );
 
     return !hasIncomplete;
@@ -507,57 +447,37 @@ import { FastifyInstance } from 'fastify';
 import { z } from 'zod';
 import { SurveyService } from '../services/surveyService';
 
-const createRequestSchema = z.object({
-  userId: z.string().min(1),
-  email: z.string().email(),
-});
+const createRequestSchema = z.object({ userId: z.string().min(1), email: z.string().email() });
 
-const listRequestsQuerySchema = z.object({
-  userId: z.string().min(1),
-});
+const listRequestsQuerySchema = z.object({ userId: z.string().min(1) });
 
-const surveyLinkQuerySchema = z.object({
-  record: z.string().min(1),
-  instrument: z.string().min(1),
-});
+const surveyLinkQuerySchema = z.object({ record: z.string().min(1), instrument: z.string().min(1) });
 
-export async function surveyRoutes(
-  fastify: FastifyInstance,
-  surveyService: SurveyService
-): Promise<void> {
+export async function surveyRoutes(fastify: FastifyInstance, surveyService: SurveyService): Promise<void> {
   // POST /api/v1/surveys/requests
   fastify.post('/api/v1/surveys/requests', async (request, reply) => {
     try {
       const body = createRequestSchema.parse(request.body);
-      
+
       // Check if user can create new request
       const canCreate = await surveyService.canCreateNewRequest(body.userId);
       if (!canCreate) {
-        return reply.status(409).send({
-          data: null,
-          error: {
-            code: 'conflict',
-            message: 'There are incomplete survey requests',
-          },
-        });
+        return reply
+          .status(409)
+          .send({ data: null, error: { code: 'conflict', message: 'There are incomplete survey requests' } });
       }
 
       const result = await surveyService.createRequest(body);
-      
-      return reply.status(200).send({
-        data: { newRequestCreated: result.count },
-        error: null,
-      });
+
+      return reply.status(200).send({ data: { newRequestCreated: result.count }, error: null });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        return reply.status(400).send({
-          data: null,
-          error: {
-            code: 'validation_error',
-            message: 'Invalid request data',
-            details: error.format(),
-          },
-        });
+        return reply
+          .status(400)
+          .send({
+            data: null,
+            error: { code: 'validation_error', message: 'Invalid request data', details: error.format() },
+          });
       }
       throw error;
     }
@@ -568,21 +488,16 @@ export async function surveyRoutes(
     try {
       const query = listRequestsQuerySchema.parse(request.query);
       const requests = await surveyService.listRequests(query.userId);
-      
-      return reply.status(200).send({
-        data: requests,
-        error: null,
-      });
+
+      return reply.status(200).send({ data: requests, error: null });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        return reply.status(400).send({
-          data: null,
-          error: {
-            code: 'validation_error',
-            message: 'Invalid query parameters',
-            details: error.format(),
-          },
-        });
+        return reply
+          .status(400)
+          .send({
+            data: null,
+            error: { code: 'validation_error', message: 'Invalid query parameters', details: error.format() },
+          });
       }
       throw error;
     }
@@ -593,21 +508,16 @@ export async function surveyRoutes(
     try {
       const query = surveyLinkQuerySchema.parse(request.query);
       const url = await surveyService.getSurveyLink(query.record, query.instrument);
-      
-      return reply.status(200).send({
-        data: { url },
-        error: null,
-      });
+
+      return reply.status(200).send({ data: { url }, error: null });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        return reply.status(400).send({
-          data: null,
-          error: {
-            code: 'validation_error',
-            message: 'Invalid query parameters',
-            details: error.format(),
-          },
-        });
+        return reply
+          .status(400)
+          .send({
+            data: null,
+            error: { code: 'validation_error', message: 'Invalid query parameters', details: error.format() },
+          });
       }
       throw error;
     }
@@ -618,21 +528,16 @@ export async function surveyRoutes(
     try {
       const query = listRequestsQuerySchema.parse(request.query);
       const data = await surveyService.downloadData(query.userId);
-      
-      return reply.status(200).send({
-        data,
-        error: null,
-      });
+
+      return reply.status(200).send({ data, error: null });
     } catch (error) {
       if (error instanceof z.ZodError) {
-        return reply.status(400).send({
-          data: null,
-          error: {
-            code: 'validation_error',
-            message: 'Invalid query parameters',
-            details: error.format(),
-          },
-        });
+        return reply
+          .status(400)
+          .send({
+            data: null,
+            error: { code: 'validation_error', message: 'Invalid query parameters', details: error.format() },
+          });
       }
       throw error;
     }
@@ -657,27 +562,19 @@ export async function buildApp(): Promise<FastifyInstance> {
   const fastify = Fastify({
     logger: {
       level: config.logging.level,
-      transport: config.logging.pretty
-        ? { target: 'pino-pretty', options: { colorize: true } }
-        : undefined,
+      transport: config.logging.pretty ? { target: 'pino-pretty', options: { colorize: true } } : undefined,
     },
   });
 
   // Security middleware
   await fastify.register(helmet);
-  await fastify.register(cors, {
-    origin: config.cors.origins,
-    credentials: true,
-  });
+  await fastify.register(cors, { origin: config.cors.origins, credentials: true });
 
   // Authentication middleware
   fastify.addHook('onRequest', apiKeyAuth);
 
   // Health check (no auth required)
-  fastify.get('/health', async () => ({
-    status: 'ok',
-    timestamp: new Date().toISOString(),
-  }));
+  fastify.get('/health', async () => ({ status: 'ok', timestamp: new Date().toISOString() }));
 
   // Dependencies
   const redcapClient = new RedcapClient();
@@ -689,14 +586,13 @@ export async function buildApp(): Promise<FastifyInstance> {
   // Global error handler
   fastify.setErrorHandler((error, request, reply) => {
     request.log.error(error);
-    
-    reply.status(error.statusCode || 500).send({
-      data: null,
-      error: {
-        code: error.code || 'internal_error',
-        message: error.message || 'An unexpected error occurred',
-      },
-    });
+
+    reply
+      .status(error.statusCode || 500)
+      .send({
+        data: null,
+        error: { code: error.code || 'internal_error', message: error.message || 'An unexpected error occurred' },
+      });
   });
 
   return fastify;
@@ -715,10 +611,7 @@ async function main() {
     const config = loadConfig();
     const app = await buildApp();
 
-    await app.listen({
-      port: config.port,
-      host: config.host,
-    });
+    await app.listen({ port: config.port, host: config.host });
 
     app.log.info(`Survey service listening on ${config.host}:${config.port}`);
   } catch (error) {
@@ -760,19 +653,11 @@ describe('SurveyService', () => {
     it('should create a new survey request', async () => {
       vi.mocked(mockRedcapClient.importRecords).mockResolvedValue({ count: 1 });
 
-      const result = await surveyService.createRequest({
-        userId: 'user123',
-        email: 'test@example.com',
-      });
+      const result = await surveyService.createRequest({ userId: 'user123', email: 'test@example.com' });
 
       expect(result).toEqual({ count: 1 });
       expect(mockRedcapClient.importRecords).toHaveBeenCalledWith(
-        expect.arrayContaining([
-          expect.objectContaining({
-            userid: 'user123',
-            email: 'test@example.com',
-          }),
-        ])
+        expect.arrayContaining([expect.objectContaining({ userid: 'user123', email: 'test@example.com' })]),
       );
     });
   });
@@ -838,10 +723,7 @@ describe('Survey API', () => {
       const response = await app.inject({
         method: 'POST',
         url: '/api/v1/surveys/requests',
-        payload: {
-          userId: 'user123',
-          email: 'test@example.com',
-        },
+        payload: { userId: 'user123', email: 'test@example.com' },
       });
 
       expect(response.statusCode).toBe(401);
@@ -851,13 +733,8 @@ describe('Survey API', () => {
       const response = await app.inject({
         method: 'POST',
         url: '/api/v1/surveys/requests',
-        headers: {
-          'x-api-key': process.env.API_KEY || 'test-key',
-        },
-        payload: {
-          userId: 'user123',
-          email: 'test@example.com',
-        },
+        headers: { 'x-api-key': process.env.API_KEY || 'test-key' },
+        payload: { userId: 'user123', email: 'test@example.com' },
       });
 
       expect(response.statusCode).toBe(200);
@@ -1089,29 +966,16 @@ export async function metricsHandler() {
   "dashboard": {
     "title": "Survey Service Metrics",
     "panels": [
-      {
-        "title": "Request Rate",
-        "targets": [
-          {
-            "expr": "rate(http_requests_total{job=\"survey-service\"}[5m])"
-          }
-        ]
-      },
+      { "title": "Request Rate", "targets": [{ "expr": "rate(http_requests_total{job=\"survey-service\"}[5m])" }] },
       {
         "title": "Request Duration (p95)",
         "targets": [
-          {
-            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=\"survey-service\"}[5m]))"
-          }
+          { "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{job=\"survey-service\"}[5m]))" }
         ]
       },
       {
         "title": "Error Rate",
-        "targets": [
-          {
-            "expr": "rate(http_requests_total{job=\"survey-service\",status=~\"5..\"}[5m])"
-          }
-        ]
+        "targets": [{ "expr": "rate(http_requests_total{job=\"survey-service\",status=~\"5..\"}[5m])" }]
       }
     ]
   }
@@ -1211,5 +1075,5 @@ export async function metricsHandler() {
 
 ---
 
-*Document généré le 20 décembre 2025*  
-*Dernière mise à jour : 20 décembre 2025*
+_Document généré le 20 décembre 2025_  
+_Dernière mise à jour : 20 décembre 2025_

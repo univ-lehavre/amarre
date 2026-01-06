@@ -19,8 +19,8 @@ interface CachedHealthResponse {
     services: Array<{
       name: string;
       status: 'healthy' | 'degraded' | 'unhealthy';
-      message?: string;
-      latencyMs?: number;
+      message?: string | undefined;
+      latencyMs?: number | undefined;
       lastChecked: string;
     }>;
   };

@@ -694,5 +694,5 @@ Ces diagrammes illustrent l'évolution progressive de l'architecture AMARRE :
 
 ---
 
-*Document généré le 20 décembre 2025*  
-*Lié au document [MICROSERVICES_AUDIT.md](./MICROSERVICES_AUDIT.md)*
+_Document généré le 20 décembre 2025_  
+_Lié au document [MICROSERVICES_AUDIT.md](./MICROSERVICES_AUDIT.md)_
