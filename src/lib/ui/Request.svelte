@@ -130,7 +130,7 @@
       {:else}
         <span class="card-link text-body-secondary">Formulaire</span>
       {/if}
-      {#if finalValidationShouldSign}
+      {#if finalValidationShouldSign && request.validation_finale}
         <!-- eslint-disable svelte/no-navigation-without-resolve -->
         <a
           href={request.validation_finale}

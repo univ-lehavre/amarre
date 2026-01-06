@@ -32,6 +32,8 @@ export const surveyRequestItem = z
     encadrant_complete: z.string().describe("Complétude de l'encadrant (ex: 0/1/2)"),
     confirmation: z.string().describe("Confirmation finale par l'utilisateur"),
     validation_finale_complete: z.string().describe('Complétude de la validation finale (ex: 0/1/2)'),
+    form: z.string().optional().describe('Lien vers le formulaire'),
+    validation_finale: z.string().optional().describe('Lien vers la validation finale'),
   })
   .openapi('SurveyRequestItem');
 
