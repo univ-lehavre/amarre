@@ -5,11 +5,21 @@ export const surveyRequestItem = z
   .object({
     record_id: z.string().describe('Identifiant de la demande').openapi({ example: '0123456789abcdef01234567' }),
     created_at: z.string().describe('Date de création (ISO)').openapi({ example: '2025-12-17T12:34:56Z' }),
-    form_complete: z.string().describe('Statut REDCap (ex: 0/1/2)'),
-    composante_complete: z.string().describe('Statut REDCap (ex: 0/1/2)'),
-    labo_complete: z.string().describe('Statut REDCap (ex: 0/1/2)'),
-    encadrant_complete: z.string().describe('Statut REDCap (ex: 0/1/2)'),
-    validation_finale_complete: z.string().describe('Statut REDCap (ex: 0/1/2)'),
+    type: z.string().describe('Enseignant chercheur, enseignants, autres'),
+    voyage: z.string().describe('Type de demande (invitation ou voyage)'),
+    name: z.string().describe("Nom de l'invité"),
+    eunicoast: z.string().describe('Université Eunicoast'),
+    gu8: z.string().describe('Université GU8'),
+    uni: z.string().describe('Université Le Havre Normandie'),
+    form_complete: z.string().describe('Complétude de la demande (ex: 0/1/2)'),
+    avis: z.string().describe('Avis de la composante'),
+    composante_complete: z.string().describe('Complétude de la composante (ex: 0/1/2)'),
+    avis_v2: z.string().describe('Avis du laboratoire'),
+    labo_complete: z.string().describe('Complétude du laboratoire (ex: 0/1/2)'),
+    avis_v2_v2: z.string().describe("Avis de l'encadrant"),
+    encadrant_complete: z.string().describe("Complétude de l'encadrant (ex: 0/1/2)"),
+    confirmation: z.string().describe("Confirmation finale par l'utilisateur"),
+    validation_finale_complete: z.string().describe('Complétude de la validation finale (ex: 0/1/2)'),
   })
   .openapi('SurveyRequestItem');
 

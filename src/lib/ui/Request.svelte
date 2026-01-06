@@ -1,0 +1,146 @@
+<script lang="ts">
+  import { DateTime } from 'luxon';
+  import CardItem from '$lib/ui/CardItem.svelte';
+
+  let { request } = $props();
+
+  let isInvitation = $derived(request.name !== '');
+  let isVoyage = $derived(request.eunicoast !== '' || request.gu8 !== '' || request.uni !== '');
+  let isCategoryEnseignantChercheur = $derived(request.type === '1');
+  let isCategoryEnseignant = $derived(request.type === '2');
+  let isCategoryOther = $derived(request.type !== '' && request.type !== '1' && request.type !== '2');
+  let composanteValidation = $derived(request.avis !== '3' && request.composante_complete === '2');
+  let laboValidation = $derived(request.avis_v2 !== '3' && request.labo_complete === '2');
+  let encadrantValidation = $derived(request.avis_v2_v2 !== '3' && request.encadrant_complete === '2');
+  // let finalValidation = $derived(request.confirmation === '1' && request.validation_finale_complete === '2');
+  let composanteShouldSign = $derived(isInvitation && (isCategoryEnseignantChercheur || isCategoryEnseignant));
+  let laboShouldSign = $derived(isCategoryEnseignantChercheur || isCategoryOther);
+  let encadrantShouldSign = $derived(isCategoryOther && isVoyage);
+  let finalValidationShouldSign = $derived.by(() => {
+    if (composanteShouldSign && laboShouldSign) {
+      return composanteValidation && laboValidation;
+    } else if (laboShouldSign && encadrantShouldSign) {
+      return laboValidation && encadrantValidation;
+    } else if (composanteShouldSign) {
+      return composanteValidation;
+    } else if (laboShouldSign) {
+      return laboValidation;
+    } else {
+      return false;
+    }
+  });
+  let sejour = $derived.by(() => {
+    if (request.eunicoast !== '') {
+      return request.eunicoast;
+    } else if (request.gu8 !== '') {
+      return request.gu8;
+    } else if (request.uni !== '') {
+      return request.uni;
+    } else {
+      return null;
+    }
+  });
+</script>
+
+<div class="flex-shrink-0">
+  <CardItem>
+    {#snippet title()}
+      {#if isInvitation}
+        Invitation de {request.name}
+      {:else if isVoyage}Mon séjour à {sejour}{:else}Ma nouvelle demande{/if}
+    {/snippet}
+    {#snippet description()}
+      Ma demande {request.record_id} est en cours de traitement.
+    {/snippet}
+    {#snippet actions()}
+      {#if composanteShouldSign}
+        <div class="list-group-item list-group-item-{request.form_complete === '2' ? 'success' : 'warning'}">
+          {request.form_complete === '2' ? 'Mon formulaire est complet' : 'Je dois compléter mon formulaire'}.
+        </div>
+        <div
+          class="list-group-item list-group-item-{request.form_complete !== '2'
+            ? 'warning'
+            : request.composante_complete === '2'
+              ? 'success'
+              : 'info'}"
+        >
+          Ma composante {request.form_complete !== '2'
+            ? 'attend mon formulaire'
+            : request.composante_complete === '2'
+              ? 'a informé sa décision'
+              : 'se concerte'}.
+        </div>
+      {/if}
+      {#if laboShouldSign}
+        <div
+          class="list-group-item list-group-item-{request.form_complete !== '2'
+            ? 'warning'
+            : request.labo_complete === '2'
+              ? 'success'
+              : 'info'}"
+        >
+          Mon laboratoire {request.form_complete !== '2'
+            ? 'attend mon formulaire'
+            : request.labo_complete === '2'
+              ? 'a informé sa décision'
+              : 'se concerte'}.
+        </div>
+      {/if}
+      {#if encadrantShouldSign}
+        <div
+          class="list-group-item list-group-item-{request.form_complete !== '2'
+            ? 'warning'
+            : request.encadrant_complete === '2'
+              ? 'success'
+              : 'info'}"
+        >
+          Mon encadrant {request.form_complete !== '2'
+            ? 'attend mon formulaire'
+            : request.encadrant_complete === '2'
+              ? 'a informé sa décision'
+              : 'se concerte'}.
+        </div>
+      {/if}
+      <div
+        class="list-group-item list-group-item-{request.form_complete !== '2'
+          ? 'info'
+          : request.validation_finale_complete === '2'
+            ? 'success'
+            : finalValidationShouldSign
+              ? 'warning'
+              : 'info'}"
+      >
+        {request.form_complete !== '2'
+          ? "Ma validation finale n'est pas disponible tant que mon formulaire n'est pas complet et que toutes les parties prenantes n'ont pas pris de décision"
+          : request.validation_finale_complete === '2'
+            ? 'Ma validation finale est complète'
+            : finalValidationShouldSign
+              ? 'Je dois compléter ma validation finale'
+              : "Je dois attendre la validation de toutes les parties prenantes avant d'effectuer ma validation finale"}.
+      </div>
+    {/snippet}
+    {#snippet links()}
+      <!-- eslint-disable svelte/no-navigation-without-resolve -->
+      <a
+        href={request.form}
+        class="card-link">Formulaire</a
+      >
+      <!-- eslint-enable svelte/no-navigation-without-resolve -->
+      {#if finalValidationShouldSign}
+        <!-- eslint-disable svelte/no-navigation-without-resolve -->
+        <a
+          href={request.validation_finale}
+          class="card-link">Validation finale</a
+        >
+        <!-- eslint-enable svelte/no-navigation-without-resolve -->
+      {:else}
+        <span class="card-link text-body-secondary">Validation finale</span>
+      {/if}
+    {/snippet}
+    {#snippet footer()}
+      <small class="text-body-secondary">
+        Créée {DateTime.fromISO(request.created_at).toRelative({ locale: 'fr' })}
+      </small>
+    {/snippet}
+  </CardItem>
+</div>
