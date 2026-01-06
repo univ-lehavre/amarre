@@ -29,7 +29,7 @@
       return false;
     }
   });
-  let sejour = $derived.by(() => {
+  let destination = $derived.by(() => {
     if (request.eunicoast !== '') {
       return request.eunicoast;
     } else if (request.gu8 !== '') {
@@ -47,7 +47,7 @@
     {#snippet title()}
       {#if isInvitation}
         Invitation de {request.name}
-      {:else if isVoyage}Mon séjour à {sejour}{:else}Ma nouvelle demande{/if}
+      {:else if isVoyage}Mon séjour à {destination}{:else}Ma nouvelle demande{/if}
     {/snippet}
     {#snippet description()}
       Ma demande {request.record_id} est en cours de traitement.
