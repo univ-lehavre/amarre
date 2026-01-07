@@ -26,7 +26,7 @@
     "test:baseline-init": "tsx scripts/manage-baselines.ts init",
     "test:baseline-list": "tsx scripts/manage-baselines.ts list",
     "test:baseline-validate": "tsx scripts/manage-baselines.ts validate",
-    "check:all": "run-s format:check lint svelte:check test build",
+    "check": "run-s lint svelte:check test build",
     "changeset-status": "changeset status",
     "changeset-add": "changeset add",
     "changeset-version": "changeset version",

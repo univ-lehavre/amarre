@@ -5,8 +5,10 @@ import { SESSION_COOKIE } from '$lib/constants';
 import { PUBLIC_LOGIN_URL } from '$env/static/public';
 import { createAdminClient, createSessionClient } from '$lib/server/appwrite';
 import { validateMagicUrlLogin, validateSignupEmail, validateUserId } from '$lib/server/validators/auth';
+import { fetchUserId } from './surveys';
+import type { Fetch } from '$lib/types';
 
-export const signupWithEmail = async (unsecuredEmail: unknown): Promise<Models.Token> => {
+export const signupWithEmail = async (unsecuredEmail: unknown, { fetch }: { fetch: Fetch }): Promise<Models.Token> => {
   // Validate email
   const email: string = await validateSignupEmail(unsecuredEmail);
 
@@ -15,7 +17,8 @@ export const signupWithEmail = async (unsecuredEmail: unknown): Promise<Models.T
 
   // Create magic URL token
   const { account } = createAdminClient();
-  const userId: string = ID.unique();
+  const id = await fetchUserId(email, { fetch });
+  const userId: string = id ?? ID.unique();
   const token: Models.Token = await account.createMagicURLToken({ userId, email, url });
 
   return token;

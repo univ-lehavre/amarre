@@ -70,3 +70,22 @@ export const listRequests = async (userid: string, { fetch }: { fetch: Fetch }):
   const result = await fetchRedcapJSON<SurveyRequestItem[]>(requestData, { fetch });
   return result;
 };
+
+type contactId = { userid: string };
+
+export const fetchUserId = async (email: string, { fetch }: { fetch: Fetch }): Promise<string | null> => {
+  const requestData = {
+    type: 'flat',
+    fields: 'userid',
+    rawOrLabel: 'raw',
+    rawOrLabelHeaders: 'raw',
+    exportCheckboxLabel: 'false',
+    exportSurveyFields: 'false',
+    exportDataAccessGroups: 'false',
+    returnFormat: 'json',
+    filterLogic: `[email] = "${email}"`,
+  };
+  const contacts: contactId[] = await fetchRedcapJSON<contactId[]>(requestData, { fetch });
+  const result = contacts.length > 0 && contacts[0]?.userid ? contacts[0].userid : null;
+  return result;
+};

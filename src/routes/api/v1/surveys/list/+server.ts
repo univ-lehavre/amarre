@@ -46,17 +46,7 @@ export const GET: RequestHandler = async ({ locals, fetch }) => {
     };
 
     const requests = await listRequests(userId, { fetch });
-    const requestsWithLinks: {
-      form: string | undefined;
-      validation_finale: string | undefined;
-      record_id: string;
-      created_at: string;
-      form_complete: string;
-      composante_complete: string;
-      labo_complete: string;
-      encadrant_complete: string;
-      validation_finale_complete: string;
-    }[] = await Promise.all(
+    const requestsWithLinks = await Promise.all(
       requests.map(async request => {
         const [form, validation_finale] = await Promise.all([
           safeGetInstrumentLink(request.record_id, 'form'),
