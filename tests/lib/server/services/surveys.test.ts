@@ -1,9 +1,7 @@
 import { describe, expect, it, vi } from 'vitest';
 import { fetchUserId } from '$lib/server/services/surveys';
 
-vi.mock('$lib/server/redcap', () => ({
-  fetchRedcapJSON: vi.fn(),
-}));
+vi.mock('$lib/server/redcap', () => ({ fetchRedcapJSON: vi.fn() }));
 
 describe('fetchUserId', () => {
   it('returns userid when user exists', async () => {
@@ -27,7 +25,7 @@ describe('fetchUserId', () => {
         returnFormat: 'json',
         filterLogic: '[email] = "test@example.com"',
       }),
-      { fetch: expect.any(Function) }
+      { fetch: expect.any(Function) },
     );
   });
 
