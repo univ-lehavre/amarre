@@ -129,6 +129,8 @@ describe('surveys service - listRequests', () => {
       }),
       expect.any(Object)
     );
+  });
+});
 
 describe('fetchUserId', () => {
   it('returns userid when user exists', async () => {
