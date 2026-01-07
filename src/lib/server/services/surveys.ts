@@ -91,11 +91,11 @@ const listRequestsWithLabel = async (userid: string, { fetch }: { fetch: Fetch }
 };
 
 export const listRequests = async (userid: string, { fetch }: { fetch: Fetch }): Promise<SurveyRequestItem[]> => {
-  const requestsWiyhCode = await listRequestsWithCode(userid, { fetch });
-  const requestsWiyhLabel = await listRequestsWithLabel(userid, { fetch });
+  const requestsWithCode = await listRequestsWithCode(userid, { fetch });
+  const requestsWithLabel = await listRequestsWithLabel(userid, { fetch });
   // Merge the two lists based on record_id
-  const result = requestsWiyhCode.map(requestCode => {
-    const matchingLabel = requestsWiyhLabel.find(label => label.record_id === requestCode.record_id);
+  const result = requestsWithCode.map(requestCode => {
+    const matchingLabel = requestsWithLabel.find(label => label.record_id === requestCode.record_id);
     return { ...requestCode, ...matchingLabel };
   });
   return result;
