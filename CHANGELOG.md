@@ -4,7 +4,7 @@
 
 ### Patch Changes
 
-- f38e1ba: Fix an issue: user get now the same userid even if appwrite is reset. A new userid is set only if there is no records in REDCap for this user
+- f38e1ba: Fix an issue: users now get the same userid even if appwrite is reset. A new userid is set only if there is no records in REDCap for this user
 
 ## 1.5.0
 
