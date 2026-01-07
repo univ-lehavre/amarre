@@ -1,6 +1,6 @@
 {
   "name": "@univ-lehavre/amarre",
-  "version": "1.5.0",
+  "version": "1.5.1",
   "type": "module",
   "files": [
     ".env",
@@ -26,11 +26,9 @@
     "test:baseline-init": "tsx scripts/manage-baselines.ts init",
     "test:baseline-list": "tsx scripts/manage-baselines.ts list",
     "test:baseline-validate": "tsx scripts/manage-baselines.ts validate",
-    "check:all": "run-s format:check lint svelte:check test build",
-    "changeset-status": "changeset status",
-    "changeset-add": "changeset add",
-    "changeset-version": "changeset version",
-    "changeset-publish": "changeset publish",
+    "check": "run-s lint svelte:check test build",
+    "changeset": "changeset",
+    "bump": "changeset version",
     "remove:node": "find . -name 'node_modules' -type d | xargs rm -fR",
     "remove:build": "find . -name 'build' -type d | xargs rm -fR",
     "remove:svelte": "find . -name '.svelte-kit' -type d | xargs rm -fR",
