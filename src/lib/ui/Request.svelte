@@ -53,10 +53,10 @@
       Ma demande {request.record_id} est en cours de traitement.
     {/snippet}
     {#snippet actions()}
+      <div class="list-group-item list-group-item-{request.form_complete === '2' ? 'success' : 'warning'}">
+        {request.form_complete === '2' ? 'Mon formulaire est complet' : 'Je dois compléter mon formulaire'}.
+      </div>
       {#if composanteShouldSign}
-        <div class="list-group-item list-group-item-{request.form_complete === '2' ? 'success' : 'warning'}">
-          {request.form_complete === '2' ? 'Mon formulaire est complet' : 'Je dois compléter mon formulaire'}.
-        </div>
         <div
           class="list-group-item list-group-item-{request.form_complete !== '2'
             ? 'warning'
