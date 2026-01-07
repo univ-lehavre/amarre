@@ -73,6 +73,13 @@ export const listRequests = async (userid: string, { fetch }: { fetch: Fetch }):
 
 type contactId = { userid: string };
 
+/**
+ * Looks up the REDCap contact associated with the given email address and returns its userid.
+ *
+ * @param email - The email address used to filter REDCap contact records.
+ * @param fetch - An object providing a `fetch` implementation used to call the REDCap API.
+ * @returns The userid string of the first matching contact, or `null` if no matching user is found.
+ */
 export const fetchUserId = async (email: string, { fetch }: { fetch: Fetch }): Promise<string | null> => {
   const requestData = {
     type: 'flat',
