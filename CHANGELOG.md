@@ -1,5 +1,13 @@
 # @univ-lehavre/amarre
 
+## 1.5.2
+
+### Patch Changes
+
+- ec1a082: Fix the destination UI label in request title
+- 5b395c4: Fix Follow title in UI
+- ea478aa: Fix request status when form is empty
+
 ## 1.5.1
 
 ### Patch Changes
