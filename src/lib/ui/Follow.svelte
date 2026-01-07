@@ -10,7 +10,7 @@
 <div id="follow">
   <HorizontalScroller
     ariaLabel="Follow cards"
-    headingText="Follow"
+    headingText="Suivre"
     bind:showHeading
   >
     <SectionTile title={!showHeading ? 'Suivre' : ''} />
