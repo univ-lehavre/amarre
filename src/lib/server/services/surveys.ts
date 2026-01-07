@@ -4,6 +4,17 @@ import { ID } from 'node-appwrite';
 import type { TUser } from '$lib/types/api/user';
 import type { SurveyRequestItem } from '$lib/types/api/surveys';
 
+/**
+ * Escapes special characters in a value to be used in REDCap filterLogic.
+ * This prevents injection attacks by escaping double quotes and backslashes.
+ * @param value - The value to escape
+ * @returns The escaped value safe for use in filterLogic
+ */
+const escapeFilterLogicValue = (value: string): string => {
+  // Escape backslashes first, then double quotes
+  return value.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
+};
+
 export const getSurveyUrl = async (record: string, instrument: string, context: { fetch: Fetch }): Promise<string> => {
   const result = await fetchRedcapText({ content: 'surveyLink', instrument, record }, context);
   return result;
@@ -12,7 +23,7 @@ export const getSurveyUrl = async (record: string, instrument: string, context: 
 export const downloadSurvey = async (userid: string, context: { fetch: Fetch }): Promise<unknown> => {
   const requestData = {
     type: 'flat',
-    filterLogic: `[userid] = "${userid}"`,
+    filterLogic: `[userid] = "${escapeFilterLogicValue(userid)}"`,
     rawOrLabel: 'label',
     rawOrLabelHeaders: 'label',
     exportCheckboxLabel: 'true',
@@ -46,7 +57,7 @@ export const newRequest = async (user: TUser, { fetch }: { fetch: Fetch }) => {
 export const listRequests = async (userid: string, { fetch }: { fetch: Fetch }): Promise<SurveyRequestItem[]> => {
   const requestData = {
     type: 'flat',
-    filterLogic: `[userid] = "${userid}"`,
+    filterLogic: `[userid] = "${escapeFilterLogicValue(userid)}"`,
     fields: [
       'record_id',
       'created_at',
@@ -83,7 +94,7 @@ export const fetchUserId = async (email: string, { fetch }: { fetch: Fetch }): P
     exportSurveyFields: 'false',
     exportDataAccessGroups: 'false',
     returnFormat: 'json',
-    filterLogic: `[email] = "${email}"`,
+    filterLogic: `[email] = "${escapeFilterLogicValue(email)}"`,
   };
   const contacts: contactId[] = await fetchRedcapJSON<contactId[]>(requestData, { fetch });
   const result = contacts.length > 0 && contacts[0]?.userid ? contacts[0].userid : null;
