@@ -1,16 +1,11 @@
-import { describe, expect, it, vi } from 'vitest';
+import { describe, expect, it, vi, beforeEach } from 'vitest';
 import type { Fetch } from '$lib/types';
 
 // Mock the redcap module
-vi.mock('$lib/server/redcap', () => ({
-  fetchRedcapJSON: vi.fn(),
-  fetchRedcapText: vi.fn(),
-}));
+vi.mock('$lib/server/redcap', () => ({ fetchRedcapJSON: vi.fn(), fetchRedcapText: vi.fn() }));
 
 // Mock node-appwrite
-vi.mock('node-appwrite', () => ({
-  ID: { unique: vi.fn(() => 'mock-id') },
-}));
+vi.mock('node-appwrite', () => ({ ID: { unique: vi.fn(() => 'mock-id') } }));
 
 describe('surveys service - fetchUserId', () => {
   it('should escape double quotes in email addresses', async () => {
@@ -25,10 +20,8 @@ describe('surveys service - fetchUserId', () => {
 
     // Verify that the filterLogic has escaped the double quote
     expect(mockFetchRedcapJSON).toHaveBeenCalledWith(
-      expect.objectContaining({
-        filterLogic: '[email] = "test\\"quote@example.com"',
-      }),
-      expect.any(Object)
+      expect.objectContaining({ filterLogic: '[email] = "test\\"quote@example.com"' }),
+      expect.any(Object),
     );
   });
 
@@ -44,10 +37,8 @@ describe('surveys service - fetchUserId', () => {
 
     // Verify that the filterLogic has escaped the backslash
     expect(mockFetchRedcapJSON).toHaveBeenCalledWith(
-      expect.objectContaining({
-        filterLogic: '[email] = "test\\\\backslash@example.com"',
-      }),
-      expect.any(Object)
+      expect.objectContaining({ filterLogic: '[email] = "test\\\\backslash@example.com"' }),
+      expect.any(Object),
     );
   });
 
@@ -63,10 +54,8 @@ describe('surveys service - fetchUserId', () => {
 
     // Verify that the filterLogic is correctly formatted
     expect(mockFetchRedcapJSON).toHaveBeenCalledWith(
-      expect.objectContaining({
-        filterLogic: '[email] = "normal@example.com"',
-      }),
-      expect.any(Object)
+      expect.objectContaining({ filterLogic: '[email] = "normal@example.com"' }),
+      expect.any(Object),
     );
   });
 
@@ -82,10 +71,8 @@ describe('surveys service - fetchUserId', () => {
 
     // Verify that both backslashes and quotes are properly escaped
     expect(mockFetchRedcapJSON).toHaveBeenCalledWith(
-      expect.objectContaining({
-        filterLogic: '[email] = "test\\\\\\"mixed@example.com"',
-      }),
-      expect.any(Object)
+      expect.objectContaining({ filterLogic: '[email] = "test\\\\\\"mixed@example.com"' }),
+      expect.any(Object),
     );
   });
 });
@@ -103,10 +90,8 @@ describe('surveys service - downloadSurvey', () => {
 
     // Verify that the filterLogic has escaped the double quote
     expect(mockFetchRedcapJSON).toHaveBeenCalledWith(
-      expect.objectContaining({
-        filterLogic: '[userid] = "user\\"123"',
-      }),
-      expect.any(Object)
+      expect.objectContaining({ filterLogic: '[userid] = "user\\"123"' }),
+      expect.any(Object),
     );
   });
 });
@@ -124,15 +109,19 @@ describe('surveys service - listRequests', () => {
 
     // Verify that the filterLogic has escaped the double quote
     expect(mockFetchRedcapJSON).toHaveBeenCalledWith(
-      expect.objectContaining({
-        filterLogic: '[userid] = "user\\"456"',
-      }),
-      expect.any(Object)
+      expect.objectContaining({ filterLogic: '[userid] = "user\\"456"' }),
+      expect.any(Object),
     );
   });
 });
 
 describe('fetchUserId', () => {
+  let fetchUserId: (email: string, opts: { fetch: Fetch }) => Promise<string | null>;
+
+  beforeEach(async () => {
+    ({ fetchUserId } = await import('$lib/server/services/surveys'));
+  });
+
   it('returns userid when user exists', async () => {
     const { fetchRedcapJSON } = await import('$lib/server/redcap');
     const mockFetchRedcapJSON = fetchRedcapJSON as unknown as ReturnType<typeof vi.fn>;
