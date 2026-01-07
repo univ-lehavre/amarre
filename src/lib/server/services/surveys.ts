@@ -54,7 +54,7 @@ export const newRequest = async (user: TUser, { fetch }: { fetch: Fetch }) => {
   return result;
 };
 
-export const listRequests = async (userid: string, { fetch }: { fetch: Fetch }): Promise<SurveyRequestItem[]> => {
+const listRequestsWithCode = async (userid: string, { fetch }: { fetch: Fetch }): Promise<SurveyRequestItem[]> => {
   const requestData = {
     type: 'flat',
     filterLogic: `[userid] = "${escapeFilterLogicValue(userid)}"`,
@@ -64,9 +64,6 @@ export const listRequests = async (userid: string, { fetch }: { fetch: Fetch }):
       'type',
       'voyage',
       'name',
-      'eunicoast',
-      'gu8',
-      'uni',
       'form_complete',
       'avis',
       'composante_complete',
@@ -79,6 +76,28 @@ export const listRequests = async (userid: string, { fetch }: { fetch: Fetch }):
     ].join(','),
   };
   const result = await fetchRedcapJSON<SurveyRequestItem[]>(requestData, { fetch });
+  return result;
+};
+
+const listRequestsWithLabel = async (userid: string, { fetch }: { fetch: Fetch }): Promise<SurveyRequestItem[]> => {
+  const requestData = {
+    type: 'flat',
+    filterLogic: `[userid] = "${escapeFilterLogicValue(userid)}"`,
+    fields: ['record_id', 'eunicoast', 'gu8', 'uni'].join(','),
+    rawOrLabel: 'label',
+  };
+  const result = await fetchRedcapJSON<SurveyRequestItem[]>(requestData, { fetch });
+  return result;
+};
+
+export const listRequests = async (userid: string, { fetch }: { fetch: Fetch }): Promise<SurveyRequestItem[]> => {
+  const requestsWiyhCode = await listRequestsWithCode(userid, { fetch });
+  const requestsWiyhLabel = await listRequestsWithLabel(userid, { fetch });
+  // Merge the two lists based on record_id
+  const result = requestsWiyhCode.map(requestCode => {
+    const matchingLabel = requestsWiyhLabel.find(label => label.record_id === requestCode.record_id);
+    return { ...requestCode, ...matchingLabel };
+  });
   return result;
 };
 
