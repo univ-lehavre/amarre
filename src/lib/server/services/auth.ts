@@ -17,8 +17,14 @@ export const signupWithEmail = async (unsecuredEmail: unknown, { fetch }: { fetc
 
   // Create magic URL token
   const { account } = createAdminClient();
-  const id = await fetchUserId(email, { fetch });
-  const userId: string = id ?? ID.unique();
+  let userId: string;
+  try {
+    const id = await fetchUserId(email, { fetch });
+    userId = id ?? ID.unique();
+  } catch (error) {
+    console.error('Failed to fetch user ID from REDCap in signupWithEmail:', error);
+    userId = ID.unique();
+  }
   const token: Models.Token = await account.createMagicURLToken({ userId, email, url });
 
   return token;
