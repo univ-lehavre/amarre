@@ -30,7 +30,6 @@ export const surveyRequestItem = z
         "Avis de l'encadrant (code d'avis sous forme de chaîne ; par exemple '3' pour un avis défavorable / rejet, d'autres valeurs pouvant représenter d'autres états comme accord ou en attente)",
       ),
     encadrant_complete: z.string().describe("Complétude de l'encadrant (ex: 0/1/2)"),
-    confirmation: z.string().describe("Confirmation finale par l'utilisateur"),
     validation_finale_complete: z.string().describe('Complétude de la validation finale (ex: 0/1/2)'),
     form: z.string().optional().describe('Lien vers le formulaire'),
     validation_finale: z.string().optional().describe('Lien vers la validation finale'),

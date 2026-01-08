@@ -1,5 +1,12 @@
 # @univ-lehavre/amarre
 
+## 1.5.3
+
+### Patch Changes
+
+- 24cbd0b: Fix the UI validation presentation
+- c5078b8: Suppression du champ confirmation dans le formulaire REDCap
+
 ## 1.5.2
 
 ### Patch Changes

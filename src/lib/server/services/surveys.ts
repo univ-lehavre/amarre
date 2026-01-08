@@ -71,7 +71,6 @@ const listRequestsWithCode = async (userid: string, { fetch }: { fetch: Fetch })
       'labo_complete',
       'avis_v2_v2',
       'encadrant_complete',
-      'confirmation',
       'validation_finale_complete',
     ].join(','),
   };

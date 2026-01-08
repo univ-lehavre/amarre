@@ -39,7 +39,6 @@ describe('GET /api/v1/surveys/list (anti-derive OpenAPI)', () => {
         labo_complete: '0',
         avis_v2_v2: 'ok',
         encadrant_complete: '2',
-        confirmation: '1',
         validation_finale_complete: '0',
       },
     ]);

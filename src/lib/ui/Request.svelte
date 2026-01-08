@@ -12,7 +12,6 @@
   let composanteValidation = $derived(request.composante_complete === '2');
   let laboValidation = $derived(request.labo_complete === '2');
   let encadrantValidation = $derived(request.encadrant_complete === '2');
-  // let finalValidation = $derived(request.confirmation === '1' && request.validation_finale_complete === '2');
   let composanteShouldSign = $derived(isInvitation && (isCategoryEnseignantChercheur || isCategoryEnseignant));
   let laboShouldSign = $derived(isCategoryEnseignantChercheur || isCategoryOther);
   let encadrantShouldSign = $derived(isCategoryOther && isVoyage);
