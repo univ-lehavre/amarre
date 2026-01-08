@@ -9,9 +9,9 @@
   let isCategoryEnseignantChercheur = $derived(request.type === '1');
   let isCategoryEnseignant = $derived(request.type === '2');
   let isCategoryOther = $derived(request.type !== '' && request.type !== '1' && request.type !== '2');
-  let composanteValidation = $derived(request.avis !== '3' && request.composante_complete === '2');
-  let laboValidation = $derived(request.avis_v2 !== '3' && request.labo_complete === '2');
-  let encadrantValidation = $derived(request.avis_v2_v2 !== '3' && request.encadrant_complete === '2');
+  let composanteValidation = $derived(request.composante_complete === '2');
+  let laboValidation = $derived(request.labo_complete === '2');
+  let encadrantValidation = $derived(request.encadrant_complete === '2');
   // let finalValidation = $derived(request.confirmation === '1' && request.validation_finale_complete === '2');
   let composanteShouldSign = $derived(isInvitation && (isCategoryEnseignantChercheur || isCategoryEnseignant));
   let laboShouldSign = $derived(isCategoryEnseignantChercheur || isCategoryOther);
