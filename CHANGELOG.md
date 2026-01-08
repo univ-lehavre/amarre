@@ -1,5 +1,11 @@
 # @univ-lehavre/amarre
 
+## 1.5.4
+
+### Patch Changes
+
+- cea39fd: Les liens s'ouvrent désormais dans un nouvel onglet
+
 ## 1.5.3
 
 ### Patch Changes
