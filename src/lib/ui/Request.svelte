@@ -123,7 +123,9 @@
         <!-- eslint-disable svelte/no-navigation-without-resolve -->
         <a
           href={request.form}
-          class="card-link">Formulaire</a
+          class="card-link"
+          target="_blank"
+          rel="noopener noreferrer">Formulaire</a
         >
         <!-- eslint-enable svelte/no-navigation-without-resolve -->
       {:else}
@@ -133,7 +135,9 @@
         <!-- eslint-disable svelte/no-navigation-without-resolve -->
         <a
           href={request.validation_finale}
-          class="card-link">Validation finale</a
+          class="card-link"
+          target="_blank"
+          rel="noopener noreferrer">Validation finale</a
         >
         <!-- eslint-enable svelte/no-navigation-without-resolve -->
       {:else}
