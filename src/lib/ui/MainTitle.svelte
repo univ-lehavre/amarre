@@ -1,6 +1,10 @@
+<script lang="ts">
+  import { resolve } from '$app/paths';
+</script>
+
 <div class="container-fluid d-flex justify-content-center">
   <a
-    href="/"
+    href={resolve('/')}
     aria-label="Accueil"
   >
     <img
