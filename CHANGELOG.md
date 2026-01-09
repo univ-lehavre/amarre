@@ -1,5 +1,11 @@
 # @univ-lehavre/amarre
 
+## 1.7.0
+
+### Minor Changes
+
+- 47c914c: Add an AMARRE favicon
+
 ## 1.6.0
 
 ### Minor Changes
