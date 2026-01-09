@@ -1,5 +1,16 @@
 # @univ-lehavre/amarre
 
+## 1.6.0
+
+### Minor Changes
+
+- 37b7513: Replace main title to a logo
+- ad56973: Add the "follow" in the top navbar
+
+### Patch Changes
+
+- 1dbf533: Les liens ouvrent maintenant des nouveaux onglets
+
 ## 1.5.3
 
 ### Patch Changes
