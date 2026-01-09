@@ -14,11 +14,13 @@
   const email = $derived(data.user?.email);
 
   let containerClass = $state<'container' | 'container-fluid' | 'container-fluid w-75'>('container');
+
+  let hasRequests = $derived(data.requests && data.requests.length > 0);
 </script>
 
 <ECRIN />
 
-<TopNavbar />
+<TopNavbar {hasRequests} />
 
 <div class={containerClass}>
   <div
@@ -32,7 +34,7 @@
       requests={data.requests}
     />
     <Rule />
-    {#if data.requests && data.requests.length > 0}
+    {#if hasRequests}
       <Follow requests={data.requests} />
       <Rule />
     {/if}
