@@ -1,6 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
+  let { hasRequests } = $props();
   let navEl: HTMLElement | undefined;
 
   onMount(() => {
@@ -31,7 +32,18 @@
         ></i><span class="d-none d-md-inline">Déposer</span></a
       >
     </li>
-
+    {#if hasRequests}
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          href="#follow"
+          ><i
+            class="bi bi-people me-0 me-md-2"
+            aria-hidden="true"
+          ></i><span class="d-none d-md-inline">Suivre</span></a
+        >
+      </li>
+    {/if}
     <li class="nav-item">
       <a
         class="nav-link"
