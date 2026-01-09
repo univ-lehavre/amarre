@@ -1,8 +1,13 @@
 <div class="container-fluid d-flex justify-content-center">
-  <div
-    class="display-2 fw-normal"
-    style="font-family: Gambetta;"
+  <a
+    href="/"
+    aria-label="Accueil"
   >
-    AMARRE
-  </div>
+    <img
+      src="/Logo_AMARRE.png"
+      alt="AMARRE"
+      class="img-fluid"
+      style="max-height:8rem;"
+    />
+  </a>
 </div>
