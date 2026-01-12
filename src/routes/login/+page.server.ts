@@ -1,8 +1,9 @@
 import { redirect } from '@sveltejs/kit';
+import type { PageServerLoad } from './$types';
 
 import { validateMagicUrlLogin } from '$lib/server/validators/auth';
 
-export async function load({ url, fetch }) {
+export const load: PageServerLoad = async ({ url, fetch }) => {
   // Extract parameters
   const unsecuredSecret = url.searchParams.get('secret');
   const unsecuredUserId = url.searchParams.get('userId');
@@ -18,4 +19,4 @@ export async function load({ url, fetch }) {
   });
 
   redirect(302, '/');
-}
+};
