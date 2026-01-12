@@ -1,5 +1,5 @@
 import type { Fetch } from '$lib/types';
-import { fetchRedcapJSON, fetchRedcapText } from '$lib/server/redcap';
+import { fetchRedcapJSON, fetchRedcapText, fetchRedcapBuffer } from '$lib/server/redcap';
 import { ID } from 'node-appwrite';
 import type { TUser } from '$lib/types/api/user';
 import type { SurveyRequestItem } from '$lib/types/api/surveys';
@@ -123,5 +123,18 @@ export const fetchUserId = async (email: string, { fetch }: { fetch: Fetch }): P
   };
   const contacts: contactId[] = await fetchRedcapJSON<contactId[]>(requestData, { fetch });
   const result = contacts.length > 0 && contacts[0]?.userid ? contacts[0].userid : null;
+  return result;
+};
+
+/**
+ * Downloads the PDF of a form from REDCap for a given record ID.
+ *
+ * @param recordId - The record ID of the form to download
+ * @param context - An object providing a `fetch` implementation used to call the REDCap API
+ * @returns An ArrayBuffer containing the PDF data
+ */
+export const downloadSurveyPdf = async (recordId: string, context: { fetch: Fetch }): Promise<ArrayBuffer> => {
+  const requestData = { content: 'pdf', record: recordId, instrument: 'form', returnFormat: 'json' };
+  const result = await fetchRedcapBuffer(requestData, context);
   return result;
 };
