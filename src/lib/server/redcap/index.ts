@@ -40,3 +40,11 @@ export const fetchRedcapText = async (params: Record<string, string>, context: {
   const response = await fetchRedcap(params, context);
   return response.text();
 };
+
+export const fetchRedcapBuffer = async (
+  params: Record<string, string>,
+  context: { fetch: Fetch },
+): Promise<ArrayBuffer> => {
+  const response = await fetchRedcap(params, context);
+  return response.arrayBuffer();
+};

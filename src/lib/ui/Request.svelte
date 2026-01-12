@@ -119,7 +119,15 @@
       </div>
     {/snippet}
     {#snippet links()}
-      {#if request.form}
+      {#if request.form_complete === '2'}
+        <!-- eslint-disable svelte/no-navigation-without-resolve -->
+        <a
+          href="/api/v1/surveys/pdf?record_id={request.record_id}"
+          class="card-link"
+          download="formulaire_{request.record_id}.pdf">Formulaire (PDF)</a
+        >
+        <!-- eslint-enable svelte/no-navigation-without-resolve -->
+      {:else if request.form}
         <!-- eslint-disable svelte/no-navigation-without-resolve -->
         <a
           href={request.form}
