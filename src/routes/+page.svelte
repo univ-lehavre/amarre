@@ -1,12 +1,15 @@
 <script lang="ts">
   import type { PageProps } from './$types';
+  import type { SurveyRequestItem } from '$lib/types/api/surveys';
 
   import Collaborate from '$lib/ui/Collaborate.svelte';
+  import Complete from '$lib/ui/Complete.svelte';
   import Administrate from '$lib/ui/Administrate.svelte';
   import ECRIN from '$lib/ui/MainTitle.svelte';
   import TopNavbar from '$lib/ui/TopNavbar.svelte';
   import Rule from '$lib/ui/Rule.svelte';
   import Follow from '$lib/ui/Follow.svelte';
+  import Retrieve from '$lib/ui/Retrieve.svelte';
 
   let { data, form }: PageProps = $props();
 
@@ -15,12 +18,25 @@
 
   let containerClass = $state<'container' | 'container-fluid' | 'container-fluid w-75'>('container');
 
-  let hasRequests = $derived(data.requests && data.requests.length > 0);
+  // Demandes avec formulaire non finalisé (form_complete != '2')
+  let incompleteRequests = $derived(data.requests?.filter((r: SurveyRequestItem) => r.form_complete !== '2') ?? []);
+
+  // Demandes en cours de validation (form_complete == '2' ET validation_finale_complete != '2')
+  let requestsInProgress = $derived(
+    data.requests?.filter((r: SurveyRequestItem) => r.form_complete === '2' && r.validation_finale_complete !== '2') ??
+      [],
+  );
+
+  let hasIncompleteRequests = $derived(incompleteRequests.length > 0);
+  let hasRequestsInProgress = $derived(requestsInProgress.length > 0);
 </script>
 
 <ECRIN />
 
-<TopNavbar {hasRequests} />
+<TopNavbar
+  {hasIncompleteRequests}
+  {hasRequestsInProgress}
+/>
 
 <div class={containerClass}>
   <div
@@ -34,10 +50,16 @@
       requests={data.requests}
     />
     <Rule />
-    {#if hasRequests}
-      <Follow requests={data.requests} />
+    {#if hasIncompleteRequests}
+      <Complete requests={incompleteRequests} />
       <Rule />
     {/if}
+    {#if hasRequestsInProgress}
+      <Follow requests={requestsInProgress} />
+      <Rule />
+    {/if}
+    <Retrieve />
+    <Rule />
     <Administrate
       {userId}
       {email}
@@ -47,7 +69,7 @@
 </div>
 
 <style>
-  :global(#introduce, #explore, #ask, #collaborate, #publish, #administrate) {
+  :global(#introduce, #explore, #ask, #collaborate, #complete, #follow, #retrieve, #publish, #administrate) {
     /* Empêche la navbar sticky de masquer le haut des sections ciblées */
     scroll-margin-top: var(--nav-offset);
   }

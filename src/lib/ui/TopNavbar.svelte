@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount } from 'svelte';
 
-  let { hasRequests } = $props();
+  let { hasIncompleteRequests, hasRequestsInProgress } = $props();
   let navEl: HTMLElement | undefined;
 
   onMount(() => {
@@ -32,18 +32,40 @@
         ></i><span class="d-none d-md-inline">Déposer</span></a
       >
     </li>
-    {#if hasRequests}
+    {#if hasIncompleteRequests}
+      <li class="nav-item">
+        <a
+          class="nav-link"
+          href="#complete"
+          ><i
+            class="bi bi-pencil-square me-0 me-md-2"
+            aria-hidden="true"
+          ></i><span class="d-none d-md-inline">Compléter</span></a
+        >
+      </li>
+    {/if}
+    {#if hasRequestsInProgress}
       <li class="nav-item">
         <a
           class="nav-link"
           href="#follow"
           ><i
-            class="bi bi-people me-0 me-md-2"
+            class="bi bi-hourglass-split me-0 me-md-2"
             aria-hidden="true"
           ></i><span class="d-none d-md-inline">Suivre</span></a
         >
       </li>
     {/if}
+    <li class="nav-item">
+      <a
+        class="nav-link"
+        href="#retrieve"
+        ><i
+          class="bi bi-archive me-0 me-md-2"
+          aria-hidden="true"
+        ></i><span class="d-none d-md-inline">Retrouver</span></a
+      >
+    </li>
     <li class="nav-item">
       <a
         class="nav-link"
