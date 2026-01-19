@@ -6,7 +6,35 @@
 
   let email = $state('');
   let signuping = $state(false);
+  let showSuccessAlert = $state(false);
+  let showErrorAlert = $state(false);
   let disabledSubmit = $derived(!isEmail(email) || signuping ? 'disabled' : '');
+
+  $effect(() => {
+    if (form?.data) {
+      showSuccessAlert = true;
+      const timer = setTimeout(() => {
+        showSuccessAlert = false;
+        const modalElement = document.getElementById('SignUp');
+        if (modalElement) {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const modal = (window as any).bootstrap?.Modal?.getInstance(modalElement);
+          modal?.hide();
+        }
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  });
+
+  $effect(() => {
+    if (form?.wrongSignupEmail) {
+      showErrorAlert = true;
+      const timer = setTimeout(() => {
+        showErrorAlert = false;
+      }, 5000);
+      return () => clearTimeout(timer);
+    }
+  });
 </script>
 
 <div
@@ -91,7 +119,7 @@
             ></button>
           </div>
         {/if}
-        {#if form?.wrongSignupEmail}
+        {#if showErrorAlert && form?.wrongSignupEmail}
           <div
             class="alert alert-danger alert-dismissible fade show"
             role="alert"
@@ -102,12 +130,12 @@
             <button
               type="button"
               class="btn-close"
-              data-bs-dismiss="alert"
               aria-label="Close"
+              onclick={() => (showErrorAlert = false)}
             ></button>
           </div>
         {/if}
-        {#if form?.data}
+        {#if showSuccessAlert}
           <div
             class="alert alert-success alert-dismissible fade show"
             role="alert"
@@ -116,8 +144,8 @@
             <button
               type="button"
               class="btn-close"
-              data-bs-dismiss="alert"
               aria-label="Close"
+              onclick={() => (showSuccessAlert = false)}
             ></button>
           </div>
         {/if}
