@@ -15,7 +15,7 @@
   let isCategoryOther = $derived(
     request.demandeur_statut !== '' && request.demandeur_statut !== '1' && request.demandeur_statut !== '2',
   );
-  let composanteValidation = $derived(request.composante_complete === '2');
+  let composanteValidation = $derived(request.demandeur_composante_complete === '2');
   let laboValidation = $derived(request.labo_complete === '2');
   let encadrantValidation = $derived(request.encadrant_complete === '2');
   let composanteShouldSign = $derived(isInvitation && (isCategoryEnseignantChercheur || isCategoryEnseignant));
@@ -51,7 +51,7 @@
   <CardItem>
     {#snippet title()}
       {#if isInvitation}
-        Invitation de {request.invite_nom}
+        Mon invitation de {request.invite_nom}
       {:else if isVoyage}Mon séjour à {destination}{:else}Ma nouvelle demande{/if}
     {/snippet}
     {#snippet description()}
@@ -65,13 +65,13 @@
         <div
           class="list-group-item list-group-item-{request.form_complete !== '2'
             ? 'warning'
-            : request.composante_complete === '2'
+            : request.demandeur_composante_complete === '2'
               ? 'success'
               : 'info'}"
         >
           Ma composante {request.form_complete !== '2'
             ? 'attend mon formulaire'
-            : request.composante_complete === '2'
+            : request.demandeur_composante_complete === '2'
               ? 'a informé sa décision'
               : 'se concerte'}.
         </div>

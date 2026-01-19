@@ -33,7 +33,20 @@ const fetchRedcap = async (params: Record<string, string>, context: { fetch: Fet
 
 export const fetchRedcapJSON = async <T>(params: Record<string, string>, context: { fetch: Fetch }): Promise<T> => {
   const response = await fetchRedcap(params, context);
-  return response.json() as Promise<T>;
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`REDCap API error (${response.status}): ${errorText}`);
+  }
+
+  const data = await response.json();
+
+  // REDCap returns { error: "..." } for API-level errors even with 200 status
+  if (data && typeof data === 'object' && 'error' in data && !Array.isArray(data)) {
+    throw new Error(`REDCap API error: ${data.error}`);
+  }
+
+  return data as T;
 };
 
 export const fetchRedcapText = async (params: Record<string, string>, context: { fetch: Fetch }): Promise<string> => {

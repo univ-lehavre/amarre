@@ -607,7 +607,7 @@
           "composante_timestamp": {
             "type": "string"
           },
-          "composante_complete": {
+          "demandeur_composante_complete": {
             "anyOf": [
               {
                 "type": "string"

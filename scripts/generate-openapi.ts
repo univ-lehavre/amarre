@@ -115,7 +115,7 @@ async function main() {
       form_timestamp: z.string().optional(),
       form_complete: z.union([z.string(), z.number()]).optional(),
       composante_timestamp: z.string().optional(),
-      composante_complete: z.union([z.string(), z.number()]).optional(),
+      demandeur_composante_complete: z.union([z.string(), z.number()]).optional(),
       labo_timestamp: z.string().optional(),
       labo_complete: z.union([z.string(), z.number()]).optional(),
       encadrant_timestamp: z.string().optional(),
