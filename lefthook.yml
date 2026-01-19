@@ -1,0 +1,30 @@
+pre-commit:
+  parallel: true
+  commands:
+    format:
+      glob: '*.{js,ts,svelte,json,md,css,html,yml,yaml}'
+      stage_fixed: true
+      run: pnpm prettier --write {staged_files}
+    lint:
+      glob: '*.{js,ts,svelte}'
+      stage_fixed: true
+      run: pnpm eslint --fix {staged_files}
+    typecheck:
+      glob: '*.{ts,svelte}'
+      run: pnpm typecheck
+    svelte-check:
+      glob: '*.svelte'
+      run: pnpm svelte:check
+
+commit-msg:
+  commands:
+    commitlint:
+      run: pnpm commitlint --edit {1}
+
+pre-push:
+  piped: true
+  commands:
+    refresh:
+      run: pnpm install
+    test:
+      run: pnpm test

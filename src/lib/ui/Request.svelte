@@ -124,7 +124,7 @@
         <a
           href="/api/v1/surveys/pdf?record_id={request.record_id}"
           class="card-link"
-          download="formulaire_{request.record_id}.pdf">Formulaire (PDF)</a
+          download="formulaire_{request.record_id}.pdf">Formulaire</a
         >
         <!-- eslint-enable svelte/no-navigation-without-resolve -->
       {:else if request.form}
@@ -139,17 +139,19 @@
       {:else}
         <span class="card-link text-body-secondary">Formulaire</span>
       {/if}
-      {#if finalValidationShouldSign && request.validation_finale}
-        <!-- eslint-disable svelte/no-navigation-without-resolve -->
-        <a
-          href={request.validation_finale}
-          class="card-link"
-          target="_blank"
-          rel="noopener noreferrer">Validation finale</a
-        >
-        <!-- eslint-enable svelte/no-navigation-without-resolve -->
-      {:else}
-        <span class="card-link text-body-secondary">Validation finale</span>
+      {#if request.validation_finale_complete !== '2'}
+        {#if finalValidationShouldSign && request.validation_finale}
+          <!-- eslint-disable svelte/no-navigation-without-resolve -->
+          <a
+            href={request.validation_finale}
+            class="card-link"
+            target="_blank"
+            rel="noopener noreferrer">Validation finale</a
+          >
+          <!-- eslint-enable svelte/no-navigation-without-resolve -->
+        {:else}
+          <span class="card-link text-body-secondary">Validation finale</span>
+        {/if}
       {/if}
     {/snippet}
     {#snippet footer()}

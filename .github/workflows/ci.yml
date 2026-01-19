@@ -2,101 +2,56 @@ name: CI
 
 on:
   push:
-    branches:
-      - main
-      - master
-      - '**'
+    branches: ['**']
   pull_request:
 
 concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  PUBLIC_APPWRITE_ENDPOINT: ${{ vars.PUBLIC_APPWRITE_ENDPOINT }}
+  PUBLIC_APPWRITE_PROJECT: ${{ vars.PUBLIC_APPWRITE_PROJECT }}
+  PUBLIC_LOGIN_URL: ${{ vars.PUBLIC_LOGIN_URL }}
+  PUBLIC_REDCAP_URL: ${{ vars.PUBLIC_REDCAP_URL }}
+  APPWRITE_KEY: ${{ secrets.APPWRITE_KEY }}
+  REDCAP_API_TOKEN: ${{ secrets.REDCAP_API_TOKEN }}
+  ALLOWED_DOMAINS_REGEXP: ${{ vars.ALLOWED_DOMAINS_REGEXP }}
+
 jobs:
-  build:
+  check:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-    env:
-      # Public env vars (Variables → Actions → Variables)
-      PUBLIC_APPWRITE_ENDPOINT: ${{ vars.PUBLIC_APPWRITE_ENDPOINT }}
-      PUBLIC_APPWRITE_PROJECT: ${{ vars.PUBLIC_APPWRITE_PROJECT }}
-      PUBLIC_LOGIN_URL: ${{ vars.PUBLIC_LOGIN_URL }}
-      PUBLIC_REDCAP_URL: ${{ vars.PUBLIC_REDCAP_URL }}
-      # Private env vars (Secrets → Actions → Secrets)
-      APPWRITE_KEY: ${{ secrets.APPWRITE_KEY }}
-      REDCAP_API_TOKEN: ${{ secrets.REDCAP_API_TOKEN }}
-      ALLOWED_DOMAINS_REGEXP: ${{ vars.ALLOWED_DOMAINS_REGEXP }}
+    strategy:
+      fail-fast: false
+      matrix:
+        task: [lint, typecheck, svelte:check, test]
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
         with:
           version: 9
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version-file: '.nvmrc'
           cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm ${{ matrix.task }}
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Code format check
-        run: pnpm format:check
-
-      - name: Lint
-        run: pnpm lint
-
-      - name: Type check (svelte-check)
-        run: pnpm svelte:check
-
-      - name: Unit tests
-        run: pnpm test
-
-      - name: Test with coverage
-        run: pnpm test:coverage
-        continue-on-error: true
-
-      - name: Upload coverage reports
-        if: always()
-        uses: actions/upload-artifact@v4
+  build:
+    needs: check
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
         with:
-          name: test-coverage
-          path: coverage/
-          if-no-files-found: warn
-
-      - name: Initialize test baselines
-        run: pnpm test:baseline-init
-        continue-on-error: true
-
-      - name: Generate OpenAPI
-        run: pnpm openapi:generate
-
-      - name: Build
-        run: pnpm build
-
-      - name: Upload OpenAPI artifact
-        if: always()
-        uses: actions/upload-artifact@v4
+          version: 9
+      - uses: actions/setup-node@v4
         with:
-          name: openapi-json
-          path: static/api/openapi.json
-          if-no-files-found: warn
-
-      - name: Upload build artifacts
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: build-output
-          path: |
-            build
-            .svelte-kit
-          if-no-files-found: warn
-
-      - name: Dead code scan (knip)
-        run: pnpm find:unused
-        continue-on-error: true
+          node-version-file: '.nvmrc'
+          cache: 'pnpm'
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
