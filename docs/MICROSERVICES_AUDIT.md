@@ -76,7 +76,6 @@ L'application présente **3 opportunités principales** d'externalisation en mic
   - `/auth/login`, `/auth/logout`, `/auth/signup` (Authentification)
   - `/surveys/list`, `/surveys/new`, `/surveys/links`, `/surveys/download` (Enquêtes)
   - `/me` (Profil utilisateur)
-  - `/health/online` (Vérification de connectivité)
 - **Lignes de code:** ~600 lignes
 - **Dépendances:** Services business
 

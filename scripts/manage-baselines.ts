@@ -113,25 +113,16 @@ class BaselineManager {
     console.log('🔧 Initializing default baselines...\n');
 
     // API Response baseline example
-    this.captureBaseline('health-check-api', 'api', {
-      endpoint: '/api/v1/health/online',
+    this.captureBaseline('me-api', 'api', {
+      endpoint: '/api/v1/me',
       method: 'GET',
       expectedStatus: 200,
-      expectedSchema: {
-        data: {
-          online: 'boolean',
-          host: 'string',
-          port: 'number',
-          tcp: { ok: 'boolean' },
-          tls: { ok: 'boolean', authorized: 'boolean' },
-        },
-        error: 'null',
-      },
+      expectedSchema: { data: { id: 'string', email: 'string', name: 'string' }, error: 'null' },
     });
 
     // Performance baseline example
     this.captureBaseline('api-response-time', 'performance', {
-      endpoint: '/api/v1/health/online',
+      endpoint: '/api/v1/me',
       maxResponseTime: 3000,
       averageResponseTime: 150,
     });
