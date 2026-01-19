@@ -27,6 +27,7 @@ export const downloadSurvey = async (userid: string, context: { fetch: Fetch }):
     rawOrLabel: 'label',
     rawOrLabelHeaders: 'label',
     exportCheckboxLabel: 'true',
+    forms: 'form,validation_finale',
   };
   const result = await fetchRedcapJSON<unknown>(requestData, context);
   return result;
