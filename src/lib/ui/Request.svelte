@@ -4,11 +4,17 @@
 
   let { request } = $props();
 
-  let isInvitation = $derived(request.name !== '');
-  let isVoyage = $derived(request.eunicoast !== '' || request.gu8 !== '' || request.uni !== '');
-  let isCategoryEnseignantChercheur = $derived(request.type === '1');
-  let isCategoryEnseignant = $derived(request.type === '2');
-  let isCategoryOther = $derived(request.type !== '' && request.type !== '1' && request.type !== '2');
+  let isInvitation = $derived(request.invite_nom !== '');
+  let isVoyage = $derived(
+    request.mobilite_universite_eunicoast !== '' ||
+      request.mobilite_universite_gu8 !== '' ||
+      request.mobilite_universite_autre !== '',
+  );
+  let isCategoryEnseignantChercheur = $derived(request.demandeur_statut === '1');
+  let isCategoryEnseignant = $derived(request.demandeur_statut === '2');
+  let isCategoryOther = $derived(
+    request.demandeur_statut !== '' && request.demandeur_statut !== '1' && request.demandeur_statut !== '2',
+  );
   let composanteValidation = $derived(request.composante_complete === '2');
   let laboValidation = $derived(request.labo_complete === '2');
   let encadrantValidation = $derived(request.encadrant_complete === '2');
@@ -29,12 +35,12 @@
     }
   });
   let destination = $derived.by(() => {
-    if (request.eunicoast !== '') {
-      return request.eunicoast;
-    } else if (request.gu8 !== '') {
-      return request.gu8;
-    } else if (request.uni !== '') {
-      return request.uni;
+    if (request.mobilite_universite_eunicoast !== '') {
+      return request.mobilite_universite_eunicoast;
+    } else if (request.mobilite_universite_gu8 !== '') {
+      return request.mobilite_universite_gu8;
+    } else if (request.mobilite_universite_autre !== '') {
+      return request.mobilite_universite_autre;
     } else {
       return null;
     }
@@ -45,7 +51,7 @@
   <CardItem>
     {#snippet title()}
       {#if isInvitation}
-        Invitation de {request.name}
+        Invitation de {request.invite_nom}
       {:else if isVoyage}Mon séjour à {destination}{:else}Ma nouvelle demande{/if}
     {/snippet}
     {#snippet description()}

@@ -62,15 +62,15 @@ const listRequestsWithCode = async (userid: string, { fetch }: { fetch: Fetch })
     fields: [
       'record_id',
       'created_at',
-      'type',
-      'voyage',
-      'name',
+      'demandeur_statut',
+      'mobilite_type',
+      'invite_nom',
       'form_complete',
-      'avis',
+      'avis_composante_position',
       'composante_complete',
-      'avis_v2',
+      'avis_laboratoire_position',
       'labo_complete',
-      'avis_v2_v2',
+      'avis_encadrant_position',
       'encadrant_complete',
       'validation_finale_complete',
     ].join(','),
@@ -83,7 +83,9 @@ const listRequestsWithLabel = async (userid: string, { fetch }: { fetch: Fetch }
   const requestData = {
     type: 'flat',
     filterLogic: `[userid] = "${escapeFilterLogicValue(userid)}"`,
-    fields: ['record_id', 'eunicoast', 'gu8', 'uni'].join(','),
+    fields: ['record_id', 'mobilite_universite_eunicoast', 'mobilite_universite_gu8', 'mobilite_universite_autre'].join(
+      ',',
+    ),
     rawOrLabel: 'label',
   };
   const result = await fetchRedcapJSON<SurveyRequestItem[]>(requestData, { fetch });
