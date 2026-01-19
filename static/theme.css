@@ -18,6 +18,13 @@
   --bs-warning-bg-subtle: #faf3d8;
   --bs-warning-border-subtle: #f5e7b1;
 
+  /* Couleur info (bleu clair du logo AMARRE pour les actions en attente) */
+  --bs-info: #0a7ea4;
+  --bs-info-rgb: 10, 126, 164;
+  --bs-info-text-emphasis: #043242;
+  --bs-info-bg-subtle: #cfe8f0;
+  --bs-info-border-subtle: #9fd1e1;
+
   /* Liens utilisant la couleur primaire */
   --bs-link-color: #0c4e6a;
   --bs-link-hover-color: #094058;
@@ -145,4 +152,36 @@
 
 .border-warning {
   border-color: #e6b229 !important;
+}
+
+/* Ajustement des list-group-item-info (bleu clair AMARRE pour actions en attente) */
+.list-group-item-info {
+  background-color: #cfe8f0;
+  color: #043242;
+  border-color: #9fd1e1;
+}
+
+.list-group-item-info.list-group-item-action:hover,
+.list-group-item-info.list-group-item-action:focus {
+  background-color: #9fd1e1;
+  color: #043242;
+}
+
+/* Ajustement des alertes info */
+.alert-info {
+  --bs-alert-color: #043242;
+  --bs-alert-bg: #cfe8f0;
+  --bs-alert-border-color: #9fd1e1;
+}
+
+.bg-info {
+  background-color: #0a7ea4 !important;
+}
+
+.text-info {
+  color: #0a7ea4 !important;
+}
+
+.border-info {
+  border-color: #0a7ea4 !important;
 }
