@@ -30,3 +30,5 @@ coverage
 tests/baselines/*.json
 !tests/baselines/.gitkeep
 tests/utils/test-baselines
+*.REDCap.xml
+*.backup
