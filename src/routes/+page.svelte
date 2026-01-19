@@ -9,7 +9,6 @@
   import TopNavbar from '$lib/ui/TopNavbar.svelte';
   import Rule from '$lib/ui/Rule.svelte';
   import Follow from '$lib/ui/Follow.svelte';
-  import Retrieve from '$lib/ui/Retrieve.svelte';
 
   let { data, form }: PageProps = $props();
 
@@ -19,12 +18,13 @@
   let containerClass = $state<'container' | 'container-fluid' | 'container-fluid w-75'>('container');
 
   // Demandes avec formulaire non finalisé (form_complete != '2')
-  let incompleteRequests = $derived(data.requests?.filter((r: SurveyRequestItem) => r.form_complete !== '2') ?? []);
+  let incompleteRequests = $derived(
+    data.requests?.filter((r: SurveyRequestItem) => r.validation_finale_complete !== '2') ?? [],
+  );
 
   // Demandes en cours de validation (form_complete == '2' ET validation_finale_complete != '2')
   let requestsInProgress = $derived(
-    data.requests?.filter((r: SurveyRequestItem) => r.form_complete === '2' && r.validation_finale_complete !== '2') ??
-      [],
+    data.requests?.filter((r: SurveyRequestItem) => r.validation_finale_complete === '2') ?? [],
   );
 
   let hasIncompleteRequests = $derived(incompleteRequests.length > 0);
@@ -58,8 +58,6 @@
       <Follow requests={requestsInProgress} />
       <Rule />
     {/if}
-    <Retrieve />
-    <Rule />
     <Administrate
       {userId}
       {email}
