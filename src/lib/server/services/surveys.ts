@@ -67,7 +67,7 @@ const listRequestsWithCode = async (userid: string, { fetch }: { fetch: Fetch })
       'invite_nom',
       'form_complete',
       'avis_composante_position',
-      'composante_complete',
+      'demandeur_composante_complete',
       'avis_laboratoire_position',
       'labo_complete',
       'avis_encadrant_position',

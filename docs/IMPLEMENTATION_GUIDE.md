@@ -362,7 +362,7 @@ export interface SurveyRequest {
   userid: string;
   email: string;
   form_complete?: string;
-  composante_complete?: string;
+  demandeur_composante_complete?: string;
   labo_complete?: string;
   encadrant_complete?: string;
   validation_finale_complete?: string;
@@ -401,7 +401,7 @@ export class SurveyService {
       'record_id',
       'created_at',
       'form_complete',
-      'composante_complete',
+      'demandeur_composante_complete',
       'labo_complete',
       'encadrant_complete',
       'validation_finale_complete',
@@ -428,7 +428,7 @@ export class SurveyService {
     const hasIncomplete = requests.some(
       r =>
         r.form_complete !== '2' ||
-        r.composante_complete !== '2' ||
+        r.demandeur_composante_complete !== '2' ||
         r.labo_complete !== '2' ||
         r.encadrant_complete !== '2' ||
         r.validation_finale_complete !== '2',
@@ -668,7 +668,7 @@ describe('SurveyService', () => {
         {
           record_id: '1',
           form_complete: '2',
-          composante_complete: '2',
+          demandeur_composante_complete: '2',
           labo_complete: '2',
           encadrant_complete: '2',
           validation_finale_complete: '2',
@@ -684,7 +684,7 @@ describe('SurveyService', () => {
         {
           record_id: '1',
           form_complete: '1', // Incomplete
-          composante_complete: '2',
+          demandeur_composante_complete: '2',
           labo_complete: '2',
           encadrant_complete: '2',
           validation_finale_complete: '2',

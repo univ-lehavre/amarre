@@ -34,7 +34,7 @@ describe('GET /api/v1/surveys/list (anti-derive OpenAPI)', () => {
         mobilite_universite_autre: 'Le Havre',
         form_complete: '2',
         avis_composante_position: 'ok',
-        composante_complete: '1',
+        demandeur_composante_complete: '1',
         avis_laboratoire_position: 'ok',
         labo_complete: '0',
         avis_encadrant_position: 'ok',

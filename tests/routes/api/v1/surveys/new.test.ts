@@ -40,7 +40,7 @@ describe('POST /api/v1/surveys/new (anti-derive OpenAPI)', () => {
                   record_id: 'abc123',
                   created_at: '2025-12-17T12:34:56Z',
                   form_complete: '1',
-                  composante_complete: '2',
+                  demandeur_composante_complete: '2',
                   labo_complete: '2',
                   encadrant_complete: '2',
                   validation_finale_complete: '2',

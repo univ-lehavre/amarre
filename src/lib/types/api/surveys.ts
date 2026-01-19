@@ -19,7 +19,7 @@ export const surveyRequestItem = z
       .describe(
         "Position de la direction de composante (code d'avis sous forme de chaîne ; par exemple '3' pour un avis défavorable / rejet, d'autres valeurs pouvant représenter d'autres états comme accord ou en attente)",
       ),
-    composante_complete: z.string().describe('Complétude de la composante (ex: 0/1/2)'),
+    demandeur_composante_complete: z.string().describe('Complétude de la composante (ex: 0/1/2)'),
     avis_laboratoire_position: z
       .string()
       .describe(
