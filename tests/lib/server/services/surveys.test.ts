@@ -94,6 +94,23 @@ describe('surveys service - downloadSurvey', () => {
       expect.any(Object),
     );
   });
+
+  it('should limit export to form and validation_finale instruments', async () => {
+    const { downloadSurvey } = await import('$lib/server/services/surveys');
+    const { fetchRedcapJSON } = await import('$lib/server/redcap');
+    const mockFetchRedcapJSON = fetchRedcapJSON as unknown as ReturnType<typeof vi.fn>;
+
+    mockFetchRedcapJSON.mockResolvedValue([]);
+
+    const mockFetch = vi.fn() as unknown as Fetch;
+    await downloadSurvey('user123', { fetch: mockFetch });
+
+    // Verify that forms parameter limits to form and validation_finale
+    expect(mockFetchRedcapJSON).toHaveBeenCalledWith(
+      expect.objectContaining({ forms: 'form,validation_finale' }),
+      expect.any(Object),
+    );
+  });
 });
 
 describe('surveys service - listRequests', () => {
