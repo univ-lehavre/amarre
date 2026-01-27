@@ -3,6 +3,10 @@
  * Adapte les couleurs primary et warning aux couleurs du logo AMARRE
  */
 
+body {
+  background-color: rgba(10, 126, 164, 0.05);
+}
+
 :root {
   /* Couleur primaire (bleu marine du logo AMARRE) */
   --bs-primary: #0c4e6a;

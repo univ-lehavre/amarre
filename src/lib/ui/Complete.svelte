@@ -12,6 +12,7 @@
     ariaLabel="Complete cards"
     headingText="Compléter"
     bind:showHeading
+    variant="dark"
   >
     <SectionTile title={!showHeading ? 'Compléter' : ''} />
     {#each requests as request (request.record_id)}

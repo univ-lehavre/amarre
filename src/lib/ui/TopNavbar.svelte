@@ -18,7 +18,7 @@
 
 <nav
   id="navbar1"
-  class="navbar sticky-top bg-body px-3 mb-3 justify-content-center"
+  class="navbar sticky-top px-3 mb-3 justify-content-center bg-transparent"
   bind:this={navEl}
 >
   <ul class="nav nav-tabs justify-content-center">

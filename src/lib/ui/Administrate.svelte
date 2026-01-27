@@ -15,6 +15,7 @@
     ariaLabel="Administrate cards"
     headingText="Administrate"
     bind:showHeading
+    variant="dark"
   >
     <SectionTile title={!showHeading ? 'Administrer' : ''} />
 
