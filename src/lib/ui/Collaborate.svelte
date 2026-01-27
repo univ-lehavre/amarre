@@ -22,6 +22,7 @@
     ariaLabel="Collaborate cards"
     headingText="Collaborate"
     bind:showHeading
+    variant="light"
   >
     <SectionTile title={!showHeading ? 'Déposer' : ''} />
     <div class="flex-shrink-0">

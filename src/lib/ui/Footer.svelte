@@ -7,7 +7,7 @@
   ];
 </script>
 
-<footer class="footer mt-5 py-4">
+<footer class="footer py-4">
   <div class="container">
     <div class="d-flex justify-content-center align-items-center gap-4 flex-wrap">
       {#each logos as logo (logo.src)}
@@ -23,8 +23,7 @@
 
 <style>
   .footer {
-    border-top: 1px solid #dee2e6;
-    background-color: #f8f9fa;
+    background-color: transparent;
   }
 
   .logo {

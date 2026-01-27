@@ -7,7 +7,6 @@
   import Administrate from '$lib/ui/Administrate.svelte';
   import ECRIN from '$lib/ui/MainTitle.svelte';
   import TopNavbar from '$lib/ui/TopNavbar.svelte';
-  import Rule from '$lib/ui/Rule.svelte';
   import Follow from '$lib/ui/Follow.svelte';
   import Footer from '$lib/ui/Footer.svelte';
 
@@ -15,8 +14,6 @@
 
   const userId = $derived(data.user?.id);
   const email = $derived(data.user?.email);
-
-  let containerClass = $state<'container' | 'container-fluid' | 'container-fluid w-75'>('container');
 
   // Demandes avec formulaire non finalisé (form_complete != '2')
   let incompleteRequests = $derived(
@@ -39,32 +36,27 @@
   {hasRequestsInProgress}
 />
 
-<div class={containerClass}>
-  <div
-    data-bs-spy="scroll"
-    data-bs-target="#navbar1"
-    data-bs-root-margin="0px 0px -50%"
-    data-bs-smooth-scroll="true"
-  >
-    <Collaborate
-      {userId}
-      requests={data.requests}
-    />
-    <Rule />
-    {#if hasIncompleteRequests}
-      <Complete requests={incompleteRequests} />
-      <Rule />
-    {/if}
-    {#if hasRequestsInProgress}
-      <Follow requests={requestsInProgress} />
-      <Rule />
-    {/if}
-    <Administrate
-      {userId}
-      {email}
-      {form}
-    />
-  </div>
+<div
+  data-bs-spy="scroll"
+  data-bs-target="#navbar1"
+  data-bs-root-margin="0px 0px -50%"
+  data-bs-smooth-scroll="true"
+>
+  <Collaborate
+    {userId}
+    requests={data.requests}
+  />
+  {#if hasIncompleteRequests}
+    <Complete requests={incompleteRequests} />
+  {/if}
+  {#if hasRequestsInProgress}
+    <Follow requests={requestsInProgress} />
+  {/if}
+  <Administrate
+    {userId}
+    {email}
+    {form}
+  />
 </div>
 
 <Footer />

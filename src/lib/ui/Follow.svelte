@@ -12,6 +12,7 @@
     ariaLabel="Follow cards"
     headingText="Suivre"
     bind:showHeading
+    variant="light"
   >
     <SectionTile title={!showHeading ? 'Suivre' : ''} />
     {#each requests as request (request.record_id)}

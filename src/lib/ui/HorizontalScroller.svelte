@@ -12,6 +12,7 @@
     headingText?: string; // titre à afficher en <h1> quand la tuile-titre disparaît
     headingRatio?: number; // ratio de visibilité sous lequel on affiche le header (0..1)
     showHeading?: boolean; // bindable: reflète l'état d'affichage du header
+    variant?: 'light' | 'dark' | 'none'; // alternance de couleurs basée sur info
   }
   let {
     ariaLabel = 'Horizontal scroller',
@@ -22,6 +23,7 @@
     headingText,
     headingRatio = 0.85,
     showHeading = $bindable(false),
+    variant = 'none',
   }: Props = $props();
 
   let scroller: HTMLDivElement;
@@ -72,60 +74,76 @@
   });
 </script>
 
-{#if headingText && showHeading}
-  <div
-    class="fw-bolder fs-3 mb-2"
-    style="font-family: Gambetta;"
-  >
-    {headingText}
-  </div>
-{/if}
+<div class="hs-wrapper {variant !== 'none' ? `hs-${variant}` : ''}">
+  <div class="container">
+    {#if headingText && showHeading}
+      <div
+        class="fw-bolder fs-3 mb-2"
+        style="font-family: Gambetta;"
+      >
+        {headingText}
+      </div>
+    {/if}
 
-<div class="position-relative hs-root">
-  <div
-    class={`overflow-auto ${snap !== 'none' ? 'snap-x' : ''}`}
-    style={`scroll-padding-inline: ${snapPadding}`}
-    aria-label={ariaLabel}
-    bind:this={scroller}
-    onscroll={updateArrows}
-  >
-    <div
-      class={`d-flex flex-column flex-sm-row flex-sm-nowrap pe-3 py-1 ${snap !== 'none' ? 'snap-items' : ''}`}
-      style={(snap !== 'none' ? `--snap-align: ${snap}; ` : '') + `gap: var(--card-gap, 1rem);`}
-      bind:this={items}
-    >
-      {@render children?.()}
+    <div class="position-relative hs-root">
+      <div
+        class={`overflow-auto ${snap !== 'none' ? 'snap-x' : ''}`}
+        style={`scroll-padding-inline: ${snapPadding}`}
+        aria-label={ariaLabel}
+        bind:this={scroller}
+        onscroll={updateArrows}
+      >
+        <div
+          class={`d-flex flex-column flex-sm-row flex-sm-nowrap pe-3 py-1 ${snap !== 'none' ? 'snap-items' : ''}`}
+          style={(snap !== 'none' ? `--snap-align: ${snap}; ` : '') + `gap: var(--card-gap, 1rem);`}
+          bind:this={items}
+        >
+          {@render children?.()}
+        </div>
+      </div>
+
+      {#if showLeft || showRight}
+        <div
+          class="position-absolute top-50 end-0 translate-middle-y pe-2 d-flex flex-column align-items-end hs-arrows d-none d-sm-flex"
+          style="z-index: 2;"
+        >
+          {#if showLeft}
+            <button
+              class="btn btn-light btn-sm shadow mb-2"
+              aria-label="Scroll left"
+              onclick={() => scrollStep(-1)}
+            >
+              <i class="bi bi-chevron-left"></i>
+            </button>
+          {/if}
+          {#if showRight}
+            <button
+              class="btn btn-light btn-sm shadow"
+              aria-label="Scroll right"
+              onclick={() => scrollStep(1)}
+            >
+              <i class="bi bi-chevron-right"></i>
+            </button>
+          {/if}
+        </div>
+      {/if}
     </div>
   </div>
-
-  {#if showLeft || showRight}
-    <div
-      class="position-absolute top-50 end-0 translate-middle-y pe-2 d-flex flex-column align-items-end hs-arrows d-none d-sm-flex"
-      style="z-index: 2;"
-    >
-      {#if showLeft}
-        <button
-          class="btn btn-light btn-sm shadow mb-2"
-          aria-label="Scroll left"
-          onclick={() => scrollStep(-1)}
-        >
-          <i class="bi bi-chevron-left"></i>
-        </button>
-      {/if}
-      {#if showRight}
-        <button
-          class="btn btn-light btn-sm shadow"
-          aria-label="Scroll right"
-          onclick={() => scrollStep(1)}
-        >
-          <i class="bi bi-chevron-right"></i>
-        </button>
-      {/if}
-    </div>
-  {/if}
 </div>
 
 <style>
+  /* Wrapper pleine largeur avec couleur de fond */
+  .hs-wrapper {
+    width: 100%;
+    padding: 1rem 0;
+  }
+  /* Variantes de couleur basées sur info */
+  .hs-light {
+    background-color: rgba(var(--bs-info-rgb), 0.07);
+  }
+  .hs-dark {
+    background-color: rgba(var(--bs-info-rgb), 0.12);
+  }
   /* Les enfants attendus: items avec .flex-shrink-0 (cartes de 18rem) */
   .snap-x {
     scroll-snap-type: x mandatory;
