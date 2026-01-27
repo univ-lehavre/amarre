@@ -8,7 +8,7 @@
     aria-label="Accueil"
   >
     <img
-      src="/Logo_AMARRE.png"
+      src="/logos/Logo_AMARRE.png"
       alt="AMARRE"
       class="img-fluid"
       style="max-height:8rem;"

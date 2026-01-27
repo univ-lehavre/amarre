@@ -9,6 +9,7 @@
   import TopNavbar from '$lib/ui/TopNavbar.svelte';
   import Rule from '$lib/ui/Rule.svelte';
   import Follow from '$lib/ui/Follow.svelte';
+  import Footer from '$lib/ui/Footer.svelte';
 
   let { data, form }: PageProps = $props();
 
@@ -65,6 +66,8 @@
     />
   </div>
 </div>
+
+<Footer />
 
 <style>
   :global(#introduce, #explore, #ask, #collaborate, #complete, #follow, #retrieve, #publish, #administrate) {
