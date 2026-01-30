@@ -1,9 +1,10 @@
 <script lang="ts">
   const logos = [
     { src: '/logos/ulhn.svg', alt: 'Université Le Havre Normandie' },
+    { src: '/logos/cptmp.png', alt: 'Campus Polytechnique des Territoires Maritimes et Portuaires' },
     { src: '/logos/eunicoast.png', alt: 'EUNICoast' },
     { src: '/logos/france-2030.png', alt: 'France 2030' },
-    { src: '/logos/region-normandie.png', alt: 'Région Normandie' },
+    { src: '/logos/region-normandie.jpg', alt: 'Région Normandie' },
   ];
 </script>
 
@@ -23,7 +24,7 @@
 
 <style>
   .footer {
-    background-color: transparent;
+    background-color: white;
   }
 
   .logo {
