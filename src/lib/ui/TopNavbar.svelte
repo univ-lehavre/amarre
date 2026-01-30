@@ -18,7 +18,7 @@
 
 <nav
   id="navbar1"
-  class="navbar sticky-top px-3 mb-3 justify-content-center bg-transparent"
+  class="navbar sticky-top px-3 mb-3 justify-content-center bg-white"
   bind:this={navEl}
 >
   <ul class="nav nav-tabs justify-content-center">
@@ -56,16 +56,6 @@
         >
       </li>
     {/if}
-    <li class="nav-item">
-      <a
-        class="nav-link"
-        href="#retrieve"
-        ><i
-          class="bi bi-archive me-0 me-md-2"
-          aria-hidden="true"
-        ></i><span class="d-none d-md-inline">Retrouver</span></a
-      >
-    </li>
     <li class="nav-item">
       <a
         class="nav-link"

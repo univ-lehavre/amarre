@@ -2,7 +2,7 @@
   import { resolve } from '$app/paths';
 </script>
 
-<div class="container-fluid d-flex justify-content-center">
+<div class="container-fluid d-flex justify-content-center bg-white">
   <a
     href={resolve('/')}
     aria-label="Accueil"
