@@ -9,6 +9,7 @@ export const surveyRequestItem = z
       .string()
       .describe('Statut professionnel du demandeur (enseignant-chercheur, enseignant, autre)'),
     mobilite_type: z.string().describe('Type de mobilité (invitation entrante ou sortie)'),
+    invitation_type: z.string().describe('Type d’invitation (ex: "Recherche", "Enseignement", "Les deux")'),
     invite_nom: z.string().describe('Nom complet du chercheur invité'),
     mobilite_universite_eunicoast: z.string().describe('Université de destination dans le réseau EUNICoast'),
     mobilite_universite_gu8: z.string().describe('Université de destination dans le réseau GU8'),
