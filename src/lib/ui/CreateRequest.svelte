@@ -16,7 +16,7 @@
           class="modal-title fs-5"
           id="CreateRequestLabel"
         >
-          Consentement sur mes données personnelles
+          Traitement des données à caractère personnel
         </h1>
         <button
           type="button"
@@ -27,9 +27,12 @@
       </div>
       <div class="modal-body">
         <p>
-          <span class="text-danger text-uppercase">
-            Avant de créer une nouvelle demande, je confirme avoir lu et compris la politique de gestion des données
-            personnelles.
+          <span class="">
+            Avant de créer une nouvelle demande, je confirme avoir pris connaissance du <a
+              href="https://survey.univ-lehavre.fr/surveys/?__file=VXFzrMApmUxKEqgU3tSXuSjA9CzpmmQrVDTvpDWFyjvKy2JCrrkziYzjdpbFkHJ57tWwrbB7b95GdneAz9Sd25SpzuDVs8BzKy8V"
+              target="_blank"
+              rel="noopener noreferrer">formulaire</a
+            > d’informations RGPD de la plateforme AMARRE.
           </span>
         </p>
         <form
